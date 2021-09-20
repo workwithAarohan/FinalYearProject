@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BatchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,13 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+
 Route::get('/header', function () {
     return view('layouts.header');
 });
+Route::resource('/batch', BatchController::class);
+
+Route::get('/test', function(){
+    return view('testLogin');
+});
+
