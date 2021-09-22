@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BatchController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,8 @@ Route::get('/header', function () {
     return view('layouts.header');
 });
 Route::resource('/batch', BatchController::class);
+
+Route::resource('/event', EventController::class);
 
 Route::get('/test', function(){
     return view('testLogin');
