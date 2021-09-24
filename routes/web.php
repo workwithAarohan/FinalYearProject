@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BatchController;
+use App\Http\Controllers\SubjectController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,8 @@ Route::get('/header', function () {
     return view('layouts.header');
 });
 Route::resource('/batch', BatchController::class);
+
+Route::resource('/subject', SubjectController::class);
 
 Route::get('/test', function(){
     return view('testLogin');
