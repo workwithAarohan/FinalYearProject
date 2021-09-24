@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BatchController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\NoticeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,8 @@ Route::get('/header', function () {
 Route::resource('/batch', BatchController::class);
 
 Route::resource('/event', EventController::class);
+
+Route::resource('/notice', NoticeController::class);
 
 Route::get('/test', function(){
     return view('testLogin');
