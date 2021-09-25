@@ -16,7 +16,11 @@ class NoticeController extends Controller
     {
         //
         $notices = Notice::all();
-        echo($notices);
+        return view("notice.index",[
+            "notices"=>$notices
+        ]);
+        
+        //echo($notices);
     }
 
     /**
