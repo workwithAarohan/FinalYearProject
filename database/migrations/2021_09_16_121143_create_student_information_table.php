@@ -15,21 +15,12 @@ class CreateStudentInformationTable extends Migration
     {
         Schema::create('student_information', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('batch_id');
-            $table->unsignedBigInteger('course_id');
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
+            $table->foreignId('user_id')->constrained()
                 ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('batch_id')
-                ->references('id')
-                ->on('batches')
+            $table->foreignId('batch_id')->constrained()
                 ->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('course_id')
-                ->references('id')
-                ->on('courses')
+            $table->foreignId('course_id')->constrained()
                 ->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
