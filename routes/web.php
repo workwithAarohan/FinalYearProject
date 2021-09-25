@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\BatchController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\HomeController;
+
 
 
 /*
@@ -44,4 +46,5 @@ Route::get('/test', function(){
     return view('testLogin');
 });
 
+Route::resource('/book', BookController::class);
 
