@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Course;
 
 class CourseController extends Controller
 {
@@ -13,7 +14,11 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        // Select * from courses;
+        $courses = Course::all();
+
+        view('course.index');
+  
     }
 
     /**
@@ -24,6 +29,7 @@ class CourseController extends Controller
     public function create()
     {
         //
+        return view('course.create');
     }
 
     /**
@@ -35,6 +41,7 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         //
+        
     }
 
     /**
@@ -43,9 +50,11 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Course $course)
     {
-        //
+        return view('course.show',[
+            'course' => $course
+        ]);
     }
 
     /**
