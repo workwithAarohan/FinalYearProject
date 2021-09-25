@@ -15,7 +15,7 @@ class BatchController extends Controller
      */
     public function index()
     {
-        $batches = Batch::all();
+        $batches = Batch::all(); // SELECT * FROM batch;
 
         return view('batch.index', [
             'batches' => $batches
@@ -41,14 +41,12 @@ class BatchController extends Controller
     public function store(Request $request)
     {
         $batch = new Batch();
-
-        request()->validate([
+        
+        $request->validate([
             'name' => 'required|string|max:255'
         ]);
 
-        $batch->create([
-            'name' => $request->input('name')
-        ]);
+        $batch->create($request->all());
 
         return redirect('/batch');
     }
@@ -100,13 +98,11 @@ class BatchController extends Controller
      */
     public function update(Request $request, Batch $batch)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255'
         ]);
 
-        $batch->update([
-            'name' => $request->input('name')
-        ]);
+        $batch->update($request->all());
 
         return redirect('/batch');
     }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Course;
+use App\Models\Book;
 
-class CourseController extends Controller
+class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,11 +14,9 @@ class CourseController extends Controller
      */
     public function index()
     {
-        // Select * from courses;
-        $courses = Course::all();
-
-        view('course.index');
-  
+    // select * from books
+    $books = Book::all();
+    echo($books);
     }
 
     /**
@@ -29,7 +27,6 @@ class CourseController extends Controller
     public function create()
     {
         //
-        return view('course.create');
     }
 
     /**
@@ -41,7 +38,6 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         //
-        
     }
 
     /**
@@ -50,11 +46,9 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $course)
+    public function show($id)
     {
-        return view('course.show',[
-            'course' => $course
-        ]);
+        //
     }
 
     /**
