@@ -1,0 +1,60 @@
+body
+{
+    background: linear-gradient(135deg, #5c6ae2,#2b39b8, #333aa3);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.input
+{
+    width: 100%;
+    margin: 0 0;
+    border-color: #a5a6a8;
+    border-style: none none solid none;
+    transition: all .5s;
+}
+
+.input:focus 
+{
+    outline:none;
+    border-color: #3241c7;
+}
+
+.input:focus + .label,
+.input:not(:placeholder-shown) + .label
+{
+    transform: translateY(-3.5em) scale(.9);
+    color: #3241c7;
+    font-weight: bold;
+}
+
+input[type="password"]:focus + .password-display
+{
+    color: red;
+}
+
+.label
+{
+    font-size: 1em;
+    color: rgb(134, 126, 126);
+    transform: translateY(-1.75em);
+    transform-origin: 0 0;
+    transition: all .3s;
+}
+
+.input::placeholder
+{
+    color: transparent;
+}
+
+
+.password-display
+{
+    position: relative;
+    top: 45%;
+    left: 75%;
+    transform: translateY(-100%);
+    cursor: pointer;
+    font-size: 20px;
+    color: #3241c7;
+}
