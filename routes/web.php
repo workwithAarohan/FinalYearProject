@@ -3,9 +3,14 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\BatchController;
+
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\NoticeController;
+
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\HomeController;
+
 
 
 
@@ -40,7 +45,13 @@ Route::get('/header', function () {
 
 Route::resource('/batch', BatchController::class);
 
+
+Route::resource('/event', EventController::class);
+
+Route::resource('/notice', NoticeController::class);
+
 Route::resource('/course', CourseController::class);
+
 
 Route::get('/test', function(){
     return view('testLogin');
