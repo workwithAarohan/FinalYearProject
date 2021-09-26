@@ -14,11 +14,11 @@ class CourseController extends Controller
      */
     public function index()
     {
-        // Select * from courses;
         $courses = Course::all();
 
-        view('course.index');
-  
+        return view("course.index",[
+            'courses' => $courses
+        ]);
     }
 
     /**
@@ -28,7 +28,6 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
         return view('course.create');
     }
 
@@ -40,7 +39,7 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
         
     }
 
