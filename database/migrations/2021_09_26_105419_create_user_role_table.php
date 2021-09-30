@@ -15,12 +15,10 @@ class CreateUserRoleTable extends Migration
     {
         Schema::create('user_role', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->onDelete('cascade');
 
             $table->foreignId('role_id')->constrained()
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->onDelete('cascade');
 
             $table->primary(['user_id','role_id']);
         });
