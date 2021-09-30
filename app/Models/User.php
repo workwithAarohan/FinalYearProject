@@ -55,8 +55,8 @@ class User extends Authenticatable
         return $this->belongsTo(StudentInformation::class);
     }
 
-    public function course()
+    public function roles()
     {
-        return $this->belongsTo(Course::class, 'students_courses');
+        return $this->belongsToMany(Role::class);
     }
 }

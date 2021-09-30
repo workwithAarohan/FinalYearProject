@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Models\Batch;
 use App\Models\User;
 
@@ -17,7 +19,7 @@ class BatchController extends Controller
     {
         $batches = Batch::all(); // SELECT * FROM batch;
 
-        return view('batch.index', [
+        return view('admin.batch.index', [
             'batches' => $batches
         ]);
     }
@@ -29,7 +31,7 @@ class BatchController extends Controller
      */
     public function create()
     {
-        return view('batch.create');
+        return view('admin.batch.create');
     }
 
     /**
@@ -39,16 +41,14 @@ class BatchController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $batch = new Batch();
-        
+    {   
         $request->validate([
             'name' => 'required|string|max:255'
         ]);
 
-        $batch->create($request->all());
+        Batch::create($request->all());
 
-        return redirect('/batch');
+        return redirect('admin/batch');
     }
 
     /**
@@ -70,7 +70,7 @@ class BatchController extends Controller
         }
 
 
-       return view('batch.show',[
+       return view('admin.batch.show',[
            'batch' => $batch,
            'students' => $students
        ]);
@@ -84,7 +84,7 @@ class BatchController extends Controller
      */
     public function edit(Batch $batch)
     {
-        return view('batch.edit', [
+        return view('admin.batch.edit', [
             'batch' => $batch
         ]);
     }
@@ -101,10 +101,10 @@ class BatchController extends Controller
         $request->validate([
             'name' => 'required|string|max:255'
         ]);
-
+        
         $batch->update($request->all());
 
-        return redirect('/batch');
+        return redirect('admin/batch');
     }
 
     /**
@@ -117,6 +117,6 @@ class BatchController extends Controller
     {
         $batch->delete();
 
-        return redirect('/batch');
+        return redirect('admin/batch');
     }
 }

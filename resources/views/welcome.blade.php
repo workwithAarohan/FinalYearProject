@@ -53,7 +53,7 @@
                             <li class="scroll-to-section"><a href="#aboutus">About Us</a></li>
                             <li class="scroll-to-section"><a href="#schedule">Schedules</a></li>
                             <li class="scroll-to-section"><a href="#contact-us">Contact</a></li> 
-                            <li class="main-button"><a href="#">Log In</a></li>
+                            <li class="main-button"><a href="{{ route('login') }}">Log In</a></li>
                         </ul>        
                         <a class='menu-trigger'>
                             <span>Menu</span>

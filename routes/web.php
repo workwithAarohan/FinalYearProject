@@ -2,13 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\BatchController;
+use App\Http\Controllers\Admin\BatchController;
+use App\Http\Controllers\Admin\CourseController;
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\NoticeController;
 
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\CourseController;
+
 use App\Http\Controllers\HomeController;
 
 
@@ -33,25 +34,26 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route:: get('/about', function (){
-    return view('about');
-});
-
-
+Route:: get('/about', fn() => view('about'));
 
 Route::get('/header', function () {
     return view('layouts.header');
 });
 
-Route::resource('/batch', BatchController::class);
+// Route::resource('/admin/batch', BatchController::class);
+// Route::resource('/admin/course', CourseController::class);
 
+Route::group([
+    'prefix' => 'admin',
+    'middleware' => 'auth'], function()
+    {
+        Route::resource('/batch', BatchController::class);
+        Route::resource('/course', CourseController::class);
+});
 
 Route::resource('/event', EventController::class);
 
 Route::resource('/notice', NoticeController::class);
-
-Route::resource('/course', CourseController::class);
-
 
 Route::get('/test', function(){
     return view('testLogin');
