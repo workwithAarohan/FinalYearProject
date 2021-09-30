@@ -11,10 +11,10 @@
                         Batch: 
                     </label>
         
-                    <input type="text" class="form-control" id='name' name="name" value="{{ old('name') }}">
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id='name' name="name" value="{{ old('name') }}" autofocus>
                     
                     @error('name')
-                        <span class="text-danger">
+                        <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror

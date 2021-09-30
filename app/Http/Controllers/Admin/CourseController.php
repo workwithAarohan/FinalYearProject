@@ -18,7 +18,7 @@ class CourseController extends Controller
     {
         $courses = Course::all();
 
-        return view("course.index",[
+        return view("admin.course.index",[
             'courses' => $courses
         ]);
     }
@@ -30,7 +30,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('course.create');
+        return view('admin.course.create');
     }
 
     /**
@@ -53,7 +53,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        return view('course.show',[
+        return view('admin.course.show',[
             'course' => $course
         ]);
     }
