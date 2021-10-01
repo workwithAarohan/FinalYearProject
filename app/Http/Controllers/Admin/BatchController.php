@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Batch;
 use App\Models\User;
+use App\Models\Course;
 
 class BatchController extends Controller
 {
@@ -17,10 +19,11 @@ class BatchController extends Controller
      */
     public function index()
     {
-        $batches = Batch::all(); // SELECT * FROM batch;
+        // SELECT * FROM batch;
+        // $batches = Batch::all(); 
 
         return view('admin.batch.index', [
-            'batches' => $batches
+            'batches' => Batch::paginate(10)
         ]);
     }
 
@@ -48,6 +51,8 @@ class BatchController extends Controller
 
         Batch::create($request->all());
 
+        $request->session()->flash('success','You have create new batch');
+
         return redirect('admin/batch');
     }
 
@@ -61,12 +66,22 @@ class BatchController extends Controller
     {
         // List of all students in a same batch
 
-        $students = $batch->users;
+        $students = $batch->users()->paginate(10);
 
         foreach ($students as $key => $value) 
         {
-            $users = User::where('id', $value->user_id)->get();
-            $value->users = $users;
+
+            $usersCourse = DB::table('student_information')
+                ->join('users', 'student_information.user_id', '=', 'users.id')
+                ->join('courses', 'student_information.course_id', '=', 'courses.id')
+                ->where('users.id', $value->user_id)
+                ->get();
+
+            $value->users = $usersCourse;
+            
+            // Users Information
+            // $users = User::where('id', $value->user_id)->get();
+            // $value->users = $users;
         }
 
 
@@ -104,6 +119,8 @@ class BatchController extends Controller
         
         $batch->update($request->all());
 
+        $request->session()->flash('success','You have updated the batch');
+
         return redirect('admin/batch');
     }
 
@@ -113,9 +130,11 @@ class BatchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Batch $batch)
+    public function destroy(Batch $batch, Request $request)
     {
         $batch->delete();
+
+        $request->session()->flash('success','You have deleted the batch');
 
         return redirect('admin/batch');
     }

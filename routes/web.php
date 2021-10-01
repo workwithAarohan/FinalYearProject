@@ -2,17 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Admin\BatchController;
-use App\Http\Controllers\Admin\CourseController;
-
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\NoticeController;
-
-use App\Http\Controllers\BookController;
-
 use App\Http\Controllers\HomeController;
-
-
+use App\Http\Controllers\Admin\StudentController;
 
 
 /*
@@ -43,12 +34,20 @@ Route::get('/header', function () {
 // Route::resource('/admin/batch', BatchController::class);
 // Route::resource('/admin/course', CourseController::class);
 
-Route::group([
-    'prefix' => 'admin',
-    'middleware' => 'auth'], function()
-    {
+Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
+
+    Route::group(['namespace' => 'Admin'], function(){
         Route::resource('/batch', BatchController::class);
         Route::resource('/course', CourseController::class);
+    });
+        
+    Route::group(['prefix' =>'student', 'as' => 'student.'], function(){
+        Route::get('/', [StudentController::class, 'index'])->name('index');
+        Route::get('/create/{batch}', [StudentController::class, 'create'])->name('create');
+        Route::post('/', [StudentController::class, 'store'])->name('store');
+        Route::get('/{student}', [StudentController::class, 'show'])->name('show');
+    });
+
 });
 
 Route::resource('/event', EventController::class);

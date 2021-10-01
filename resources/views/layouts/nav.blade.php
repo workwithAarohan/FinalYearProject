@@ -22,7 +22,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #0078D4; height: 50px;">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0078D4; height: 50px;">
         <div class="container-fluid">
             <a class="navbar-brand text-white" href="{{ route('home') }}">
                 <strong>Academia College</strong>
@@ -32,45 +32,65 @@
                 <span class="fas fa-ellipsis-h"></span>
             </button>
             
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active text-white" aria-current="page" href="{{ route('batch.index') }}">Batch</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('course.index') }}">Course</a>
-                    </li>
+            @can('logged-in')
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active text-white" aria-current="page" href="{{ route('batch.index') }}">Batch</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('course.index') }}">Course</a>
+                        </li>
+                        
+                    </ul>
                     
-                </ul>
-                
-            </div>
+                </div>
+            @endcan
+            
 
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown justify-content-end">
-                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ Auth::user()->username }}
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                            onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
+                @guest
+                    @if (Route::has('login'))
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                    @endif
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </ul>
-                </li>
+                    @if (Route::has('register'))
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
+                    @endif
+
+                @else
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ Auth::user()->username }}
+                        </a>
+                        <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </ul>
+                    </li>
+                @endguest
+                
             </ul>
         </div>
       </nav>
 
 
-    <main class="py-4">
+    <main class="py-4 container">
+        @include('partials.alert')
         @yield('content')
     </main>
 </body>

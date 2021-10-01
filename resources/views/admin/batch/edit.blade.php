@@ -1,22 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <form action="{{ route('batch.update', $batch->id) }}" method="POST">
-        @csrf
-        @method('PUT')
+@extends('layouts.nav')
 
-        <label for="name">
-            Batch Name:
-        </label>
-        <input type="text" name="name" value="{{ $batch->name }}">
+@section('content')
+    <div class="container">
+        <div class="row w-25">
+            <form action="{{ route('batch.update',$batch->id) }}" method="POST">
+                @method('PUT')
+                @csrf
+        
+                <div class="mb-3">
+                    <label for="name" class="form-label">
+                        Batch: 
+                    </label>
+        
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id='name' name="name" value="{{ $batch->name }}" autofocus>
+                    
+                    @error('name')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
 
-        <button type="submit">Submit</button>
-    </form>
-</body>
-</html>
+                </div>
+        
+        
+                <button type="submit" class="btn btn-outline-primary">Update</button>
+            </form>
+        </div>
+    </div>
+@endsection

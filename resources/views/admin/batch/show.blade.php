@@ -1,25 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
+@extends('layouts.nav')
 
-    Batch: {{ $batch->name }} <br>
-
-    <h4>Students list</h4>
-    <ol>
-
-        
-        @foreach ($students as $value)
-
-            @foreach ($value->users as $users)
-                <li>{{ $users->firstname }}</li>
-            @endforeach
-        @endforeach
-    </ol>
-</body>
-</html>
+@section('content')
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-12">
+                <h1 class="float-start">
+                    {{ $batch->name }} Batch
+                </h1>
+                <a href="{{ route('student.create',$batch->id) }}" class="btn btn-success float-end" role="button">
+                    Create
+                </a>
+            </div>
+        </div>
+        <div class="card shadow" style="padding: 10px 40px;" >
+            <table class="table table-hover" style="font-size: small;">
+                <thead>
+                    <tr>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    @foreach ($students as $key => $value)
+                        @foreach ($value->users as $user)
+                            <tr>
+                                <th scope="row">{{ $user->firstname }}</th>
+                                <th scope="row">{{ $user->lastname }}</th>
+                                <td>{{ $user->username }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>
+                                    <a href="" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
+                                            document.getElementById('delete-user-form-{{ $value->id }}').submit();">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    <form id="delete-user-{{ $user->id }}" action="" method="POST" style="display:none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endforeach
+                </tbody>
+            </table>
+            {{ $students->links() }}
+        </div>
+    </div>
+@endsection
