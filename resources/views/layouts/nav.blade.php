@@ -45,10 +45,23 @@
                     </ul>
                     
                 </div>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link  text-white position-relative" href="{{ url('/notification') }}">
+                            <i class="far fa-bell"></i>
+                            @if (auth()->user()->unreadNotifications->count() !=0)
+                                <span class="position-absolute translate-middle p-1 bg-danger rounded-circle" style="top:12px;">
+                                    <span class="visually-hidden">New alerts</span>
+                                </span> 
+                            @endif
+                        </a>
+                    </li> 
+                </ul>
             @endcan
             
 
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto ">
                 @guest
                     @if (Route::has('login'))
                         <li class="nav-item">

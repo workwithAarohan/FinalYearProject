@@ -146,7 +146,10 @@
                     </div>
                 </div>
 
-                <input type="hidden" name="roles[]" value="Student">
+                @foreach ($roles as $role)
+                    <input type="hidden" name="roles[]" value="{{ $role->id }}">
+                @endforeach
+                
 
 
 

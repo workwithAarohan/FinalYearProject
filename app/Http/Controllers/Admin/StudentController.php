@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Notifications\StudentEnrollment;
+
 use App\Models\User;
 use App\Models\Batch;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Role;
+
 
 class StudentController extends Controller
 {
@@ -17,15 +21,18 @@ class StudentController extends Controller
         ]);
     }
 
-    public function create($id)
+    public function create()
     {
+        $roles = Role::where('name','=','Student')->select('id')->get();
+
         return view('admin.students.create',[
-            'batch' => Batch::findOrFail($id)
+            'roles' => $roles
         ]);
     }
 
     public function store(Request $request)
     {
+
         $student = User::create([
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
@@ -41,10 +48,13 @@ class StudentController extends Controller
         ]);
         $student->roles()->sync($request->roles);
 
-        return redirect(route('batch.show'));
+        $user = User::find(1);
+        $user->notify(new StudentEnrollment($student));
+
+        return redirect('/');
     }
 
-    public function show()
+    public function show($id)
     {
         return view('admin.students.index',[
             'students' => User::paginate(10)

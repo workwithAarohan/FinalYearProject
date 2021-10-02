@@ -43,12 +43,25 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
         
     Route::group(['prefix' =>'student', 'as' => 'student.'], function(){
         Route::get('/', [StudentController::class, 'index'])->name('index');
-        Route::get('/create/{batch}', [StudentController::class, 'create'])->name('create');
-        Route::post('/', [StudentController::class, 'store'])->name('store');
+
         Route::get('/{student}', [StudentController::class, 'show'])->name('show');
     });
 
 });
+
+
+Route::get('student/create', [StudentController::class, 'create'])->name('student.create');
+Route::post('/student', [StudentController::class, 'store'])->name('student.store');
+
+Route::get('/send-enrollment', [App\Http\Controllers\StudentEnrollmentController::class, 'sendEnrollmentNotification']);
+
+Route::get('/notification', function () {
+    return view('notification.index');
+})->name('notification.index');
+
+Route::get('/notification/markAsRead/{notificationId}', [App\Http\Controllers\StudentEnrollmentController::class, 'markAsRead'])->name('notification.markAsRead');
+
+Route::get('/enrolledStudent/info/{studentId}', [App\Http\Controllers\StudentEnrollmentController::class, 'StudentInfo'])->name('enrolledStudent.info');
 
 Route::resource('/event', EventController::class);
 

@@ -1,7 +1,6 @@
 @extends('layouts.nav')
 
 <link rel="stylesheet" href="/css/login.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 @section('content')
     <div class="container">
@@ -18,8 +17,7 @@
             <div class="col-lg-5 p-3 mb-2 shadow">
                 <div class="d-flex justify-content-between align-items-baseline">
                     <h4 class="align-middle"><b>Login to continue</b></h4>
-                    <img src="/images/logo/academia_logo.png" style="width: 125px; object-fit: cover;">
-                    
+                    <img src="/images/logo/academia_logo.png" style="width: 125px; object-fit: cover;"> 
                 </div>
                 <form action="{{ route('login') }}" method="POST">
                     @csrf
