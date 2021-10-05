@@ -19,7 +19,7 @@ class NoticeController extends Controller
         return view("notice.index",[
             "notices"=>$notices
         ]);
-        
+
         //echo($notices);
     }
 
@@ -30,7 +30,7 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        //
+        return view('notice.create');
     }
 
     /**

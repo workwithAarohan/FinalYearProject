@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\StudentController;
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +24,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'dashboard'])->name('dashboard');
 
 Route:: get('/about', fn() => view('about'));
 
@@ -40,7 +41,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
         Route::resource('/batch', BatchController::class);
         Route::resource('/course', CourseController::class);
     });
-        
+
     Route::group(['prefix' =>'student', 'as' => 'student.'], function(){
         Route::get('/', [StudentController::class, 'index'])->name('index');
 
@@ -72,4 +73,3 @@ Route::get('/test', function(){
 });
 
 Route::resource('/book', BookController::class);
-

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\NewStudentAdmissionEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,7 +11,6 @@ use App\Notifications\StudentEnrollment;
 use App\Models\User;
 use App\Models\Batch;
 use App\Models\Role;
-
 
 class StudentController extends Controller
 {
@@ -32,7 +32,6 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-
         $student = User::create([
             'firstname' => $request->input('firstname'),
             'lastname' => $request->input('lastname'),
@@ -46,10 +45,14 @@ class StudentController extends Controller
             'gender' => $request->input('gender'),
             'nationality' => $request->input('nationality'),
         ]);
+
+        // Insert into user_role table
         $student->roles()->sync($request->roles);
 
+        // select admin to notify
         $user = User::find(1);
-        $user->notify(new StudentEnrollment($student));
+
+        event(new NewStudentAdmissionEvent($student,$user));
 
         return redirect('/');
     }
