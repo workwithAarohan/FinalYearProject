@@ -16,6 +16,7 @@ class StudentController extends Controller
 {
     public function index()
     {
+        
         return view('admin.students.index',[
             'students' => User::paginate(10)
         ]);

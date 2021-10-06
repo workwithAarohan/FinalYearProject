@@ -7,19 +7,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class StudentEnrollment extends Notification
+class NewNotice extends Notification
 {
     use Queueable;
-    private $student;
+
+    private $notice, $sender;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($student)
+    public function __construct($notice, $sender)
     {
-        $this->student = $student;
+        $this->notice = $notice;
+        $this->sender = $sender;
     }
 
     /**
@@ -42,10 +44,9 @@ class StudentEnrollment extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line($this->enrollmentData['body'])
-                    ->action($this->enrollmentData['enrollmentText'],
-                    $this->enrollmentData['url'])
-                    ->line($this->enrollmentData['thankyou']);
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
@@ -57,11 +58,11 @@ class StudentEnrollment extends Notification
     public function toArray($notifiable)
     {
         return [
-            'title' => 'New Admission Request',
-            'message' => 'New Student has requested for admission',
-            'logo' => '/images/logo/student.png',
-            'route' => 'enrolledStudent.info',
-            'id' => $this->student['id']
+            'title' => $this->sender['name'],
+            'message' => 'Posted a new notice',
+            'logo' => '/images/profile/'.$this->sender['avatar'],
+            'route' => 'notice.show',
+            'id' => $this->notice['id'],
         ];
     }
 }

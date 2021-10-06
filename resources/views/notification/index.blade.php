@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-4">
-        
+
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card p-3 mb-2">
@@ -13,17 +13,17 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <img src="{{ asset('images/logo/student.jpg') }}" class="img-thumbnail" alt="...">
+                                    <img src="{{ asset($notifications->data['logo']) }}" class="img-thumbnail" alt="...">
                                 </div>
                                 <div class="col">
                                     <h4>{{ $notifications->data['title'] }}</h4>
-                                    <a href="{{ route($notifications->data['route'],$notifications->data['student_id']) }}">{{ $notifications->data['message'] }}</a>
+                                    <a href="{{ route($notifications->data['route'],$notifications->data['id']) }}">{{ $notifications->data['message'] }}</a>
                                     <a href="{{ route('notification.markAsRead', $notifications->id) }}" class=" btn btn-secondary float-end w-25">
                                         Mark as Read
                                     </a>
                                 </div>
                             </div>
-                            
+
                         </div>
                     @endforeach
                 </div>
@@ -31,13 +31,13 @@
                     @foreach (auth()->user()->readNotifications as $notifications)
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-1">
-                                    <img src="{{ asset('images/logo/student.png') }}" class="rounded" style="width: 45px;">
+                                <div class="col-md-2">
+                                    <img src="{{ asset($notifications->data['logo']) }}" class="border-0" style="width: 65px; height: auto; border-radius: 50% ">
                                 </div>
                                 <div class="col-md-9">
-                                    <h5>{{ $notifications->data['title'] }}</h5>
-                                    <a href="{{ route($notifications->data['route'],$notifications->data['student_id']) }}" class="text-decoration-none">
-                                        <strong>{{ $notifications->data['message'] }}</strong>
+                                    <h5 class="font-weight-bold">{{ $notifications->data['title'] }}</h5>
+                                    <a href="{{ route($notifications->data['route'],$notifications->data['id']) }}" class="text-decoration-none">
+                                        {{ $notifications->data['message'] }}
                                     </a>
                                 </div>
                                 <div class="col">
@@ -46,7 +46,7 @@
                                     </a>
                                 </div>
                             </div>
-                            
+
                         </div>
                     @endforeach
                 </div>

@@ -16,10 +16,13 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    @yield('style')
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0078D4; height: 50px;">
@@ -31,7 +34,7 @@
             <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"  data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="fas fa-ellipsis-h"></span>
             </button>
-            
+
             @can('logged-in')
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -41,9 +44,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('course.index') }}">Course</a>
                         </li>
-                        
+
                     </ul>
-                    
+
                 </div>
 
                 <ul class="navbar-nav ms-auto">
@@ -53,13 +56,13 @@
                             @if (auth()->user()->unreadNotifications->count() !=0)
                                 <span class="position-absolute translate-middle p-1 bg-danger rounded-circle" style="top:12px;">
                                     <span class="visually-hidden">New alerts</span>
-                                </span> 
+                                </span>
                             @endif
                         </a>
-                    </li> 
+                    </li>
                 </ul>
             @endcan
-            
+
 
             <ul class="navbar-nav ms-auto ">
                 @guest
@@ -96,7 +99,7 @@
                         </ul>
                     </li>
                 @endguest
-                
+
             </ul>
         </div>
       </nav>
@@ -106,5 +109,7 @@
         @include('partials.alert')
         @yield('content')
     </main>
+
+    @yield('script')
 </body>
 </html>
