@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Mail\MailController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -73,3 +74,5 @@ Route::get('/test', function(){
 });
 
 Route::resource('/book', BookController::class);
+
+Route::get('/send-mail',  [MailController::class, 'sendMail']);

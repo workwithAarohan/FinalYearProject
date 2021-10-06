@@ -10,16 +10,17 @@ use Illuminate\Notifications\Notification;
 class StudentEnrollment extends Notification
 {
     use Queueable;
-    private $student;
+    private $student, $enrollmentData;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($student)
+    public function __construct($student, $enrollmentData)
     {
         $this->student = $student;
+        $this->enrollmentData = $enrollmentData;
     }
 
     /**
@@ -30,7 +31,7 @@ class StudentEnrollment extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','mail'];
     }
 
     /**

@@ -6,7 +6,7 @@ use App\Notifications\StudentEnrollment;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class NotifyAdminAboutAdmissionListener
+class NotifyAdminAboutAdmissionListener 
 {
     /**
      * Create the event listener.
@@ -26,6 +26,6 @@ class NotifyAdminAboutAdmissionListener
      */
     public function handle($event)
     {
-        $event->user->notify(new StudentEnrollment($event->student));
+        $event->user->notify(new StudentEnrollment($event->student, $event->enrollmentData));
     }
 }

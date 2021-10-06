@@ -58,7 +58,7 @@ class NewNotice extends Notification
     public function toArray($notifiable)
     {
         return [
-            'title' => $this->sender['name'],
+            'title' => $this->sender['firstname'] . " " . $this->sender['lastname'],
             'message' => 'Posted a new notice',
             'logo' => '/images/profile/'.$this->sender['avatar'],
             'route' => 'notice.show',

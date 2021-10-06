@@ -14,7 +14,7 @@ class NewStudentAdmissionEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $student, $user;
+    public $student, $user, $enrollmentData;
 
     /**
      * Create a new event instance.
@@ -25,6 +25,13 @@ class NewStudentAdmissionEvent
     {
         $this->student = $student;
         $this->user = $user;
+
+        $this->enrollmentData = [
+            'body' => 'You received a new Notification',
+            'enrollmentText' => 'New Student has enrolled for the course',
+            'url' => url('/'),
+            'thankyou' => 'Please approve the student'
+        ];
     }
 
     /**
