@@ -151,7 +151,7 @@
 
                     </div>
 
-                    
+
 
                     <div class="mb-3 row">
                         <label for="nationality" class="col-md-4 col-form-label text-md-right">{{ __('Nationality') }}</label>
@@ -170,7 +170,9 @@
                     @foreach ($roles as $role)
                         <input type="hidden" name="roles[]" value="{{ $role->id }}">
                     @endforeach
-                    
+
+                    <input type="hidden" name="password" value="password">
+
 
 
 

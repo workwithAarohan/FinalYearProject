@@ -16,7 +16,7 @@ class StudentController extends Controller
 {
     public function index()
     {
-        
+
         return view('admin.students.index',[
             'students' => User::paginate(10)
         ]);
@@ -33,19 +33,11 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $student = User::create([
-            'firstname' => $request->input('firstname'),
-            'lastname' => $request->input('lastname'),
-            'username' => strtolower($request->input('firstname')).'-'.strtolower($request->input('lastname')),
-            'email' => $request->input('email'),
-            'password' => Hash::make('password'),
-            'temporaryAddress' => $request->input('temporaryAddress'),
-            'permanentAddress' => $request->input('permanentAddress'),
-            'phone' => $request->input('phone'),
-            'dob' => $request->input('dob'),
-            'gender' => $request->input('gender'),
-            'nationality' => $request->input('nationality'),
+        $request->merge([
+            'username' => strtolower($request->firstname) . "@academia",
         ]);
+
+        $student = User::create($request->all());
 
         // Insert into user_role table
         $student->roles()->sync($request->roles);
