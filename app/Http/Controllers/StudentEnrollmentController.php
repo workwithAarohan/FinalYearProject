@@ -23,7 +23,7 @@ class StudentEnrollmentController extends Controller
             'message' => 'New Student has requested for admission'
         ];
 
-        $user->notify(new StudentEnrollment($enrollmentData));
+        $user->notify(new StudentEnrollment($enrollmentData,$user));
 
         return redirect('home');
 
@@ -36,10 +36,25 @@ class StudentEnrollmentController extends Controller
             ->unreadNotifications
             ->where('id', $notificationId)
             ->first();
-    
-        if($notification) 
+
+        if($notification)
         {
             $notification->markAsRead();
+        }
+
+        return redirect()->back();
+    }
+
+    public function deleteNotification($notificationId)
+    {
+        $notification = auth()->user()
+            ->notifications
+            ->where('id', $notificationId)
+            ->first();
+
+        if($notification)
+        {
+            $notification->delete();
         }
 
         return redirect()->back();

@@ -61,7 +61,12 @@ Route::get('/notification', function () {
     return view('notification.index');
 })->name('notification.index');
 
-Route::get('/notification/markAsRead/{notificationId}', [App\Http\Controllers\StudentEnrollmentController::class, 'markAsRead'])->name('notification.markAsRead');
+
+Route::prefix('/notificaiton')->group(function () {
+    Route::get('/markAsRead/{notificationId}', [App\Http\Controllers\StudentEnrollmentController::class, 'markAsRead'])->name('notification.markAsRead');
+    Route::get('/notification/delete/{notificationId}', [App\Http\Controllers\StudentEnrollmentController::class, 'deleteNotification'])->name('notification.delete');
+});
+
 
 Route::get('/enrolledStudent/info/{studentId}', [App\Http\Controllers\StudentEnrollmentController::class, 'StudentInfo'])->name('enrolledStudent.info');
 
@@ -76,3 +81,8 @@ Route::get('/test', function(){
 Route::resource('/book', BookController::class);
 
 Route::get('/send-mail',  [MailController::class, 'sendMail']);
+
+
+Route::get('/form', function(){
+    return view('partials.form');
+});

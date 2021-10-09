@@ -5,16 +5,14 @@
 
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <a href="{{ url('/') }}" class="text-decoration-none text-">
-                    <div class="card p-3">
-                        <h4>Notification</h4>
+                <div class="card p-3">
+                    <h4>Notification</h4>
 
-                        @if (!auth()->user()->unreadNotifications->count())
-                            <h5>No new Notification</h5>
-                        @endif
+                    @if (!auth()->user()->unreadNotifications->count())
+                        <h5>No new Notification</h5>
+                    @endif
 
-                    </div>
-                </a>
+                </div>
 
                 @foreach (auth()->user()->unreadNotifications as $notifications)
                     <div class="card p-4">
@@ -56,7 +54,7 @@
                                 {{ $notifications->updated_at->toFormattedDateString() }}
                             </div>
                             <div class="" style="margin-left: auto">
-                                <a href="{{ route('notification.markAsRead', $notifications->id) }}" class="text-decoration-none">
+                                <a href="{{ route('notification.delete', $notifications->id) }}" class="text-decoration-none">
                                     <i class="fas fa-times fs-4 text-secondary"></i>
                                 </a>
                             </div>

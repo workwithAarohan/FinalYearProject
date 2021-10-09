@@ -6,7 +6,7 @@ use App\Notifications\StudentEnrollment;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class NotifyAdminAboutAdmissionListener 
+class NotifyAdminAboutAdmissionListener implements ShouldQueue
 {
     /**
      * Create the event listener.

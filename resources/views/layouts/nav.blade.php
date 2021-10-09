@@ -16,7 +16,13 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="{{ asset('js/ckeditor.js') }}"></script>
+
+    {{-- CkEditor --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/inline/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/balloon/ckeditor.js"></script>
+
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -31,7 +37,7 @@
                 <strong>Academia College</strong>
             </a>
 
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"  data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler ms-auto" type="" data-bs-toggle="collapse"  data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="fas fa-ellipsis-h"></span>
             </button>
 
@@ -64,7 +70,7 @@
             @endcan
 
 
-            <ul class="navbar-nav ms-auto ">
+            <ul class="navbar-nav me-auto ">
                 @guest
                     @if (Route::has('login'))
                         <li class="nav-item">
@@ -79,8 +85,9 @@
                     @endif
 
                 @else
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link  text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link  text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="true">
                             {{ Auth::user()->username }}
                         </a>
                         <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
@@ -98,6 +105,8 @@
                             </form>
                         </ul>
                     </li>
+                </ul>
+
                 @endguest
 
             </ul>
