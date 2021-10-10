@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Mail\MailController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -25,7 +26,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'dashboard'])->name('dashboard');
+
 
 Route:: get('/about', fn() => view('about'));
 
@@ -86,3 +87,7 @@ Route::get('/send-mail',  [MailController::class, 'sendMail']);
 Route::get('/form', function(){
     return view('partials.form');
 });
+
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::post('/search/users', [SearchController::class, 'searchUsers'])->name('search.users');
+

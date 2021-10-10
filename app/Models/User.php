@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function studentinfo()
     {
-        return $this->belongsTo(StudentInformation::class);
+        return $this->hasOne(StudentInformation::class);
     }
 
     public function roles()
