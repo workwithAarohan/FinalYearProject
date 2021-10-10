@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Batch;
 use App\Models\User;
+use App\Models\Course;
 
 class BatchController extends Controller
 {
@@ -15,10 +19,11 @@ class BatchController extends Controller
      */
     public function index()
     {
-        $batches = Batch::all(); // SELECT * FROM batch;
+        // SELECT * FROM batch;
+        // $batches = Batch::all(); 
 
-        return view('batch.index', [
-            'batches' => $batches
+        return view('admin.batch.index', [
+            'batches' => Batch::paginate(10)
         ]);
     }
 
@@ -29,7 +34,7 @@ class BatchController extends Controller
      */
     public function create()
     {
-        return view('batch.create');
+        return view('admin.batch.create');
     }
 
     /**
@@ -39,16 +44,16 @@ class BatchController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $batch = new Batch();
-        
+    {   
         $request->validate([
             'name' => 'required|string|max:255'
         ]);
 
-        $batch->create($request->all());
+        Batch::create($request->all());
 
-        return redirect('/batch');
+        $request->session()->flash('success','You have create new batch');
+
+        return redirect('admin/batch');
     }
 
     /**
@@ -61,16 +66,26 @@ class BatchController extends Controller
     {
         // List of all students in a same batch
 
-        $students = $batch->users;
+        $students = $batch->users()->paginate(10);
 
         foreach ($students as $key => $value) 
         {
-            $users = User::where('id', $value->user_id)->get();
-            $value->users = $users;
+
+            $usersCourse = DB::table('student_information')
+                ->join('users', 'student_information.user_id', '=', 'users.id')
+                ->join('courses', 'student_information.course_id', '=', 'courses.id')
+                ->where('users.id', $value->user_id)
+                ->get();
+
+            $value->users = $usersCourse;
+            
+            // Users Information
+            // $users = User::where('id', $value->user_id)->get();
+            // $value->users = $users;
         }
 
 
-       return view('batch.show',[
+       return view('admin.batch.show',[
            'batch' => $batch,
            'students' => $students
        ]);
@@ -84,7 +99,7 @@ class BatchController extends Controller
      */
     public function edit(Batch $batch)
     {
-        return view('batch.edit', [
+        return view('admin.batch.edit', [
             'batch' => $batch
         ]);
     }
@@ -101,10 +116,12 @@ class BatchController extends Controller
         $request->validate([
             'name' => 'required|string|max:255'
         ]);
-
+        
         $batch->update($request->all());
 
-        return redirect('/batch');
+        $request->session()->flash('success','You have updated the batch');
+
+        return redirect('admin/batch');
     }
 
     /**
@@ -113,10 +130,12 @@ class BatchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Batch $batch)
+    public function destroy(Batch $batch, Request $request)
     {
         $batch->delete();
 
-        return redirect('/batch');
+        $request->session()->flash('success','You have deleted the batch');
+
+        return redirect('admin/batch');
     }
 }

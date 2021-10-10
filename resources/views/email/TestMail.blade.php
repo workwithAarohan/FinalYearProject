@@ -7,14 +7,13 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="{{ route('batch.store') }}" method="POST">
-        @csrf
-        <label for="name">
-            Batch Name:
-        </label>
-        <input type="text" name="name">
+    <h4>{{ $details['title'] }}</h4>
 
-        <button type="submit">Create</button>
-    </form>
+    <p>{{ $details['body'] }}</p>
+
+    <footer>
+        Regards,
+        {{ auth()->user()->firstname }}
+    </footer>
 </body>
 </html>

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 
@@ -24,11 +25,14 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'temporaryAddress',
+        'permanentAddress',
         'avatar',
         'address',
         'phone',
         'dob',
         'gender',
+        'nationality',
     ];
 
     /**
@@ -50,13 +54,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function studentinfo()
+    /**
+     * Mutator
+     * Hashing the password
+     *
+     */
+    public function setPasswordAttribute($data)
     {
-        return $this->belongsTo(StudentInformation::class);
+        $this->attributes['password'] = Hash::make($data);
     }
 
-    public function course()
+    public function studentinfo()
     {
-        return $this->belongsTo(Course::class, 'students_courses');
+        return $this->hasOne(StudentInformation::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,'user_role');
     }
 }
