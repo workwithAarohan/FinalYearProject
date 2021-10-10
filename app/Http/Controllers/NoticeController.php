@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostNoticeEvent;
 use Illuminate\Http\Request;
 use App\Models\Notice;
+use App\Models\User;
 
 class NoticeController extends Controller
 {
@@ -19,7 +21,7 @@ class NoticeController extends Controller
         return view("notice.index",[
             "notices"=>$notices
         ]);
-        
+
         //echo($notices);
     }
 
@@ -30,7 +32,7 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        //
+        return view('notice.create');
     }
 
     /**
@@ -41,7 +43,11 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $notice = Notice::create($request->except('_token'));
+
+        event(new PostNoticeEvent($notice));
+
+        return redirect()->route('notice.index');
     }
 
     /**

@@ -14,9 +14,9 @@ class StudentInformation extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function batches()
+    public function batch()
     {
-        return $this->belongsToMany(Batch::class);
+        return $this->belongsTo(Batch::class);
     }
 
     public function course()

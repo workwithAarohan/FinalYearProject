@@ -12,14 +12,14 @@
             width: 100%;
         }
 
-        td, th 
+        td, th
         {
             border: 1px solid #dddddd;
             text-align: left;
             padding: 8px;
         }
 
-        tr:nth-child(even) 
+        tr:nth-child(even)
         {
             background-color: #dddddd;
         }
@@ -45,17 +45,17 @@
 
                 <td>
                     <a href="{{ route('notice.show',$notice->id) }}">
-                        {{ $notice->description }}
+                        {!! $notice->description !!}
                     </a>
                 </td>
-            
+
                 <td style="display: flex; align: center;">
                     <a href="{{ route('notice.edit', $notice->id) }}">Edit</a>
                     &emsp;
                     <form action="{{ route('notice.destroy', $notice->id)}}" method="POST">
                         @csrf
                         @method('DELETE')
-                        
+
                         <button type="submit"> Delete </button>
                     </form>
                 </td>
@@ -66,6 +66,6 @@
     <br><br>
     <a href="{{ route('notice.create') }}">Create New notice</a>
 
-    
+
 </body>
 </html>
