@@ -29,7 +29,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        return view('event.create');
     }
 
     /**
@@ -40,7 +40,15 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $event = new Event();
+
+        $event->title = $request->input('title');
+        $event->description = $request->input('description');
+        $event->venue = $request->input('venue');
+        $event->date = $request->input('date');
+        $event->save();
+
+        return redirect('/event');
     }
 
     /**
@@ -66,7 +74,11 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //
+        $event = Event::find($id);
+
+        return view('/event/edit',[
+            'event' => $event
+        ]);
     }
 
     /**
@@ -78,7 +90,15 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $event = Event::find($id);
+
+        $event->title = $request->input('title');
+        $event->description = $request->input('description');
+        $event->venue = $request->input('venue');
+        $event->date = $request->input('date');
+        $event->save();
+
+        return redirect('/event');
     }
 
     /**
