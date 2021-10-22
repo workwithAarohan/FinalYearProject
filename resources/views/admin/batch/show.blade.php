@@ -23,8 +23,33 @@
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
-    
+
                 <tbody>
+                    @foreach ($students as $student)
+                        <tr>
+                            <th scope="row">{{ $student->user->firstname }}</th>
+                            <th scope="row">{{ $student->user->lastname }}</th>
+                            <td>{{ $student->user->username }}</td>
+                            <td>{{ $student->course->name }}</td>
+                            <td>
+                                <a href="" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
+                                        document.getElementById('delete-user-form-{{ $student->id }}').submit();">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <form id="delete-user-{{ $student->user->id }}" action="" method="POST" style="display:none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+
+                {{-- <tbody>
+
                     @foreach ($students as $key => $value)
                         @foreach ($value->users as $user)
                             <tr>
@@ -48,9 +73,12 @@
                             </tr>
                         @endforeach
                     @endforeach
-                </tbody>
+                </tbody> --}}
+
             </table>
             {{ $students->links() }}
         </div>
     </div>
+
 @endsection
+
