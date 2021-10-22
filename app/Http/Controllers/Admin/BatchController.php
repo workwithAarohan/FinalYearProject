@@ -17,6 +17,7 @@ class BatchController extends Controller
     public function index()
     {
         // SELECT * FROM batch;
+      
         // $batches = Batch::all();
 
         return view('admin.batch.index', [
@@ -82,6 +83,7 @@ class BatchController extends Controller
         //     // $value->users = $users;
         // }
 
+
        return view('admin.batch.show',[
            'batch' => $batch,
            'students' => $students
@@ -113,6 +115,7 @@ class BatchController extends Controller
         $request->validate([
             'name' => 'required|string|max:255'
         ]);
+
 
         $batch->update($request->all());
 
