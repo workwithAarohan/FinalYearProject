@@ -76,7 +76,7 @@ Route::resource('/event', EventController::class);
 Route::resource('/notice', NoticeController::class);
 
 Route::get('/test', function(){
-    return view('testLogin');
+    return view('test');
 });
 
 Route::resource('/book', BookController::class);
