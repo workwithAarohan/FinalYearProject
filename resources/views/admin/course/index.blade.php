@@ -12,14 +12,14 @@
             width: 100%;
         }
 
-        td, th 
+        td, th
         {
             border: 1px solid #dddddd;
             text-align: left;
             padding: 8px;
         }
 
-        tr:nth-child(even) 
+        tr:nth-child(even)
         {
             background-color: #dddddd;
         }
@@ -44,7 +44,7 @@
                     <form action="{{ route('course.destroy', $course->id)}}" method="POST">
                         @csrf
                         @method('DELETE')
-                        
+
                         <button type="submit"> Delete </button>
                     </form>
                 </td>
@@ -55,6 +55,6 @@
     <br><br>
     <a href="{{ route('course.create') }}">Create New course</a>
 
-    
+
 </body>
 </html>

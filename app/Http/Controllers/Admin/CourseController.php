@@ -16,10 +16,10 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::all();
+        // $courses = Course::all();
 
         return view("admin.course.index",[
-            'courses' => $courses
+            'courses' => Course::all()
         ]);
     }
 
@@ -41,8 +41,16 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        
-        
+        // $course = new Course();
+
+        // $course->name = $request->input('name');
+        // $course->description = $request->input('description');
+        // $course->save();
+
+        Course::create($request->all());
+
+        return redirect('/admin/course');
+
     }
 
     /**
@@ -66,7 +74,11 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $course = Course::find($id);   //Select * from courses where id = $id;
+
+        return view('/admin/course/edit',[
+            'course' => $course
+        ]);
     }
 
     /**
@@ -78,7 +90,14 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $course = Course::find($id);
+
+        $course->name = $request->input('name');
+        $course->description = $request->input('description');
+        $course->save();
+
+        return redirect('/admin/course');
+
     }
 
     /**

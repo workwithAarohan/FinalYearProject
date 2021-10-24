@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
             $table->string('nationality');
 
             $table->rememberToken();
-            $table->timestamps();   
+            $table->timestamps();
         });
     }
 
