@@ -56,9 +56,11 @@ class NoticeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Notice $notice)
     {
-        //
+        return view("notice.show", [
+            "notice"=>$notice
+        ]);
     }
 
     /**
@@ -69,7 +71,11 @@ class NoticeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $notice = Notice::find($id);
+
+        return view('/notice/edit',[
+            'notice' => $notice
+        ]);
     }
 
     /**
