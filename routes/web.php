@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Mail\MailController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -41,7 +42,14 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
     Route::group(['namespace' => 'Admin'], function(){
         Route::resource('/batch', BatchController::class);
+
+        Route::get('/course/{course}/batches', [App\Http\Controllers\Admin\CourseController::class, 'batch_index'])->name('course.batches');
         Route::resource('/course', CourseController::class);
+
+        Route::resource('/semester', SemesterController::class);
+
+        Route::get('/subject/create/{course}', [App\Http\Controllers\Admin\SubjectController::class, 'create'])->name('course.subject.create');
+        Route::resource('/subject', SubjectController::class);
     });
 
     Route::group(['prefix' =>'student', 'as' => 'student.'], function(){
@@ -81,7 +89,7 @@ Route::get('/test', function(){
 
 Route::resource('/book', BookController::class);
 
-Route::get('/send-mail',  [MailController::class, 'sendMail']);
+// Route::get('/send-mail',  [MailController::class, 'sendMail']);
 
 
 Route::get('/form', function(){
@@ -90,4 +98,6 @@ Route::get('/form', function(){
 
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::post('/search/users', [SearchController::class, 'searchUsers'])->name('search.users');
+
+Route::get('/welcome', [WelcomeController::class, 'admissionOpen'])->name('welcome');
 

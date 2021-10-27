@@ -12,9 +12,9 @@
         <div class="row mb-3">
             <div class="col-12">
                 <h1 class="float-start">
-                    Course
+                   {{ $course->courseDetails->slug }} - Batch
                 </h1>
-                <a href="{{ route('course.create') }}" class="btn btn-success float-end" role="button">
+                <a href="{{ route('batch.create') }}" class="btn btn-success float-end" role="button">
                     Create
                 </a>
             </div>
@@ -24,7 +24,8 @@
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Course Name</th>
+                        <th scope="col">Batch</th>
+                        <th scope="col">No.of Students</th>
                         <th scope="col">Created By</th>
                         @can('logged-in')
                             <th scope="col">Action</th>
@@ -33,26 +34,29 @@
                 </thead>
 
                 <tbody>
-                    @foreach ($courses as $course)
-                        <tr data-href="{{ route('course.show',$course->id) }}">
-                            <th scope="row">{{ $course->id }}</th>
+                    @foreach ($batches as $batch)
+                        <tr data-href="{{ route('batch.show',$batch->id) }}">
+                            <th scope="row">{{ $batch->id }}</th>
 
                             <th scope="row">
-                                {{ $course->course_name }} ({{ $course->courseDetails->slug }})
+                                {{ $batch->batch_name }}
                             </th>
                             <td>
-                                {{ $course->createdBy->firstname }} {{ $course->createdBy->lastname }}
+                                {{ $batch->users()->count() }}
+                            </td>
+                            <td>
+                                {{ $batch->createdBy->firstname }}
                             </td>
                             @can('logged-in')
                                 <td>
-                                    <a href="{{ route('course.edit',$course->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                    <a href="{{ route('batch.edit',$batch->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
-                                            document.getElementById('delete-user-form-{{ $course->id }}').submit();">
+                                            document.getElementById('delete-user-form-{{ $batch->id }}').submit();">
                                         <i class="fas fa-trash"></i>
                                     </a>
-                                    <form id="delete-user-form-{{ $course->id }}" action="{{ route('course.destroy',$course->id) }}" method="POST" style="display:none;">
+                                    <form id="delete-user-form-{{ $batch->id }}" action="{{ route('batch.destroy',$batch->id) }}" method="POST" style="display:none;">
                                         @csrf
                                         @method('DELETE')
                                     </form>
@@ -63,7 +67,7 @@
                 </tbody>
             </table>
 
-            {{ $courses->links() }}
+            {{ $batches->links() }}
         </div>
     </div>
 

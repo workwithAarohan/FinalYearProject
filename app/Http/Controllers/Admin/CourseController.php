@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Course;
+use App\Models\Semester;
+use App\Models\Subject;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
@@ -19,7 +22,19 @@ class CourseController extends Controller
         // $courses = Course::all();
 
         return view("admin.course.index",[
-            'courses' => Course::all()
+            'courses' => Course::paginate(10)
+        ]);
+    }
+
+    /**
+     * Display a list of course related batch
+     *
+     */
+    public function batch_index(Course $course)
+    {
+        return view('admin.course.batches', [
+            'course' => $course,
+            'batches' => $course->batches()->paginate(10)
         ]);
     }
 
@@ -47,7 +62,16 @@ class CourseController extends Controller
         // $course->description = $request->input('description');
         // $course->save();
 
-        Course::create($request->all());
+        $course = Course::create($request->all());
+
+        DB::table('course_details')->insert([
+            'course_id' => $course->id,
+            'slug' => $request->input('slug'),
+            'title' => $request->input('title'),
+            'image' => $request->input('image'),
+            'description' => $request->input('description'),
+            'objective' => $request->input('objective'),
+        ]);
 
         return redirect('/admin/course');
 
@@ -61,8 +85,23 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
+        $semesters = Semester::all();
+
+        foreach($semesters as $semester)
+        {
+            $subject = Subject::where('course_id', $course->id)
+                ->where('semester_id', $semester->id)->get();
+            $semester->subject = $subject;
+
+            $semester->electiveCount = Subject::where('course_id', $course->id)
+                ->where('semester_id', $semester->id)
+                ->where('is_elective', 1)
+                ->count();
+        }
+
         return view('admin.course.show',[
-            'course' => $course
+            'course' => $course,
+            'semesters' => $semesters,
         ]);
     }
 

@@ -25,24 +25,36 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Batch</th>
+                        <th scope="col">Course</th>
                         <th scope="col">No.of Students</th>
+                        <th scope="col">Status</th>
                         @can('logged-in')
                             <th scope="col">Action</th>
                         @endcan
                     </tr>
                 </thead>
-    
+
                 <tbody>
                     @foreach ($batches as $key => $value)
                         <tr data-href="{{ route('batch.show',$value->id) }}">
                             <th scope="row">{{ $value->id }}</th>
-                            
+
                             <th scope="row">
-                                {{ $value->name }}
-                            </th> 
+                                {{ $value->batch_name }}
+                            </th>
+                            <td>
+                                {{ $value->course->courseDetails->slug }}
+                            </td>
                             <td>
                                 {{ $value->users()->count() }}
-                            </td> 
+                            </td>
+                            <td>
+                                @if ($value->is_active)
+                                    Active
+                                @else
+                                    Inactive
+                                @endif
+                            </td>
                             @can('logged-in')
                                 <td>
                                     <a href="{{ route('batch.edit',$value->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
