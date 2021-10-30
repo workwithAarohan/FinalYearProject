@@ -31,6 +31,7 @@
                         <th scope="col">Subject Name</th>
                         <th scope="col">Course</th>
                         <th scope="col">Semester</th>
+                        <th scope="col">Subject Type</th>
                         @can('logged-in')
                             <th scope="col">Action</th>
                         @endcan
@@ -53,6 +54,13 @@
                             </td>
                             <td>
                                 {{ $subject->semester->semester_name }}
+                            </td>
+                            <td>
+                                @if ($subject->is_elective)
+                                    Elective
+                                @else
+                                    Non-Elective
+                                @endif
                             </td>
                             @can('logged-in')
                                 <td>

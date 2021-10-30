@@ -59,10 +59,19 @@
                             </td>
                             @can('logged-in')
                                 <td>
-                                    <a href="{{ route('batch.edit',$value->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
+                                    <div class="d-flex align-items-baseline">
+                                        <a href="{{ route('batch.edit',$value->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('batch.destroy', $value->id) }}" method="POST">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="text-danger btn" title="Delete" style="padding: 0px;">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    {{-- <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
                                             document.getElementById('delete-batch-form-{{ $value->id }}').submit();">
                                         <i class="fas fa-trash"></i>
                                     </a>
@@ -70,7 +79,7 @@
                                         @method('DELETE')
                                         @csrf
 
-                                    </form>
+                                    </form> --}}
                                 </td>
                             @endcan
                         </tr>

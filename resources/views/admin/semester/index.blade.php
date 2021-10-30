@@ -28,6 +28,7 @@
                         <th scope="col">ID</th>
                         <th scope="col">Semester</th>
                         <th scope="col">Created By</th>
+                        <th scope="col">Status</th>
                         @can('logged-in')
                             <th scope="col">Action</th>
                         @endcan
@@ -45,9 +46,28 @@
                             <td>
                                 {{ $semester->createdBy->firstname }} {{ $semester->createdBy->lastname }}
                             </td>
+                            <td>
+                                @if ($semester->is_active)
+                                    Active
+                                @else
+                                    Inactive
+                                @endif
+                            </td>
                             @can('logged-in')
                                 <td>
-                                    <a href="{{ route('semester.edit',$semester->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                    <div class="d-flex align-items-baseline">
+                                        <a href="{{ route('semester.edit',$semester->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('semester.destroy', $semester->id) }}" method="POST">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="text-danger p-0 btn" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    {{-- <a href="{{ route('semester.edit',$semester->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
@@ -57,7 +77,7 @@
                                     <form id="delete-user-form-{{ $semester->id }}" action="{{ route('semester.destroy',$semester->id) }}" method="POST" style="display:none;">
                                         @csrf
                                         @method('DELETE')
-                                    </form>
+                                    </form> --}}
                                 </td>
                             @endcan
                         </tr>

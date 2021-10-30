@@ -55,6 +55,8 @@ class BatchController extends Controller
 
         $request->session()->flash('success','You have create new batch');
 
+        
+
         return redirect('admin/batch');
     }
 
@@ -116,7 +118,9 @@ class BatchController extends Controller
     public function update(Request $request, Batch $batch)
     {
         $request->validate([
-            'name' => 'required|string|max:255'
+            'batch_name' => 'required|string|max:255',
+            'batch_description' => 'required|string|max:255',
+            'year' => 'required|string|max:255'
         ]);
 
         $batch->update($request->all());

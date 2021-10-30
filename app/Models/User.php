@@ -79,6 +79,11 @@ class User extends Authenticatable
         return $this->hasOne(Semester::class, 'created_by');
     }
 
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
     public function studentinfo()
     {
         return $this->hasOne(StudentInformation::class);

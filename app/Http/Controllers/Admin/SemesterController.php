@@ -89,8 +89,13 @@ class SemesterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Semester $semester, Request $request)
     {
-        //
+        $semester->delete();
+
+        $request->session()->flash('success','You have deleted the semester');
+
+        return redirect('admin/semester');
+
     }
 }

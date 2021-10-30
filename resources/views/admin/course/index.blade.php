@@ -28,6 +28,7 @@
                         <th scope="col">ID</th>
                         <th scope="col">Course Name</th>
                         <th scope="col">Created By</th>
+                        <th scope="col">Status</th>
                         @can('logged-in')
                             <th scope="col">Action</th>
                         @endcan
@@ -45,9 +46,16 @@
                             <td>
                                 {{ $course->createdBy->firstname }} {{ $course->createdBy->lastname }}
                             </td>
+                            <td>
+                                @if ($course->is_active)
+                                    Active
+                                @else
+                                    Inactive
+                                @endif
+                            </td>
                             @can('logged-in')
                                 <td>
-                                    <div class="d-flex">
+                                    <div class="d-flex align-items-baseline">
                                         <a href="{{ route('course.edit',$course->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>

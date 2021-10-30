@@ -3,6 +3,9 @@
 @section('content')
 
     <div class="container">
+        <a href="{{ route('course.batch.create', $course->id) }}" class="btn btn-primary float-end" >
+            New Session
+        </a>
         <h4>
             <strong>
                 {{ $course->course_name }}
