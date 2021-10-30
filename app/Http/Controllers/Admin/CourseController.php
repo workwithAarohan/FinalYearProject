@@ -111,9 +111,9 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Course $course)
     {
-        $course = Course::find($id);   //Select * from courses where id = $id;
+        // $course = Course::find($id);   //Select * from courses where id = $id;
 
         return view('/admin/course/edit',[
             'course' => $course
@@ -127,13 +127,17 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Course $course)
     {
-        $course = Course::find($id);
+        // $course = Course::find($id);
 
-        $course->name = $request->input('name');
-        $course->description = $request->input('description');
-        $course->save();
+        $course->update($request->all());
+
+        $course->courseDetails->update($request->except('_token'));
+
+        // $course->name = $request->input('name');
+        // $course->description = $request->input('description');
+        // $course->save();
 
         return redirect('/admin/course');
 
@@ -145,8 +149,10 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Course $course)
     {
-        //
+        $course->delete();
+
+        return redirect('/admin/course');
     }
 }

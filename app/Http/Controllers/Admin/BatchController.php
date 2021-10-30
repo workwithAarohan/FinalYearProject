@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Batch;
+use App\Models\Course;
 
 class BatchController extends Controller
 {
@@ -29,9 +30,11 @@ class BatchController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Course $course)
     {
-        return view('admin.batch.create');
+        return view('admin.batch.create',[
+            'course' => $course
+        ]);
     }
 
     /**
@@ -43,7 +46,9 @@ class BatchController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255'
+            'batch_name' => 'required|string|max:255',
+            'batch_description' => 'required|string|max:255',
+            'year' => 'required|string|max:255'
         ]);
 
         Batch::create($request->all());

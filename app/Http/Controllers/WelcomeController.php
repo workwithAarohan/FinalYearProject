@@ -8,6 +8,6 @@ class WelcomeController extends Controller
 {
     public function admissionOpen()
     {
-        return view('welcome');
+        return view('admission');
     }
 }

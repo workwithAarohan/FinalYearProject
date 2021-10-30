@@ -11,12 +11,12 @@
 
         <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
 
-        <label for="course_name">
+        <label for="slug">
             Course Slug:
         </label>
         <input type="text" name="slug"> <br> <br>
 
-        <label for="course_name">
+        <label for="title">
             Course Title:
         </label>
         <input type="text" name="title"> <br> <br>

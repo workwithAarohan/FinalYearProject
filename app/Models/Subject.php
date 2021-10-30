@@ -20,4 +20,9 @@ class Subject extends Model
     {
         return $this->belongsTo(Semester::class);
     }
+
+    public function classroom()
+    {
+        return $this->hasOne(Classroom::class);
+    }
 }

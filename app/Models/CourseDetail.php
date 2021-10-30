@@ -11,6 +11,8 @@ class CourseDetail extends Model
 
     protected $table = 'course_details';
 
+    protected $fillable = ['course_id', 'slug', 'title', 'image','description', 'objective'];
+
     public function course()
     {
         return $this->belongsTo(Course::class);

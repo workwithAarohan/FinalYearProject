@@ -14,9 +14,9 @@
         <div class="row mb-3">
             <div class="col-12">
                 <h1 class="float-start">
-                    Batch
+                    Classroom
                 </h1>
-                {{-- <a href="{{ route('batch.create') }}" class="btn btn-success float-end" role="button">
+                {{-- <a href="{{ route('course.classroom.create', $course->id) }}" class="btn btn-success float-end" role="button">
                     Create
                 </a> --}}
             </div>
@@ -26,9 +26,9 @@
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
+                        <th scope="col">Classroom Name</th>
                         <th scope="col">Batch</th>
-                        <th scope="col">Course</th>
-                        <th scope="col">No.of Students</th>
+                        <th scope="col">Subject</th>
                         <th scope="col">Status</th>
                         @can('logged-in')
                             <th scope="col">Action</th>
@@ -37,21 +37,21 @@
                 </thead>
 
                 <tbody>
-                    @foreach ($batches as $key => $value)
-                        <tr data-href="{{ route('batch.show',$value->id) }}">
-                            <th scope="row">{{ $value->id }}</th>
+                    @foreach ($classrooms as $classroom)
+                        <tr data-href="{{ route('classroom.show',$classroom->id) }}">
+                            <th scope="row">{{ $classroom->id }}</th>
 
-                            <th scope="row">
-                                {{ $value->batch_name }}
-                            </th>
                             <td>
-                                {{ $value->course->courseDetails->slug }}
+                                {{ $classroom->room_name }}
                             </td>
                             <td>
-                                {{ $value->users()->count() }}
+                                {{ $classroom->batch->batch_name }}
                             </td>
                             <td>
-                                @if ($value->is_active)
+                                {{ $classroom->subject->subject_name }}
+                            </td>
+                            <td>
+                                @if($classroom->is_active)
                                     Active
                                 @else
                                     Inactive
@@ -59,17 +59,16 @@
                             </td>
                             @can('logged-in')
                                 <td>
-                                    <a href="{{ route('batch.edit',$value->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                    <a href="{{ route('classroom.edit',$classroom->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
-                                            document.getElementById('delete-batch-form-{{ $value->id }}').submit();">
+                                            document.getElementById('delete-user-form-{{ $classroom->id }}').submit();">
                                         <i class="fas fa-trash"></i>
                                     </a>
-                                    <form id="delete-batch-form-{{ $value->id }}" action="{{ route('batch.destroy',$value->id) }}" method="POST" style="display:none;">
-                                        @method('DELETE')
+                                    <form id="delete-user-form-{{ $classroom->id }}" action="{{ route('classroom.destroy',$classroom->id) }}" method="POST" style="display:none;">
                                         @csrf
-
+                                        @method('DELETE')
                                     </form>
                                 </td>
                             @endcan
@@ -78,7 +77,7 @@
                 </tbody>
             </table>
 
-            {{ $batches->links() }}
+            {{ $classrooms->links() }}
         </div>
     </div>
 

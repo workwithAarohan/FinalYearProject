@@ -41,6 +41,7 @@ Route::get('/header', function () {
 Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
     Route::group(['namespace' => 'Admin'], function(){
+        Route::get('/batch/{course}/create', [App\Http\Controllers\Admin\BatchController::class, 'create'])->name('course.batch.create');
         Route::resource('/batch', BatchController::class);
 
         Route::get('/course/{course}/batches', [App\Http\Controllers\Admin\CourseController::class, 'batch_index'])->name('course.batches');
@@ -50,6 +51,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
         Route::get('/subject/create/{course}', [App\Http\Controllers\Admin\SubjectController::class, 'create'])->name('course.subject.create');
         Route::resource('/subject', SubjectController::class);
+
+        Route::resource('/classroom', ClassroomController::class);
     });
 
     Route::group(['prefix' =>'student', 'as' => 'student.'], function(){

@@ -9,7 +9,7 @@ class Batch extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['batch_name', 'batch_description', 'course_id', 'year', 'is_active'];
+    protected $fillable = ['batch_name', 'batch_description', 'course_id', 'year', 'created_by', 'is_active'];
 
     public function users()
     {
@@ -24,5 +24,10 @@ class Batch extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class,'created_by');
+    }
+
+    public function classrooms()
+    {
+        return $this->hasMany(Classroom::class);
     }
 }

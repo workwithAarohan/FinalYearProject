@@ -65,9 +65,9 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body ">
-                        <button class="btn btn-success float-end">
+                        <a href="{{ route('course.batch.create', $course->id) }}" class="btn btn-success float-end">
                             Add Batch
-                        </button>
+                        </a>
                         <a href="{{ route('course.batches', $course->id) }}" class="text-decoration-none">
                             <h5 class="card-title fw-bold ">Batch</h5>
                         </a>

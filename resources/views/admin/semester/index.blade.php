@@ -1,11 +1,13 @@
 @extends('layouts.nav')
 
-<style>
-    tr[data-href]
-    {
-        cursor: pointer;
-    }
-</style>
+@section('style')
+    <style>
+        tr[data-href]
+        {
+            cursor: pointer;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="container">
