@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Course;
+use App\Models\Semester;
+use App\Models\Subject;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
@@ -16,10 +19,22 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::all();
+        // $courses = Course::all();
 
         return view("admin.course.index",[
-            'courses' => $courses
+            'courses' => Course::paginate(10)
+        ]);
+    }
+
+    /**
+     * Display a list of course related batch
+     *
+     */
+    public function batch_index(Course $course)
+    {
+        return view('admin.course.batches', [
+            'course' => $course,
+            'batches' => $course->batches()->paginate(10)
         ]);
     }
 
@@ -41,8 +56,25 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        
-        
+        // $course = new Course();
+
+        // $course->name = $request->input('name');
+        // $course->description = $request->input('description');
+        // $course->save();
+
+        $course = Course::create($request->all());
+
+        DB::table('course_details')->insert([
+            'course_id' => $course->id,
+            'slug' => $request->input('slug'),
+            'title' => $request->input('title'),
+            'image' => $request->input('image'),
+            'description' => $request->input('description'),
+            'objective' => $request->input('objective'),
+        ]);
+
+        return redirect('/admin/course');
+
     }
 
     /**
@@ -53,8 +85,23 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
+        $semesters = Semester::all();
+
+        foreach($semesters as $semester)
+        {
+            $subject = Subject::where('course_id', $course->id)
+                ->where('semester_id', $semester->id)->get();
+            $semester->subject = $subject;
+
+            $semester->electiveCount = Subject::where('course_id', $course->id)
+                ->where('semester_id', $semester->id)
+                ->where('is_elective', 1)
+                ->count();
+        }
+
         return view('admin.course.show',[
-            'course' => $course
+            'course' => $course,
+            'semesters' => $semesters,
         ]);
     }
 
@@ -64,9 +111,13 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Course $course)
     {
-        //
+        // $course = Course::find($id);   //Select * from courses where id = $id;
+
+        return view('/admin/course/edit',[
+            'course' => $course
+        ]);
     }
 
     /**
@@ -76,9 +127,20 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Course $course)
     {
-        //
+        // $course = Course::find($id);
+
+        $course->update($request->all());
+
+        $course->courseDetails->update($request->except('_token'));
+
+        // $course->name = $request->input('name');
+        // $course->description = $request->input('description');
+        // $course->save();
+
+        return redirect('/admin/course');
+
     }
 
     /**
@@ -87,8 +149,10 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Course $course)
     {
-        //
+        $course->delete();
+
+        return redirect('/admin/course');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBatchesTable extends Migration
+class CreateSemestersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,13 @@ class CreateBatchesTable extends Migration
      */
     public function up()
     {
-        Schema::create('batches', function (Blueprint $table) {
+        Schema::create('semesters', function (Blueprint $table) {
             $table->id();
-            $table->string('batch_name');
-            $table->string('batch_description');
-            $table->foreignId('course_id')->constrained()
-                ->onDelete('cascade');
-            $table->string('year');
+            $table->string('semester_name');
+            $table->text('description')->nullable();
             $table->foreignId('created_by')->constrained('users')
                 ->onDelete('cascade');
             $table->boolean('is_active')->default(1);
-
             $table->timestamps();
         });
     }
@@ -35,6 +31,6 @@ class CreateBatchesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('batches');
+        Schema::dropIfExists('semesters');
     }
 }

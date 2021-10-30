@@ -49,7 +49,6 @@
                 </tbody>
 
                 {{-- <tbody>
-
                     @foreach ($students as $key => $value)
                         @foreach ($value->users as $user)
                             <tr>
@@ -74,11 +73,8 @@
                         @endforeach
                     @endforeach
                 </tbody> --}}
-
             </table>
             {{ $students->links() }}
         </div>
     </div>
-
 @endsection
-
