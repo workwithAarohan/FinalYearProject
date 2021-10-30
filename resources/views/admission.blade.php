@@ -9,9 +9,14 @@
 </head>
 <body>
     <div class="container mt-4">
-            <a href="{{ route('welcome') }}" class="btn btn-primary">
-                Admission Open
-            </a>
+        @foreach ($admissionWindows as $admissionWindow)
+            @if ($admissionWindow->is_open)
+                <a href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}" class="btn btn-primary">
+                    Admission Open for {{ $admissionWindow->course->courseDetails->slug }}
+                </a>
+            @endif
+        @endforeach
+
     </div>
 </body>
 </html>

@@ -35,4 +35,9 @@ class Course extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    public function admissionWindows()
+    {
+        return $this->hasMany(AdmissionWindow::class);
+    }
 }

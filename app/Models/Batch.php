@@ -35,4 +35,9 @@ class Batch extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    public function admissionWindow()
+    {
+        return $this->hasOne(AdmissionWindow::class);
+    }
 }

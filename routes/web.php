@@ -53,6 +53,9 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
         Route::resource('/subject', SubjectController::class);
 
         Route::resource('/classroom', ClassroomController::class);
+
+        Route::get('/course/newSession/{course}', [App\Http\Controllers\Admin\AdmissionController::class, 'createNewSession'])->name('course.newSession');
+        Route::post('/course/newSession/store', [App\Http\Controllers\Admin\AdmissionController::class, 'storeNewSession'])->name('course.newSession.store');
     });
 
     Route::group(['prefix' =>'student', 'as' => 'student.'], function(){
@@ -63,8 +66,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
 });
 
-
-Route::get('student/create', [StudentController::class, 'create'])->name('student.create');
+// Student New Admission
+Route::get('student/create/{course}/{batch}', [StudentController::class, 'create'])->name('student.create');
 Route::post('/student', [StudentController::class, 'store'])->name('student.store');
 
 Route::get('/send-enrollment', [App\Http\Controllers\StudentEnrollmentController::class, 'sendEnrollmentNotification']);

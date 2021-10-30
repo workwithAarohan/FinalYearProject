@@ -21,8 +21,10 @@ class CreateAdmissionWindowsTable extends Migration
             $table->foreignId('course_id')
                 ->constrained()
                 ->onDelete('cascade');
+            $table->foreignId('created_by')->constrained('users')
+                ->onDelete('cascade');
             $table->boolean('is_open')->default(1);
-            
+
             $table->timestamps();
         });
     }

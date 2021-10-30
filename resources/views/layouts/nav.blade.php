@@ -28,7 +28,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0078D4; height: 50px;">
-        <div class="container-fluid">
+        <div class="container">
             <a class="navbar-brand text-white" href="{{ route('home') }}">
                 <strong>Academia College</strong>
             </a>
