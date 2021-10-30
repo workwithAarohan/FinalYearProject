@@ -7,7 +7,7 @@
                 <h1 class="float-start">
                     {{ $batch->name }} Batch
                 </h1>
-                <a href="{{ route('student.create',$batch->id) }}" class="btn btn-success float-end" role="button">
+                <a href="{{ route('student.create', [$batch->course_id, $batch->id]) }}" class="btn btn-success float-end" role="button">
                     Create
                 </a>
             </div>

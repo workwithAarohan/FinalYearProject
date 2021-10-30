@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Mail\MailController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\WelcomeController;
+use App\Models\AdmissionWindow;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -21,7 +22,9 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', [
+        'admissionWindows' => AdmissionWindow::all()
+    ]);
 });
 
 Auth::routes();
