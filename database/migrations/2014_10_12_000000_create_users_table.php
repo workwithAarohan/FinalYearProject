@@ -22,7 +22,9 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 
+
             $table->string('avatar')->default('download.png');
+
             $table->string('temporaryAddress');
             $table->string('permanentAddress');
             $table->string('phone');
