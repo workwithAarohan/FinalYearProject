@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
-use App\Models\Event;
 
-class EventController extends Controller
+class ClassroomController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,12 +15,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
-        $events=Event::all();
-        return view("event.index",[
-            "events"=> $events
+        return view('admin.classroom.index',[
+            'classrooms' => Classroom::paginate(10)
         ]);
-        //    echo($events);
     }
 
     /**
@@ -29,7 +27,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('event.create');
+        return view('admin.classroom.create');
     }
 
     /**
@@ -40,15 +38,8 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $event = new Event();
-
-        $event->title = $request->input('title');
-        $event->description = $request->input('description');
-        $event->venue = $request->input('venue');
-        $event->date = $request->input('date');
-        $event->save();
-
-        return redirect('/event');
+        Classroom::create($request->all());
+        return redirect('/admin/classroom');
     }
 
     /**
@@ -57,13 +48,9 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show($id)
     {
         //
-      
-        return view("event.show", [
-            "event"=>$event
-        ]);
     }
 
     /**
@@ -72,12 +59,10 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Classroom $classroom)
     {
-        $event = Event::find($id);
-
-        return view('/event/edit',[
-            'event' => $event
+        return view('admin.classroom.edit',[
+            'classroom' => $classroom
         ]);
     }
 
@@ -88,17 +73,11 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Classroom $classroom)
     {
-        $event = Event::find($id);
+        $classroom->update($request->all());
 
-        $event->title = $request->input('title');
-        $event->description = $request->input('description');
-        $event->venue = $request->input('venue');
-        $event->date = $request->input('date');
-        $event->save();
-
-        return redirect('/event');
+        return redirect('/admin/classroom');
     }
 
     /**
@@ -107,8 +86,9 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Classroom $classroom)
     {
-        //
+        $classroom->delete();
+        return redirect('/admin/classroom');
     }
 }

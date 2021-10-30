@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\Semester;
 use Illuminate\Http\Request;
-use App\Models\Event;
 
-class EventController extends Controller
+class SemesterController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,12 +15,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
-        $events=Event::all();
-        return view("event.index",[
-            "events"=> $events
+        return view('admin.semester.index', [
+            'semesters' => Semester::paginate(10)
         ]);
-        //    echo($events);
     }
 
     /**
@@ -29,7 +27,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('event.create');
+        return view('admin.semester.create');
     }
 
     /**
@@ -40,15 +38,9 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $event = new Event();
+        Semester::create($request->all());
 
-        $event->title = $request->input('title');
-        $event->description = $request->input('description');
-        $event->venue = $request->input('venue');
-        $event->date = $request->input('date');
-        $event->save();
-
-        return redirect('/event');
+        return redirect('admin/semester');
     }
 
     /**
@@ -57,12 +49,10 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show(Semester $semester)
     {
-        //
-      
-        return view("event.show", [
-            "event"=>$event
+        return view('admin.semester.show',[
+            'semester' => $semester
         ]);
     }
 
@@ -72,12 +62,10 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Semester $semester)
     {
-        $event = Event::find($id);
-
-        return view('/event/edit',[
-            'event' => $event
+        return view('admin.semester.edit', [
+            'semester' => $semester
         ]);
     }
 
@@ -88,17 +76,11 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Semester $semester)
     {
-        $event = Event::find($id);
+        $semester->update($request->all());
 
-        $event->title = $request->input('title');
-        $event->description = $request->input('description');
-        $event->venue = $request->input('venue');
-        $event->date = $request->input('date');
-        $event->save();
-
-        return redirect('/event');
+        return redirect('/admin/semester');
     }
 
     /**
@@ -107,8 +89,13 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Semester $semester, Request $request)
     {
-        //
+        $semester->delete();
+
+        $request->session()->flash('success','You have deleted the semester');
+
+        return redirect('admin/semester');
+
     }
 }

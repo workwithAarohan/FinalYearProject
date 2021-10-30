@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Events\PostNoticeEvent;
+use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\Semester;
+use App\Models\Subject;
 use Illuminate\Http\Request;
-use App\Models\Notice;
-use App\Models\User;
+use Mockery\Matcher\Subset;
 
-class NoticeController extends Controller
+class SubjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,13 +18,9 @@ class NoticeController extends Controller
      */
     public function index()
     {
-        //
-        $notices = Notice::all();
-        return view("notice.index",[
-            "notices"=>$notices
+        return view('admin.subject.index', [
+            'subjects' => Subject::paginate(10)
         ]);
-
-        //echo($notices);
     }
 
     /**
@@ -30,9 +28,12 @@ class NoticeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Course $course)
     {
-        return view('notice.create');
+        return view('admin.subject.create', [
+            'course' => $course,
+            'semesters' => Semester::all()
+        ]);
     }
 
     /**
@@ -43,11 +44,9 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
-        $notice = Notice::create($request->except('_token'));
+        $subject = Subject::create($request->all());
 
-        event(new PostNoticeEvent($notice));
-
-        return redirect()->route('notice.index');
+        return redirect('/admin/course/'. $subject->course->id);
     }
 
     /**
@@ -56,10 +55,10 @@ class NoticeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Notice $notice)
+    public function show(Subject $subject)
     {
-        return view("notice.show", [
-            "notice"=>$notice
+        return view('admin.subject.show', [
+            'subject' => $subject
         ]);
     }
 
@@ -69,12 +68,10 @@ class NoticeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Subject $subject)
     {
-        $notice = Notice::find($id);
-
-        return view('/notice/edit',[
-            'notice' => $notice
+        return view('admin.subject.edit',[
+            'subject' => $subject
         ]);
     }
 
@@ -85,9 +82,11 @@ class NoticeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Subject $subject)
     {
-        //
+        $subject->update($request->all());
+
+        return redirect('/admin/subject');
     }
 
     /**
@@ -96,8 +95,12 @@ class NoticeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Subject $subject, Request $request)
     {
-        //
+        $subject->delete();
+
+        $request->session()->flash('success','You have deleted the batch');
+
+        return redirect('admin/subject');
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Batch;
+use App\Models\Course;
 
 class BatchController extends Controller
 {
@@ -17,7 +18,6 @@ class BatchController extends Controller
     public function index()
     {
         // SELECT * FROM batch;
-      
         // $batches = Batch::all();
 
         return view('admin.batch.index', [
@@ -30,9 +30,11 @@ class BatchController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Course $course)
     {
-        return view('admin.batch.create');
+        return view('admin.batch.create',[
+            'course' => $course
+        ]);
     }
 
     /**
@@ -44,12 +46,16 @@ class BatchController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255'
+            'batch_name' => 'required|string|max:255',
+            'batch_description' => 'required|string|max:255',
+            'year' => 'required|string|max:255'
         ]);
 
         Batch::create($request->all());
 
         $request->session()->flash('success','You have create new batch');
+
+        
 
         return redirect('admin/batch');
     }
@@ -83,7 +89,6 @@ class BatchController extends Controller
         //     // $value->users = $users;
         // }
 
-
        return view('admin.batch.show',[
            'batch' => $batch,
            'students' => $students
@@ -113,9 +118,10 @@ class BatchController extends Controller
     public function update(Request $request, Batch $batch)
     {
         $request->validate([
-            'name' => 'required|string|max:255'
+            'batch_name' => 'required|string|max:255',
+            'batch_description' => 'required|string|max:255',
+            'year' => 'required|string|max:255'
         ]);
-
 
         $batch->update($request->all());
 
