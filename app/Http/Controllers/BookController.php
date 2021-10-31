@@ -16,8 +16,12 @@ class BookController extends Controller
     {
     // select * from books
     $books = Book::all();
-    echo($books);
-    }
+  
+    return view('book.index', [
+        'books' => $books
+    ]);
+}
+
 
     /**
      * Show the form for creating a new resource.

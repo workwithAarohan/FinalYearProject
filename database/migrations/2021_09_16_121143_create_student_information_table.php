@@ -17,11 +17,11 @@ class CreateStudentInformationTable extends Migration
             $table->id();
 
             $table->foreignId('user_id')->constrained()
-                ->onDelete('cascade')->onUpdate('cascade');
+                ->onDelete('cascade');
             $table->foreignId('batch_id')->constrained()
-                ->onDelete('cascade')->onUpdate('cascade');
+                ->onDelete('cascade');
             $table->foreignId('course_id')->constrained()
-                ->onDelete('cascade')->onUpdate('cascade');
+                ->onDelete('cascade');
 
             $table->timestamps();
         });
