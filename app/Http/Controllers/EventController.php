@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Course;
+use App\Models\Event;
 
-class CourseController extends Controller
+class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,11 +14,12 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::all();
-
-        return view("course.index",[
-            'courses' => $courses
+        //
+        $events=Event::all();
+        return view("event.index",[
+            "events"=> $events
         ]);
+        //    echo($events);
     }
 
     /**
@@ -28,7 +29,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('course.create');
+        //
     }
 
     /**
@@ -39,8 +40,7 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        
-        
+        //
     }
 
     /**
@@ -49,10 +49,12 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $course)
+    public function show(Event $event)
     {
-        return view('course.show',[
-            'course' => $course
+        //
+      
+        return view("event.show", [
+            "event"=>$event
         ]);
     }
 

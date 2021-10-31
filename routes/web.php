@@ -1,8 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\BatchController;
 use App\Http\Controllers\SubjectController;
+
+
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\NoticeController;
+
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\HomeController;
+
+
 
 
 /*
@@ -22,12 +33,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route:: get('/about', function (){
+    return view('about');
+});
+
 
 
 Route::get('/header', function () {
     return view('layouts.header');
 });
+
 Route::resource('/batch', BatchController::class);
 
 Route::resource('/subject', SubjectController::class);
@@ -35,4 +52,6 @@ Route::resource('/subject', SubjectController::class);
 Route::get('/test', function(){
     return view('testLogin');
 });
+
+Route::resource('/book', BookController::class);
 
