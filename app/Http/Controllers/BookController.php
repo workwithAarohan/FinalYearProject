@@ -30,7 +30,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        return view('book.create');
     }
 
     /**
@@ -41,7 +41,14 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = new Book();
+
+        $book->book_name = $request->input('book_name');
+        $book->author_name = $request->input('author_name');
+        $book->publication = $request->input('publication');
+        $book->save();
+
+        return redirect('/book');
     }
 
     /**
@@ -50,9 +57,12 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Book $book)
     {
         //
+        return view("book.show", [
+            "book"=>$book
+        ]);
     }
 
     /**
@@ -64,6 +74,11 @@ class BookController extends Controller
     public function edit($id)
     {
         //
+        $book = Book::find($id);
+
+        return view('/book/edit',[
+            'book' => $book
+        ]);
     }
 
     /**
@@ -76,6 +91,14 @@ class BookController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $book = Book::find($id);
+
+        $book->book_name = $request->input('book_name');
+        $book->author_name = $request->input('author_name');
+        $book->publication = $request->input('publication');
+        $book->save();
+
+        return redirect('/book');
     }
 
     /**
