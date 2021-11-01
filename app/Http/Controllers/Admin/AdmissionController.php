@@ -29,4 +29,14 @@ class AdmissionController extends Controller
 
         return redirect('/admin/batch/'. $batch->id);
     }
+
+    public function endSession($id)
+    {
+        $admissionWindow = AdmissionWindow::where('batch_id', $id)
+            ->update([
+            'is_open' => 0
+        ]);
+
+        return redirect()->back();
+    }
 }

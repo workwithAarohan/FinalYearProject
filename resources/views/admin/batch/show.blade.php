@@ -5,10 +5,10 @@
         <div class="row mb-2">
             <div class="col-12">
                 <h1 class="float-start">
-                    {{ $batch->name }} Batch
+                    {{ $batch->batch_name }} Batch
                 </h1>
-                <a href="{{ route('student.create',$batch->id) }}" class="btn btn-success float-end" role="button">
-                    Create
+                <a href="{{ route('admission.closed', $batch->id) }}" class="btn btn-warning float-end" role="button">
+                    End Session
                 </a>
             </div>
         </div>
