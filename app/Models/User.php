@@ -64,6 +64,31 @@ class User extends Authenticatable
         $this->attributes['password'] = Hash::make($data);
     }
 
+    public function course()
+    {
+        return $this->hasMany(Course::class, 'created_by');
+    }
+
+    public function batch()
+    {
+        return $this->hasMany(Batch::class, 'created_by');
+    }
+
+    public function semester()
+    {
+        return $this->hasMany(Semester::class, 'created_by');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function admissionWindow()
+    {
+        return $this->hasMany(AdmissionWindow::class, 'created_by');
+    }
+
     public function studentinfo()
     {
         return $this->hasOne(StudentInformation::class);

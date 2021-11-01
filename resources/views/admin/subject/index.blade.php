@@ -9,14 +9,15 @@
     </style>
 @endsection
 
+
 @section('content')
     <div class="container">
         <div class="row mb-3">
             <div class="col-12">
                 <h1 class="float-start">
-                    Batch
+                    Subject
                 </h1>
-                {{-- <a href="{{ route('batch.create') }}" class="btn btn-success float-end" role="button">
+                {{-- <a href="{{ route('course.subject.create', $course->id) }}" class="btn btn-success float-end" role="button">
                     Create
                 </a> --}}
             </div>
@@ -26,10 +27,11 @@
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Batch</th>
+                        <th scope="col">Subject Code</th>
+                        <th scope="col">Subject Name</th>
                         <th scope="col">Course</th>
-                        <th scope="col">No.of Students</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Semester</th>
+                        <th scope="col">Subject Type</th>
                         @can('logged-in')
                             <th scope="col">Action</th>
                         @endcan
@@ -37,48 +39,53 @@
                 </thead>
 
                 <tbody>
-                    @foreach ($batches as $key => $value)
-                        <tr data-href="{{ route('batch.show',$value->id) }}">
-                            <th scope="row">{{ $value->id }}</th>
+                    @foreach ($subjects as $subject)
+                        <tr data-href="{{ route('subject.show',$subject->id) }}">
+                            <th scope="row">{{ $subject->id }}</th>
 
                             <th scope="row">
-                                {{ $value->batch_name }}
+                                {{ $subject->subject_code }}
                             </th>
                             <td>
-                                {{ $value->course->courseDetails->slug }}
+                                {{ $subject->subject_name }}
                             </td>
                             <td>
-                                {{ $value->users()->count() }}
+                                {{ $subject->course->courseDetails->slug }}
                             </td>
                             <td>
-                                @if ($value->is_active)
-                                    Active
+                                {{ $subject->semester->semester_name }}
+                            </td>
+                            <td>
+                                @if ($subject->is_elective)
+                                    Elective
                                 @else
-                                    Inactive
+                                    Non-Elective
                                 @endif
                             </td>
                             @can('logged-in')
                                 <td>
                                     <div class="d-flex align-items-baseline">
-                                        <a href="{{ route('batch.edit',$value->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                        <a href="{{ route('subject.edit',$subject->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('batch.destroy', $value->id) }}" method="POST">
+                                        <form action="{{ route('subject.destroy', $subject->id) }}" method="POST">
                                             @method('DELETE')
                                             @csrf
-                                            <button type="submit" class="text-danger btn" title="Delete" style="padding: 0px;">
+                                            <button type="submit" class="text-danger p-0 btn" title="Delete">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                     </div>
-                                    {{-- <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
-                                            document.getElementById('delete-batch-form-{{ $value->id }}').submit();">
+                                    {{-- <a href="{{ route('subject.edit',$subject->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
+                                            document.getElementById('delete-user-form-{{ $subject->id }}').submit();">
                                         <i class="fas fa-trash"></i>
                                     </a>
-                                    <form id="delete-batch-form-{{ $value->id }}" action="{{ route('batch.destroy',$value->id) }}" method="POST" style="display:none;">
-                                        @method('DELETE')
+                                    <form id="delete-user-form-{{ $subject->id }}" action="{{ route('subject.destroy',$subject->id) }}" method="POST" style="display:none;">
                                         @csrf
-
+                                        @method('DELETE')
                                     </form> --}}
                                 </td>
                             @endcan
@@ -87,7 +94,7 @@
                 </tbody>
             </table>
 
-            {{ $batches->links() }}
+            {{ $subjects->links() }}
         </div>
     </div>
 

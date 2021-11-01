@@ -16,7 +16,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
-    
+
     {{-- CkEditor --}}
     <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
 
@@ -28,7 +28,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0078D4; height: 50px;">
-        <div class="container-fluid">
+        <div class="container">
             <a class="navbar-brand text-white" href="{{ route('home') }}">
                 <strong>Academia College</strong>
             </a>
@@ -41,10 +41,19 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active text-white" aria-current="page" href="{{ route('batch.index') }}">Batch</a>
+                            <a class="nav-link active text-white" aria-current="page" href="{{ route('course.index') }}">Course</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('course.index') }}">Course</a>
+                            <a class="nav-link text-white" href="{{ route('batch.index') }}">Batch</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('semester.index') }}">Semester</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('subject.index') }}">Subject</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('classroom.index') }}">Classroom</a>
                         </li>
 
                     </ul>

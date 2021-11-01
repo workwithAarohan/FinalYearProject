@@ -8,16 +8,16 @@
             <div class="col-lg-7 mb-5">
                 <center>
                     <img src="images/logo/images.jfif" alt="book" class="image mt-4" style="width: 250px; object-fit: cover;">
-                
+
                     <h3><strong>Learn it. Earn it.</strong></h3>
                 </center>
 
-                
+
             </div>
             <div class="col-lg-5 p-3 mb-2 shadow">
                 <div class="d-flex justify-content-between align-items-baseline">
                     <h4 class="align-middle"><b>Login to continue</b></h4>
-                    <img src="/images/logo/academia_logo.png" style="width: 125px; object-fit: cover;"> 
+                    <img src="/images/logo/academia_logo.png" style="width: 125px; object-fit: cover;">
                 </div>
                 <form action="{{ route('login') }}" method="POST">
                     @csrf
@@ -46,7 +46,7 @@
                             </span>
                         @enderror
                     </div>
-                    
+
                     <a href="{{ route('password.request') }}" class="small mb-3 float-end">
                         <strong>Forget Password?</strong>
                     </a><br>
