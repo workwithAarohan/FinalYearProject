@@ -42,7 +42,7 @@
                 </td>
                 <td>
                     
-                        {{ $book->author_name }}
+                        {!! $book->author_name !!}
                    
                 </td>
                 <td>
