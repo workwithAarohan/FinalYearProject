@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Mail\MailController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\WelcomeController;
+use App\Models\AdmissionWindow;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -21,7 +22,9 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', [
+        'admissionWindows' => AdmissionWindow::all()
+    ]);
 });
 
 Auth::routes();
@@ -56,6 +59,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
         Route::get('/course/newSession/{course}', [App\Http\Controllers\Admin\AdmissionController::class, 'createNewSession'])->name('course.newSession');
         Route::post('/course/newSession/store', [App\Http\Controllers\Admin\AdmissionController::class, 'storeNewSession'])->name('course.newSession.store');
+        Route::get('/admission/closed/{batch}',[App\Http\Controllers\Admin\AdmissionController::class, 'endSession'])->name('admission.closed');
     });
 
     Route::group(['prefix' =>'student', 'as' => 'student.'], function(){
@@ -69,6 +73,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 // Student New Admission
 Route::get('student/create/{course}/{batch}', [StudentController::class, 'create'])->name('student.create');
 Route::post('/student', [StudentController::class, 'store'])->name('student.store');
+
 
 Route::get('/send-enrollment', [App\Http\Controllers\StudentEnrollmentController::class, 'sendEnrollmentNotification']);
 

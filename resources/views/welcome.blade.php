@@ -17,11 +17,11 @@
     <link rel="stylesheet" href="/css/templatemo-training-studio.css">
 
     </head>
-    
+
     <body>
-    
+
     <!-- ***** Preloader Start ***** -->
-    <div id="js-preloader" class="js-preloader">
+    {{-- <div id="js-preloader" class="js-preloader">
       <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -30,10 +30,10 @@
           <span></span>
         </div>
       </div>
-    </div>
+    </div> --}}
     <!-- ***** Preloader End ***** -->
-    
-    
+
+
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
         <div class="container">
@@ -52,10 +52,16 @@
                             <li class="scroll-to-section"><a href="#our-classes">Examinations</a></li>
                             <li class="scroll-to-section"><a href="#aboutus">About Us</a></li>
                             <li class="scroll-to-section"><a href="#schedule">Schedules</a></li>
-                            <li class="scroll-to-section"><a href="#contact-us">Contact</a></li> 
+                            <li class="scroll-to-section"><a href="#contact-us">Contact</a></li>
                             <li><a href="{{ route('login') }}">Log In</a></li>
-                            <li class="main-button"><a href="{{ route('student.create') }}">Admission Open</a></li>
-                        </ul>        
+
+                            @foreach ($admissionWindows as $admissionWindow)
+                                @if ($admissionWindow->is_open)
+                                    <li class="main-button"><a href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}">Admission Open for {{ $admissionWindow->course->courseDetails->slug }}</a></li>
+                                @endif
+                            @endforeach
+
+                        </ul>
                         <a class='menu-trigger'>
                             <span>Menu</span>
                         </a>
@@ -209,7 +215,7 @@
 
                <!--    <li><a href='#tabs-5'><img src="/images/tabs-first-icon.png" alt="">BIT</a></a></li>
                   <li><a href='#tabs-6'><img src="/images/tabs-first-icon.png" alt="">BBS</a></a></li> -->
-                  
+
                   <div class="main-rounded-button"><a href="#">View All Schedules</a></div>
                 </ul>
               </div>
@@ -342,7 +348,7 @@
 
         <!---****About Us End**** --->
 
-    
+
     <section class="section" id="schedule">
         <div class="container">
             <div class="row">
@@ -504,7 +510,7 @@
         </div>
     </section>
     <!-- ***** Testimonials Ends ***** -->
-    
+
     <!-- ***** Contact Us Area Starts ***** -->
     <section class="section" id="contact-us">
         <div class="container-fluid">
@@ -514,7 +520,7 @@
                       <iframe src="https://maps.google.com/maps?q=Av.+L%C3%BAcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="600px" frameborder="0" style="border:0" allowfullscreen></iframe>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-6 col-md-6 col-xs-12">
                     <div class="contact-form">
                         <form id="contact" action="" method="post">
@@ -552,7 +558,7 @@
         </div>
     </section>
     <!-- ***** Contact Us Area Ends ***** -->
-                    
+
                 </div>
             </div>
         </div>
@@ -569,10 +575,10 @@
     <script src="/js/scrollreveal.min.js"></script>
     <script src="/js/waypoints.min.js"></script>
     <script src="/js/jquery.counterup.min.js"></script>
-    <script src="/js/imgfix.min.js"></script> 
-    <script src="/js/mixitup.js"></script> 
+    <script src="/js/imgfix.min.js"></script>
+    <script src="/js/mixitup.js"></script>
     <script src="/js/accordions.js"></script>
-    
+
     <!-- Global Init -->
     <script src="/js/custom.js"></script>
 
