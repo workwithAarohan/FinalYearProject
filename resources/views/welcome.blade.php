@@ -21,7 +21,7 @@
     <body>
 
     <!-- ***** Preloader Start ***** -->
-    <div id="js-preloader" class="js-preloader">
+    {{-- <div id="js-preloader" class="js-preloader">
       <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -30,7 +30,7 @@
           <span></span>
         </div>
       </div>
-    </div>
+    </div> --}}
     <!-- ***** Preloader End ***** -->
 
 
@@ -57,7 +57,7 @@
 
                             @foreach ($admissionWindows as $admissionWindow)
                                 @if ($admissionWindow->is_open)
-                                    <li class="main-button"><a href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}">Admission Open</a></li>
+                                    <li class="main-button"><a href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}">Admission Open for {{ $admissionWindow->course->courseDetails->slug }}</a></li>
                                 @endif
                             @endforeach
 
