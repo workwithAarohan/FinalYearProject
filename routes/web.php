@@ -22,8 +22,11 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome', [
-        'admissionWindows' => AdmissionWindow::all()
+    $admissionWindows = AdmissionWindow::where('is_open',1)->get();
+    $admissionWindows->count = AdmissionWindow::where('is_open', 1)->count();
+
+    return view('welcome',[
+        'admissionWindows' => $admissionWindows
     ]);
 });
 
