@@ -89,6 +89,26 @@ class User extends Authenticatable
         return $this->hasMany(AdmissionWindow::class, 'created_by');
     }
 
+    public function education()
+    {
+        return $this->hasMany(EducationStudent::class);
+    }
+
+    public function topics()
+    {
+        return $this->hasMany(Topic::class, 'created_by');
+    }
+
+    public function subTopics()
+    {
+        return $this->hasMany(SubTopic::class, 'created_by');
+    }
+
+    public function assignements()
+    {
+        return $this->hasMany(Assignment::class, 'created_by');
+    }
+
     public function studentinfo()
     {
         return $this->hasOne(StudentInformation::class);

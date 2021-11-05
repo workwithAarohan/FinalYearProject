@@ -7,13 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <title>College Information Management System</title>
 
     <!-- Additional CSS Files -->
-
+    <script src="{{ asset('js/app.js') }}"></script>
     <link rel="stylesheet" href="/css/templatemo-training-studio.css">
 
     </head>
@@ -54,12 +55,24 @@
                             <li class="scroll-to-section"><a href="#schedule">Schedules</a></li>
                             <li class="scroll-to-section"><a href="#contact-us">Contact</a></li>
                             <li><a href="{{ route('login') }}">Log In</a></li>
-
-                            @foreach ($admissionWindows as $admissionWindow)
-                                @if ($admissionWindow->is_open)
-                                    <li class="main-button"><a href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}">Admission Open for {{ $admissionWindow->course->courseDetails->slug }}</a></li>
-                                @endif
-                            @endforeach
+                            @if ($admissionWindows->count > 1)
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admission Open
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                                        @foreach ($admissionWindows as $admissionWindow)
+                                            <li><a class="dropdown-item text-dark" href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}">{{ $admissionWindow->course->courseDetails->slug }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @else
+                                @foreach ($admissionWindows as $admissionWindow)
+                                    <a href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}" class="btn btn-primary">
+                                        Admission Open for {{ $admissionWindow->course->courseDetails->slug }}
+                                    </a>
+                                @endforeach
+                            @endif
 
                         </ul>
                         <a class='menu-trigger'>
