@@ -62,6 +62,13 @@ class BatchController extends Controller
         // List of all students in a same batch
 
         $students = $batch->users;
+        $tests=array(0,1,2,3,4,7);
+        $count=0;
+        foreach ($tests as $test){
+            $count++;
+        
+        }
+        echo($count);
 
         foreach ($students as $key => $value) 
         {
