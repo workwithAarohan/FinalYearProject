@@ -23,4 +23,14 @@ class Classroom extends Model
     {
         return $this->hasMany(Topic::class);
     }
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
+    }
 }
