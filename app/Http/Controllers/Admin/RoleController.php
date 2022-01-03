@@ -15,7 +15,15 @@ class RoleController extends Controller
      */
     public function index()
     {
+<<<<<<< HEAD:app/Http/Controllers/Admin/RoleController.php
         //
+=======
+        $courses = Course::all();
+
+        return view("course.index",[
+            'courses' => $courses
+        ]);
+>>>>>>> 7c6dd80aa43e285a556404dc77aba44a23069d13:app/Http/Controllers/CourseController.php
     }
 
     /**
@@ -25,7 +33,11 @@ class RoleController extends Controller
      */
     public function create()
     {
+<<<<<<< HEAD:app/Http/Controllers/Admin/RoleController.php
         //
+=======
+        return view('course.create');
+>>>>>>> 7c6dd80aa43e285a556404dc77aba44a23069d13:app/Http/Controllers/CourseController.php
     }
 
     /**
@@ -36,7 +48,12 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+<<<<<<< HEAD:app/Http/Controllers/Admin/RoleController.php
         //
+=======
+        
+        
+>>>>>>> 7c6dd80aa43e285a556404dc77aba44a23069d13:app/Http/Controllers/CourseController.php
     }
 
     /**
