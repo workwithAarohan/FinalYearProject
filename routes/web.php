@@ -22,8 +22,11 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome', [
-        'admissionWindows' => AdmissionWindow::all()
+    $admissionWindows = AdmissionWindow::where('is_open',1)->get();
+    $admissionWindows->count = AdmissionWindow::where('is_open', 1)->count();
+
+    return view('welcome',[
+        'admissionWindows' => $admissionWindows
     ]);
 });
 
@@ -65,8 +68,11 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
     Route::group(['prefix' =>'student', 'as' => 'student.'], function(){
         Route::get('/', [StudentController::class, 'index'])->name('index');
 
-        Route::get('/{student}', [StudentController::class, 'show'])->name('show');
+        Route::get('/{p}', [StudentController::class, 'show'])->name('show');
     });
+
+    Route::resource('/announcement', AnnouncementController::class);
+    Route::resource('/assignment', AssignmentController::class);
 
 });
 

@@ -89,6 +89,26 @@ class User extends Authenticatable
         return $this->hasMany(AdmissionWindow::class, 'created_by');
     }
 
+    public function education()
+    {
+        return $this->hasMany(EducationStudent::class);
+    }
+
+    public function topics()
+    {
+        return $this->hasMany(Topic::class, 'created_by');
+    }
+
+    public function subTopics()
+    {
+        return $this->hasMany(SubTopic::class, 'created_by');
+    }
+
+    public function assignements()
+    {
+        return $this->hasMany(Assignment::class, 'created_by');
+    }
+
     public function studentinfo()
     {
         return $this->hasOne(StudentInformation::class);
@@ -97,5 +117,15 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class,'user_role');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'teacher_id');
+    }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class, 'created_by');
     }
 }

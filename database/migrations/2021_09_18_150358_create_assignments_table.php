@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubjectsTable extends Migration
+class CreateAssignmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,21 @@ class CreateSubjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create('assignments', function (Blueprint $table) {
             $table->id();
 
-            $table->string('subject_name');
-            $table->string('subject_code');
-            $table->string('credit_hrs');
-            $table->boolean('is_elective')->default(0);
-            $table->string('syllabus');
-            $table->foreignId('course_id')
+            $table->string('title');
+            $table->text('instruction');
+            $table->date('due_date');
+            $table->string('points');
+            $table->foreignId('topic_id')
                 ->constrained()
                 ->onDelete('cascade');
-            $table->foreignId('semester_id')
+            $table->foreignId('classroom_id')
                 ->constrained()
+                ->onDelete('cascade');
+            $table->foreignId('created_by')
+                ->constrained('users')
                 ->onDelete('cascade');
             $table->timestamps();
         });
@@ -38,6 +40,6 @@ class CreateSubjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('assignments');
     }
 }

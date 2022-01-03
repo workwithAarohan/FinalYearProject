@@ -119,7 +119,7 @@
       </nav>
 
 
-    <main class="py-4 container">
+    <main class="py-4">
         @include('partials.alert')
         @yield('content')
     </main>

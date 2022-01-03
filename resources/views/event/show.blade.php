@@ -8,7 +8,7 @@
 </head>
 <body>
     Event Title: {{$event->title}} <br>
-    Description: {{$event->description}} <br>
+    Description: {!! $event->description !!} <br>
     Venue: {{$event->venue}} <br>
     Date: {{$event->date}} 
 </body>
