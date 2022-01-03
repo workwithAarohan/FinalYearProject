@@ -118,4 +118,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class,'user_role');
     }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'teacher_id');
+    }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class, 'created_by');
+    }
 }

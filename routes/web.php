@@ -68,8 +68,11 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
     Route::group(['prefix' =>'student', 'as' => 'student.'], function(){
         Route::get('/', [StudentController::class, 'index'])->name('index');
 
-        Route::get('/{student}', [StudentController::class, 'show'])->name('show');
+        Route::get('/{p}', [StudentController::class, 'show'])->name('show');
     });
+
+    Route::resource('/announcement', AnnouncementController::class);
+    Route::resource('/assignment', AssignmentController::class);
 
 });
 
