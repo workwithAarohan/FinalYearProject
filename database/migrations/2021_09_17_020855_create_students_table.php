@@ -23,7 +23,7 @@ class CreateStudentsTable extends Migration
             $table->string('registration_number')->nullable();
             $table->string('college_email')->unique()->nullable();
             $table->foreignId('course_id')
-                ->cousernstrained()
+                ->constrained()
                 ->onDelete('cascade');
             $table->foreignId('batch_id')
                 ->constrained()
@@ -32,7 +32,7 @@ class CreateStudentsTable extends Migration
                 ->constrained()
                 ->onDelete('cascade');
 
-            $table->string('admission_date');
+            $table->date('admission_date');
             $table->boolean('is_active')->default(1);
 
             $table->timestamps();

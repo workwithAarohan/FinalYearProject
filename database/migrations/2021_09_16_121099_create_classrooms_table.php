@@ -18,14 +18,16 @@ class CreateClassroomsTable extends Migration
 
             $table->string('room_name');
             $table->string('description');
-            $table->string('image');
+            $table->string('image')->default('background.jfif');
             $table->foreignId('batch_id')
                 ->constrained()
                 ->onDelete('cascade');
             $table->foreignId('subject_id')
                 ->constrained()
                 ->onDelete('cascade');
-            $table->boolean('is_active');
+            $table->boolean('is_active')->default(1);
+            $table->foreignId('created_by')->constrained('users')
+                ->onDelete('cascade');
 
             $table->timestamps();
         });

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Batch;
 use App\Models\Course;
+use App\Models\Semester;
 
 class BatchController extends Controller
 {
@@ -55,7 +56,7 @@ class BatchController extends Controller
 
         $request->session()->flash('success','You have create new batch');
 
-        
+
 
         return redirect('admin/batch');
     }
@@ -72,26 +73,10 @@ class BatchController extends Controller
 
         $students = $batch->users()->paginate(10);
 
-        // Inner join between student_information, user and course
-        // foreach ($students as $key => $value)
-        // {
-
-        //     $usersCourse = DB::table('student_information')
-        //         ->join('users', 'student_information.user_id', '=', 'users.id')
-        //         ->join('courses', 'student_information.course_id', '=', 'courses.id')
-        //         ->where('users.id', $value->user_id)
-        //         ->get();
-
-        //     $value->users = $usersCourse;
-
-        //     // Users Information
-        //     // $users = User::where('id', $value->user_id)->get();
-        //     // $value->users = $users;
-        // }
-
        return view('admin.batch.show',[
            'batch' => $batch,
-           'students' => $students
+           'students' => $students,
+           'semesters' => Semester::all()
        ]);
     }
 

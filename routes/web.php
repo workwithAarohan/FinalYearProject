@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\StudentController;
+// use App\Http\Controllers\Coordinator\ClassroomController;
 use App\Http\Controllers\Mail\MailController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\WelcomeController;
@@ -44,6 +45,8 @@ Route::get('/header', function () {
 // Route::resource('/admin/batch', BatchController::class);
 // Route::resource('/admin/course', CourseController::class);
 
+
+// Admin Route
 Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
     Route::group(['namespace' => 'Admin'], function(){
@@ -57,8 +60,6 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
         Route::get('/subject/create/{course}', [App\Http\Controllers\Admin\SubjectController::class, 'create'])->name('course.subject.create');
         Route::resource('/subject', SubjectController::class);
-
-        Route::resource('/classroom', ClassroomController::class);
 
         Route::get('/course/newSession/{course}', [App\Http\Controllers\Admin\AdmissionController::class, 'createNewSession'])->name('course.newSession');
         Route::post('/course/newSession/store', [App\Http\Controllers\Admin\AdmissionController::class, 'storeNewSession'])->name('course.newSession.store');
@@ -76,9 +77,19 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
 });
 
+//Co-ordinator Route
+Route::group(['prefix'=>'coordinator', 'middleware' => 'auth', 'namespace' => 'Coordinator'], function(){
+    Route::resource('/classroom', ClassroomController::class)->except(['index']);
+    Route::get('/rooms/{batch}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'index'])->name('classroom.index');
+    Route::post('/classroom/addStudents', [App\Http\Controllers\Coordinator\ClassroomController::class, 'addStudents'])->name('classroom.addStudents');
+    Route::post('/classroom/addTeachers', [App\Http\Controllers\Coordinator\ClassroomController::class, 'addTeachers'])->name('classroom.addTeachers');
+});
+Route::get('/classroom/{classroom}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'classroom'])->name('classroom.dashboard');
+
 // Student New Admission
 Route::get('student/create/{course}/{batch}', [StudentController::class, 'create'])->name('student.create');
 Route::post('/student', [StudentController::class, 'store'])->name('student.store');
+Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard')->middleware('auth');
 
 
 Route::get('/send-enrollment', [App\Http\Controllers\StudentEnrollmentController::class, 'sendEnrollmentNotification']);

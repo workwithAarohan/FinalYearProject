@@ -52,9 +52,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('subject.index') }}">Subject</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('classroom.index') }}">Classroom</a>
-                        </li>
 
                     </ul>
 

@@ -7,9 +7,13 @@
                 <h1 class="float-start">
                     {{ $batch->batch_name }} Batch
                 </h1>
-                <a href="{{ route('admission.closed', $batch->id) }}" class="btn btn-warning float-end" role="button">
+                {{-- <a href="{{ route('admission.closed', $batch->id) }}" class="btn btn-warning float-end" role="button">
                     End Session
+                </a> --}}
+                <a href="{{ route('classroom.index', $batch->id) }}" class="btn btn-success float-end">
+                    Classroom
                 </a>
+
             </div>
         </div>
         <div class="card shadow" style="padding: 10px 40px;" >
