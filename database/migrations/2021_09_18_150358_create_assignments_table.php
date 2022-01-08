@@ -17,8 +17,8 @@ class CreateAssignmentsTable extends Migration
             $table->id();
 
             $table->string('title');
-            $table->text('instruction');
-            $table->date('due_date');
+            $table->text('instruction')->nullable();
+            $table->date('due_date')->nullable();
             $table->string('points');
             $table->foreignId('topic_id')
                 ->constrained()

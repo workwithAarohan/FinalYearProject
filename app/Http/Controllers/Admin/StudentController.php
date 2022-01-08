@@ -11,6 +11,7 @@ use App\Notifications\StudentEnrollment;
 use App\Models\User;
 use App\Models\Batch;
 use App\Models\Role;
+use App\Models\Student;
 
 class StudentController extends Controller
 {
@@ -18,7 +19,7 @@ class StudentController extends Controller
     {
 
         return view('admin.students.index',[
-            'students' => User::paginate(10)
+            'students' => Student::paginate(10)
         ]);
     }
 
@@ -54,6 +55,16 @@ class StudentController extends Controller
     {
         return view('admin.students.index',[
             'students' => User::paginate(10)
+        ]);
+    }
+
+    public function dashboard()
+    {
+        $user = User::findOrFail(auth()->user()->id);
+        $student_id = $user->student->id;
+
+        return view('student.dashboard', [
+            'student' => Student::findOrFail($student_id)
         ]);
     }
 }

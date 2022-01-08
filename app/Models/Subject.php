@@ -21,8 +21,15 @@ class Subject extends Model
         return $this->belongsTo(Semester::class);
     }
 
-    public function classroom()
+    public function classrooms()
     {
-        return $this->hasOne(Classroom::class);
+        return $this->hasMany(Classroom::class);
     }
+
+    public function batch_classrooms($batch_id)
+    {
+        return $this->hasMany(Classroom::class)->where('batch_id', $batch_id);
+    }
+
+
 }

@@ -22,32 +22,32 @@
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
-    
+
                 <tbody>
-                    @foreach ($students as $key => $value)
-                    <a href="{{ route('batch.show',$value->id) }}"></a>
+                    @foreach ($students as $student)
+                    <a href="{{ route('batch.show',$student->id) }}"></a>
                         <tr>
-                            <th scope="row">{{ $value->id }}</th>
-                            
+                            <th scope="row">{{ $student->id }}</th>
+
                             <th scope="row">
-                                <a href="{{ route('student.show',$value->id) }}" type="button"
+                                <a href="{{ route('student.show',$student->id) }}" type="button"
                                     >
-                                    {{ $value->firstname }} {{ $value->lastname }}
+                                    {{ $student->user->firstname }} {{ $student->user->lastname }}
                                 </a>
-                            </th> 
+                            </th>
                             <td>
-                                {{ $value->permanentAddress }}
-                            </th> 
+                                {{ $student->user->permanentAddress }}
+                            </th>
                             <td>
                                 <a href="" class="btn btn-sm btn-primary">
                                     Edit
                                 </a>
-                                <button type="button" class="btn btn-sm btn-danger" 
+                                <button type="button" class="btn btn-sm btn-danger"
                                         onclick="event.preventDefault();
-                                        document.getElementById('delete-user-form-{{ $value->id }}').submit()">
+                                        document.getElementById('delete-user-form-{{ $student->id }}').submit()">
                                     Delete
                                 </button>
-                                <form id="delete-user-{{ $value->id }}" action="" method="POST" style="display:none;">
+                                <form id="delete-user-{{ $student->id }}" action="" method="POST" style="display:none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>

@@ -1,11 +1,13 @@
 @extends('layouts.nav')
 
-<style>
-    tr[data-href]
-    {
-        cursor: pointer;
-    }
-</style>
+@section('style')
+    <style>
+        tr[data-href]
+        {
+            cursor: pointer;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="container">
@@ -49,17 +51,19 @@
                             </td>
                             @can('logged-in')
                                 <td>
-                                    <a href="{{ route('batch.edit',$batch->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
-                                            document.getElementById('delete-user-form-{{ $batch->id }}').submit();">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                    <form id="delete-user-form-{{ $batch->id }}" action="{{ route('batch.destroy',$batch->id) }}" method="POST" style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
+                                    
+                                    <div class="d-flex align-items-baseline">
+                                        <a href="{{ route('batch.edit',$batch->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('batch.destroy', $batch->id) }}" method="POST">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="text-danger btn" title="Delete" style="padding: 0px;">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             @endcan
                         </tr>

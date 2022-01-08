@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Classroom;
 
 use App\Http\Controllers\Controller;
+use App\Models\Assignment;
 use App\Models\Classroom;
 use Illuminate\Http\Request;
 
-class ClassroomController extends Controller
+class AssignmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Classroom $classroom)
     {
-        return view('admin.classroom.index',[
-            'classrooms' => Classroom::paginate(10)
+        return view('coordinator.classroom.assignment.index', [
+            'classroom' => $classroom
         ]);
     }
 
@@ -27,7 +28,7 @@ class ClassroomController extends Controller
      */
     public function create()
     {
-        return view('admin.classroom.create');
+        //
     }
 
     /**
@@ -38,8 +39,14 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {
-        Classroom::create($request->all());
-        return redirect('/admin/classroom');
+        $request->validate([
+            'title' => 'required',
+            'points' => 'required',
+        ]);
+
+        $assignment = Assignment::create($request->all());
+
+        return redirect('/classroom/assignment/'. $assignment->id);
     }
 
     /**
@@ -48,10 +55,10 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Classroom $classroom)
+    public function show(Assignment $assignment)
     {
-        return view('admin.classroom.show', [
-            'classroom' => $classroom
+        return view('coordinator.classroom.assignment.show', [
+            'assignment' => $assignment
         ]);
     }
 
@@ -61,10 +68,10 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Classroom $classroom)
+    public function edit(Assignment $assignment)
     {
-        return view('admin.classroom.edit',[
-            'classroom' => $classroom
+        return view('coordinator.classroom.assignment.edit', [
+            'assignment' => $assignment
         ]);
     }
 
@@ -75,11 +82,16 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Classroom $classroom)
+    public function update(Request $request, Assignment $assignment)
     {
-        $classroom->update($request->all());
+        $request->validate([
+            'title' => 'required',
+            'points' => 'required',
+        ]);
 
-        return redirect('/admin/classroom');
+        $assignment->update($request->all());
+
+        return redirect('/classroom/assignment/'. $assignment->id);
     }
 
     /**
@@ -88,9 +100,10 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Classroom $classroom)
+    public function destroy(Assignment $assignment)
     {
-        $classroom->delete();
-        return redirect('/admin/classroom');
+        $assignment->delete();
+
+        return redirect('/classroom/'. $assignment->classroom_id .'/assignment');
     }
 }
