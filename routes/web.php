@@ -73,7 +73,6 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
     });
 
     Route::resource('/announcement', AnnouncementController::class);
-    Route::resource('/assignment', AssignmentController::class);
 
 });
 
@@ -85,6 +84,13 @@ Route::group(['prefix'=>'coordinator', 'middleware' => 'auth', 'namespace' => 'C
     Route::post('/classroom/addTeachers', [App\Http\Controllers\Coordinator\ClassroomController::class, 'addTeachers'])->name('classroom.addTeachers');
 });
 Route::get('/classroom/{classroom}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'classroom'])->name('classroom.dashboard');
+
+// Classroom Topic
+Route::resource('/classroom/topic', Classroom\TopicController::class);
+
+// Classroom Assignment
+Route::resource('/classroom/assignment', Classroom\AssignmentController::class)->except(['index']);
+Route::get('/classroom/{classroom}/assignment', [App\Http\Controllers\Classroom\AssignmentController::class, 'index'])->name('assignment.index');
 
 // Student New Admission
 Route::get('student/create/{course}/{batch}', [StudentController::class, 'create'])->name('student.create');

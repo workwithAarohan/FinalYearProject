@@ -30,6 +30,7 @@
                 </div>
                 <div class="mb-3 mt-2 p-4 bg-white w-50 rounded shadow ">
                     <h5 class="fw-bold mb-3">Assignments</h5>
+                    <a href="{{ route('assignment.index', $classroom->id) }}" class="btn btn-primary text-white">Assignment</a>
                     @foreach ($classroom->assignments as $assignment)
                         <div class="card" style="border:none;">
                             <div class="card-body d-flex justify-content-between align-items-baseline">
@@ -74,64 +75,198 @@
         </div>
 
         <div class="card shadow" style="padding: 10px 40px; ">
-            <h5 class="fw-bold mt-2 mb-3">Course Structure</h5>
-            <table class="table table-hover" style="font-size:small;">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Topic</th>
-                        <th scope="col">Credit Hrs</th>
-                        <th scope="col">Remarks</th>
-                        @can('logged-in')
-                            <th scope="col">Action</th>
-                        @endcan
-                    </tr>
-                </thead>
+            <div class="d-flex justify-content-between">
+                <h5 class="fw-bold mt-2 mb-3">Course Structure</h5>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Add Topic
+                </button>
 
-                <tbody>
-                    <?PHP $i=1; ?>
-                    @foreach ($classroom->topics as $topic)
-                        <tr data-href="{{ route('classroom.show',$topic->id) }}">
-                            <th scope="row">{{ $i }}</th>
-
-                            <td>
-                                {{ $topic->title }}
-                                <ul>
-                                    @foreach ($topic->subTopics as $subTopic)
-                                        <li>{{ $subTopic->title }}</li>
-                                    @endforeach
-                                </ul>
-                            </td>
-                            <td class="align-middle">
-                                {{ $topic->credit_hrs }}
-                            </td>
-                            <td class="align-middle">
-                                Assignments: {{ $topic->assignments->count() }}
-                                <br> Notes: 0
-                            </td>
-                            @can('logged-in')
-                                <td class="align-middle">
-                                    <div class="d-flex align-items-baseline">
-                                        <a href="{{ route('classroom.edit',$classroom->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form action="{{ route('classroom.destroy', $classroom->id) }}" method="POST">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit" class="text-danger p-0 btn" title="Delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="selectCourse">Add Topic</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="{{ route('topic.store') }}" method="POST">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Topic Title</label>
+                                        <input type="text" name="topic_title" class="form-control">
                                     </div>
-                                </td>
+
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Classroom</label>
+                                        <input type="text" value="{{ $classroom->room_name }}" class="form-control" disabled>
+                                        <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="credit_hr" class="form-label">Credit Hours</label>
+                                        <input type="text" name="credit_hrs" class="form-control">
+                                    </div>
+
+                                    <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
+
+                                    <div class="mb-3">
+                                        <label for="sub_topic" class="form-label">Sub Topics</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control me-2" name="title[]">
+                                            <input type="text" class="form-control me-2" name="title[]">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Select</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-hover" style="font-size:small;">
+                @if ($classroom->topics->count()!=0)
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Topic</th>
+                            <th scope="col">Credit Hrs</th>
+                            <th scope="col">Remarks</th>
+                            @can('logged-in')
+                                <th scope="col">Action</th>
                             @endcan
                         </tr>
+                    </thead>
 
-                        <?PHP  $i++; ?>
-                    @endforeach
-                </tbody>
+                    <tbody>
+                        <?PHP $i=1; ?>
+                        @foreach ($classroom->topics as $topic)
+                            <tr data-href="{{ route('classroom.show',$topic->id) }}">
+                                <th scope="row">{{ $i }}</th>
+
+                                <td>
+                                    {{ $topic->topic_title }}
+                                    <ul>
+                                        @foreach ($topic->subTopics as $subTopic)
+                                            <li>{{ $subTopic->title }}</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td class="align-middle">
+                                    {{ $topic->credit_hrs }}
+                                </td>
+                                <td class="align-middle">
+                                    Assignments: {{ $topic->assignments->count() }}
+                                    <br> Notes: 0
+                                </td>
+                                @can('logged-in')
+                                    <td class="align-middle">
+                                        <div class="d-flex align-items-baseline">
+                                            <div class="dropdown">
+                                                <button class="btn btn-default" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                    <li>
+                                                        <button class="dropdown-item" type="button">Add Sub Topic</button>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('topic.edit',$topic->id) }}" class="me-3 text-decoration-none dropdown-item" title="Edit">
+                                                            Edit
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <form action="{{ route('topic.destroy', $topic->id) }}" method="POST" class="dropdown-item">
+                                                            @method('DELETE')
+                                                            @csrf
+                                                            <button type="submit" class="p-0 btn" title="Delete">
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+
+
+                                        </div>
+                                    </td>
+                                @endcan
+                            </tr>
+
+                            <?PHP  $i++; ?>
+                        @endforeach
+                    </tbody>
+                @else
+                    <div class=" d-flex justify-content-around">
+                        <div class="no-content">
+                            <h5 class="fs-4">
+                                No Topic Found
+                            </h5>
+
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Add Topic
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="selectCourse">Add Topic</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('topic.store') }}" method="POST">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="" class="form-label">Topic Title</label>
+                                                    <input type="text" name="title" class="form-control">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="" class="form-label">Classroom</label>
+                                                    <input type="text" value="{{ $classroom->room_name }}" class="form-control" disabled>
+                                                    <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="credit_hr" class="form-label">Credit Hours</label>
+                                                    <input type="text" name="credit_hrs" class="form-control">
+                                                </div>
+
+                                                <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Select</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </table>
         </div>
-
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#add_btn').on('click', function(){
+                var html = "";
+                html += '<input type="text" class="form-control" name="title[]">';
+            });
+
+            $('.modal-body').append(html);
+        });
+    </script>
 @endsection

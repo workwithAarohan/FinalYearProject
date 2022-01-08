@@ -10,7 +10,7 @@ class Topic extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'classroom_id', 'credit_hrs', 'created_by'];
+    protected $fillable = ['topic_title', 'classroom_id', 'credit_hrs', 'created_by'];
 
     public function classroom()
     {

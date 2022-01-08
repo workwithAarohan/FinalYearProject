@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Classroom;
 
+use App\Http\Controllers\Controller;
+use App\Models\SubTopic;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 
-class AssignmentController extends Controller
+class TopicController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +26,9 @@ class AssignmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('coordinator.classroom.topic.create', [
+
+        ]);
     }
 
     /**
@@ -34,7 +39,24 @@ class AssignmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'topic_title' => 'required',
+            'title' => 'required',
+        ]);
+
+        $topic = Topic::create($request->all());
+
+        foreach($request->title as $title)
+        {
+            SubTopic::create([
+                'title' => $title,
+                'topic_id' => $topic->id,
+                'created_by' => $request->input('created_by'),
+            ]);
+        }
+
+
+        return redirect()->back();
     }
 
     /**
@@ -54,9 +76,11 @@ class AssignmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Topic $topic)
     {
-        //
+        return view('coordinator.classroom.topic.edit',[
+            'topic' => $topic
+        ]);
     }
 
     /**
@@ -66,9 +90,17 @@ class AssignmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Topic $topic)
     {
-        //
+        $request->validate([
+            'topic_title' => 'required'
+        ]);
+
+        $topic->update($request->all());
+
+        return redirect('/classroom/'. $topic->classroom_id);
+
+
     }
 
     /**
@@ -77,8 +109,10 @@ class AssignmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Topic $topic)
     {
-        //
+        $topic->delete();
+
+        return redirect()->back();
     }
 }
