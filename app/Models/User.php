@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 
@@ -24,11 +25,14 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'temporaryAddress',
+        'permanentAddress',
         'avatar',
         'address',
         'phone',
         'dob',
         'gender',
+        'nationality',
     ];
 
     /**
@@ -50,13 +54,93 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function studentinfo()
+    /**
+     * Mutator
+     * Hashing the password
+     *
+     */
+    public function setPasswordAttribute($data)
     {
-        return $this->belongsTo(StudentInformation::class);
+        $this->attributes['password'] = Hash::make($data);
     }
 
     public function course()
     {
-        return $this->belongsTo(Course::class, 'students_courses');
+        return $this->hasMany(Course::class, 'created_by');
+    }
+
+    public function batch()
+    {
+        return $this->hasMany(Batch::class, 'created_by');
+    }
+
+    public function semester()
+    {
+        return $this->hasMany(Semester::class, 'created_by');
+    }
+
+    public function classroomCreatedBy()
+    {
+        return $this->hasMany(Semester::class, 'created_by');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
+    public function admissionWindow()
+    {
+        return $this->hasMany(AdmissionWindow::class, 'created_by');
+    }
+
+    public function education()
+    {
+        return $this->hasMany(EducationStudent::class);
+    }
+
+    public function topics()
+    {
+        return $this->hasMany(Topic::class, 'created_by');
+    }
+
+    public function subTopics()
+    {
+        return $this->hasMany(SubTopic::class, 'created_by');
+    }
+
+    public function assignements()
+    {
+        return $this->hasMany(Assignment::class, 'created_by');
+    }
+
+    public function studentinfo()
+    {
+        return $this->hasOne(StudentInformation::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,'user_role');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'teacher_id');
+    }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class, 'created_by');
+    }
+
+    public function classrooms()
+    {
+        return $this->belongsToMany(Classroom::class);
     }
 }

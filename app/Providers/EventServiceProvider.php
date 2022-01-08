@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\NewStudentAdmissionEvent;
+use App\Events\PostNoticeEvent;
+use App\Listeners\NotifyAdminAboutAdmissionListener;
+use App\Listeners\NotifyStudentListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +21,14 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        NewStudentAdmissionEvent::class => [
+            NotifyAdminAboutAdmissionListener::class,
+        ],
+
+        PostNoticeEvent::class => [
+            NotifyStudentListener::class,
         ],
     ];
 

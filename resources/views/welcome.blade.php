@@ -7,21 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <title>College Information Management System</title>
 
     <!-- Additional CSS Files -->
-
+    <script src="{{ asset('js/app.js') }}"></script>
     <link rel="stylesheet" href="/css/templatemo-training-studio.css">
 
     </head>
-    
+
     <body>
-    
+
     <!-- ***** Preloader Start ***** -->
-    <div id="js-preloader" class="js-preloader">
+    {{-- <div id="js-preloader" class="js-preloader">
       <div class="preloader-inner">
         <span class="dot"></span>
         <div class="dots">
@@ -30,10 +31,10 @@
           <span></span>
         </div>
       </div>
-    </div>
+    </div> --}}
     <!-- ***** Preloader End ***** -->
-    
-    
+
+
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
         <div class="container">
@@ -52,9 +53,28 @@
                             <li class="scroll-to-section"><a href="#our-classes">Examinations</a></li>
                             <li class="scroll-to-section"><a href="#aboutus">About Us</a></li>
                             <li class="scroll-to-section"><a href="#schedule">Schedules</a></li>
-                            <li class="scroll-to-section"><a href="#contact-us">Contact</a></li> 
-                            <li class="main-button"><a href="#">Log In</a></li>
-                        </ul>        
+                            <li class="scroll-to-section"><a href="#contact-us">Contact</a></li>
+                            <li><a href="{{ route('login') }}">Log In</a></li>
+                            @if ($admissionWindows->count > 1)
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admission Open
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                                        @foreach ($admissionWindows as $admissionWindow)
+                                            <li><a class="dropdown-item text-dark" href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}">{{ $admissionWindow->course->courseDetails->slug }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @else
+                                @foreach ($admissionWindows as $admissionWindow)
+                                    <a href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}" class="btn btn-primary">
+                                        Admission Open for {{ $admissionWindow->course->courseDetails->slug }}
+                                    </a>
+                                @endforeach
+                            @endif
+
+                        </ul>
                         <a class='menu-trigger'>
                             <span>Menu</span>
                         </a>
@@ -208,7 +228,7 @@
 
                <!--    <li><a href='#tabs-5'><img src="/images/tabs-first-icon.png" alt="">BIT</a></a></li>
                   <li><a href='#tabs-6'><img src="/images/tabs-first-icon.png" alt="">BBS</a></a></li> -->
-                  
+
                   <div class="main-rounded-button"><a href="#">View All Schedules</a></div>
                 </ul>
               </div>
@@ -341,7 +361,7 @@
 
         <!---****About Us End**** --->
 
-    
+
     <section class="section" id="schedule">
         <div class="container">
             <div class="row">
@@ -503,7 +523,7 @@
         </div>
     </section>
     <!-- ***** Testimonials Ends ***** -->
-    
+
     <!-- ***** Contact Us Area Starts ***** -->
     <section class="section" id="contact-us">
         <div class="container-fluid">
@@ -513,7 +533,7 @@
                       <iframe src="https://maps.google.com/maps?q=Av.+L%C3%BAcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="600px" frameborder="0" style="border:0" allowfullscreen></iframe>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-6 col-md-6 col-xs-12">
                     <div class="contact-form">
                         <form id="contact" action="" method="post">
@@ -551,7 +571,7 @@
         </div>
     </section>
     <!-- ***** Contact Us Area Ends ***** -->
-                    
+
                 </div>
             </div>
         </div>
@@ -568,10 +588,10 @@
     <script src="/js/scrollreveal.min.js"></script>
     <script src="/js/waypoints.min.js"></script>
     <script src="/js/jquery.counterup.min.js"></script>
-    <script src="/js/imgfix.min.js"></script> 
-    <script src="/js/mixitup.js"></script> 
+    <script src="/js/imgfix.min.js"></script>
+    <script src="/js/mixitup.js"></script>
     <script src="/js/accordions.js"></script>
-    
+
     <!-- Global Init -->
     <script src="/js/custom.js"></script>
 

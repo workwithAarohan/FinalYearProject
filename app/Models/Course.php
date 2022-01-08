@@ -9,8 +9,40 @@ class Course extends Model
 {
     use HasFactory;
 
-    public function users()
+    protected $fillable = ['course_name', 'created_by', 'is_active'];
+
+    public function courseDetails()
     {
-        return $this->hasMany(User::class, 'students_courses');
+        return $this->hasOne(CourseDetail::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class,'created_by');
+    }
+
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
+
+    public function subjects()
+    {
+        return $this->hasMany(Subject::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    public function admissionWindows()
+    {
+        return $this->hasMany(AdmissionWindow::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
     }
 }
