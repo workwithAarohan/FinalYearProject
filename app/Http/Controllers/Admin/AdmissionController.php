@@ -19,6 +19,12 @@ class AdmissionController extends Controller
 
     public function storeNewSession(Request $request)
     {
+        $request->validate([
+            'batch_name' => 'required|string|max:255',
+            'batch_description' => 'required|string|max:255',
+            'year' => 'required|string|max:255'
+        ]);
+
         $batch = Batch::create($request->all());
 
         AdmissionWindow::create([

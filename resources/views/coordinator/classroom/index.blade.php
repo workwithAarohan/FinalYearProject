@@ -119,9 +119,9 @@
                         <div class="col-md-3 mb-3 mt-3" style="width: 20rem;">
                             <div class="card shadow p-0" style="height: 350px; position: relative;">
                                 <img src="{{ asset('images/background/'.$classroom->image) }}" class="card-img-top" style="object-fit:contain;">
-                                <div class="profile" >
+                                <div class="profile" style="position: absolute; top: 132px; right: 10px;">
                                     @foreach ($classroom->teachers as $teacher)
-                                        <img src="{{ asset('images/profile/'. $teacher->user->avatar) }}"style="width: 60px; border-radius: 50%; position: absolute; top: 132px; right: 10px;">
+                                        <img src="{{ asset('images/profile/'. $teacher->user->avatar) }}" style="width: 60px; border-radius: 50%; ">
                                     @endforeach
                                 </div>
                                 <div class="card-body">

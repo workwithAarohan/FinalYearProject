@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Batch;
 use App\Models\Role;
 use App\Models\Student;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -38,15 +39,20 @@ class StudentController extends Controller
             'username' => strtolower($request->firstname) . "@academia",
         ]);
 
-        $student = User::create($request->all());
+        DB::transaction(function () use ($request) {
+            // Create new Student
+            $student = User::create($request->all());
 
-        // Insert into user_role table
-        $student->roles()->sync($request->roles);
+            // Insert into user_role table
+            $student->roles()->sync($request->roles);
 
-        // select admin to notify
-        $user = User::find(1);
+            // Select admin to notify
+            $user = User::find(1);
 
-        event(new NewStudentAdmissionEvent($student,$user));
+            // Call New Student Admission Event
+            event(new NewStudentAdmissionEvent($student,$user));
+        });
+
 
         return redirect('/');
     }

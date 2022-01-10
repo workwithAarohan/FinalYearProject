@@ -1,30 +1,81 @@
-@extends('layouts.nav')
+@extends('admin.dashboard')
 
 @section('content')
-    <form action="{{ route('course.update', $course->id) }}" method="POST">
-        @csrf
-        @method('PUT')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 bg-white p-0">
+                <form action="{{ route('course.update', $course->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <h3 class="bg-primary text-white fs-4 text-center p-2">
+                        Edit Course Details
+                    </h3>
+                    <div class="d-flex p-3 align-items-center">
+                        <div class="me-3">
+                            <label for="slug" class="form-label">Course Slug: </label>
+                            <input type="text" name="slug" value="{{ $course->courseDetails->slug }}"  class="form-control @error('slug') is-invalid @enderror">
+                            @error('slug')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="w-75">
+                            <label for="course_name" class="form-label">Course Name</label>
+                            <input type="text" name="course_name" id="course_id" value="{{ $course->course_name }}"  class="form-control @error('course_name') is-invalid @enderror">
+                            @error('course_name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="px-3 mb-3">
+                        <label for="title" class="form-label">Course Title: </label>
+                        <input type="text" name="title" value="{{ $course->courseDetails->title }}" style="width: 500px;" class="form-control @error('title') is-invalid @enderror">
+                        @error('title')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class=" px-3 mb-3">
+                        <label for="image" class="form-label">Image </label>
+                        <input type="file" name="image" value="{{ $course->courseDetails->image }}" style="width: 500px;" class="form-control @error('image') is-invalid @enderror">
+                        @error('image')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class=" px-3 mb-3">
+                        <label for="description" class="form-label">Description: </label> <br>
+                        <textarea name="description" id="description" cols="50" rows="12" class="form-control @error('description') is-invalid @enderror">{{ $course->courseDetails->description }}
+                        </textarea>
+                        @error('description')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="px-3 mb-3">
+                        <label for="objective" class="form-label">Objective: </label> <br>
+                        <textarea name="objective" id="objective" cols="50" rows="12" class="form-control @error('objective') is-invalid @enderror">{{ $course->courseDetails->objective }}
+                        </textarea>
+                        @error('objective')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 px-3">
+                        <button type="submit" class="btn btn-primary ">Edit</button>
+                    </div>
 
-        <h3>
-            Edit Course Details
-        </h3>
-        <label for="course_name">Course Name: </label>
-        <input type="text" name="course_name" id="course_id" value="{{ $course->course_name }}" style="width: 500px;"> <br> <br>
-        <label for="slug">Course Slug: </label>
-        <input type="text" name="slug" value="{{ $course->courseDetails->slug }}" style="width: 500px;"> <br> <br>
-        <label for="title">Course Title: </label>
-        <input type="text" name="title" value="{{ $course->courseDetails->title }}" style="width: 500px;"> <br> <br>
-        <label for="image">Image </label>
-        <input type="text" name="image" value="{{ $course->courseDetails->image }}" style="width: 500px;"> <br> <br>
-        <label for="description">Description: </label> <br>
-        <textarea name="description" id="description" cols="50" rows="5">{{ $course->courseDetails->description }}
-        </textarea> <br><br>
-        <label for="objective">Objective: </label> <br>
-        <textarea name="objective" id="objective" cols="50" rows="5">{{ $course->courseDetails->objective }}
-        </textarea> <br><br>
-
-        <button type="submit">Edit</button>
-    </form>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 

@@ -48,6 +48,9 @@ Route::get('/header', function () {
 
 // Admin Route
 Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
+    Route::get('/dashboard', function(){
+        return view('admin.dashboard');
+    });
 
     Route::group(['namespace' => 'Admin'], function(){
         Route::get('/batch/{course}/create', [App\Http\Controllers\Admin\BatchController::class, 'create'])->name('course.batch.create');

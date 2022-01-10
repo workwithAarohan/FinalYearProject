@@ -56,22 +56,31 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        // $course = new Course();
-
-        // $course->name = $request->input('name');
-        // $course->description = $request->input('description');
-        // $course->save();
-
-        $course = Course::create($request->all());
-
-        DB::table('course_details')->insert([
-            'course_id' => $course->id,
-            'slug' => $request->input('slug'),
-            'title' => $request->input('title'),
-            'image' => $request->input('image'),
-            'description' => $request->input('description'),
-            'objective' => $request->input('objective'),
+        $request->validate([
+            'slug' => 'required',
+            'course_name' => 'required|max:255',
+            'title' => 'required',
+            'image' => 'required',
+            'description' => 'required',
+            'objective' => 'required'
         ]);
+
+        DB::transaction(function () use ($request ) {
+
+            // Create new Course
+            $course = Course::create($request->all());
+
+            // Add Course Details
+            DB::table('course_details')->insert([
+                'course_id' => $course->id,
+                'slug' => $request->input('slug'),
+                'title' => $request->input('title'),
+                'image' => $request->input('image'),
+                'description' => $request->input('description'),
+                'objective' => $request->input('objective'),
+            ]);
+        });
+
 
         return redirect('/admin/course');
 
@@ -129,15 +138,18 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        // $course = Course::find($id);
+        $request->validate([
+            'slug' => 'required',
+            'course_name' => 'required|max:255',
+            'title' => 'required',
+            'image' => 'required',
+            'description' => 'required',
+            'objective' => 'required'
+        ]);
 
         $course->update($request->all());
 
         $course->courseDetails->update($request->except('_token'));
-
-        // $course->name = $request->input('name');
-        // $course->description = $request->input('description');
-        // $course->save();
 
         return redirect('/admin/course');
 

@@ -1,17 +1,15 @@
-@extends('layouts.nav')
+@extends('admin.dashboard')
 
 @section('style')
-    <style>
-        tr[data-href]
-        {
-            cursor: pointer;
-        }
-    </style>
+    tr[data-href]
+    {
+        cursor: pointer;
+    }
 @endsection
 
 @section('content')
     <div class="container">
-        
+
         <div class="row mb-3">
             <div class="col-12">
                 <h1 class="float-start">
