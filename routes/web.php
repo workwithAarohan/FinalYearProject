@@ -79,6 +79,10 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
 });
 
+// Admission Form
+Route::get('/admission/form/{admissionWindow}',[App\Http\Controllers\Admin\AdmissionController::class, 'admissionForm'])->name('admission.form');
+Route::post('/admission/store',[App\Http\Controllers\Admin\AdmissionController::class, 'admissionData'])->name('admission.store');
+
 //Co-ordinator Route
 Route::group(['prefix'=>'coordinator', 'middleware' => 'auth', 'namespace' => 'Coordinator'], function(){
     Route::resource('/classroom', ClassroomController::class)->except(['index']);
@@ -96,7 +100,7 @@ Route::resource('/classroom/assignment', Classroom\AssignmentController::class)-
 Route::get('/classroom/{classroom}/assignment', [App\Http\Controllers\Classroom\AssignmentController::class, 'index'])->name('assignment.index');
 
 // Student New Admission
-Route::get('student/create/{course}/{batch}', [StudentController::class, 'create'])->name('student.create');
+// Route::get('student/create/{course}/{batch}', [StudentController::class, 'create'])->name('student.create');
 Route::post('/student', [StudentController::class, 'store'])->name('student.store');
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard')->middleware('auth');
 

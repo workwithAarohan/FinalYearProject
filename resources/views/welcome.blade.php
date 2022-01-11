@@ -68,7 +68,7 @@
                                 </div>
                             @else
                                 @foreach ($admissionWindows as $admissionWindow)
-                                    <a href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}" class="btn btn-primary">
+                                    <a href="{{ route('admission.form', $admissionWindow->id) }}" class="btn btn-primary">
                                         Admission Open for {{ $admissionWindow->course->courseDetails->slug }}
                                     </a>
                                 @endforeach

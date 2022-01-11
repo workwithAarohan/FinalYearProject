@@ -22,19 +22,27 @@
                     <tr>
                         <th scope="col">First Name</th>
                         <th scope="col">Last Name</th>
-                        <th scope="col">Username</th>
                         <th scope="col">Course</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($students as $student)
+                    @foreach ($batch->admissionWindow->admissions as $student)
                         <tr>
-                            <th scope="row">{{ $student->user->firstname }}</th>
-                            <th scope="row">{{ $student->user->lastname }}</th>
-                            <td>{{ $student->user->username }}</td>
-                            <td>{{ $student->course->name }}</td>
+                            <th scope="row">{{ $student->firstname }}</th>
+                            <th scope="row">{{ $student->lastname }}</th>
+                            <td>{{ $batch->course->courseDetails->slug }}</td>
+                            @if ($student->is_admitted)
+                                <td>
+                                    <a href="" class="badge bg-success text-decoration-none">Admitted</a>
+                                </td>
+                            @else
+                                <td>
+                                    <span class="badge bg-warning text-dark">Not Admitted</span>
+                                </td>
+                            @endif
                             <td>
                                 <a href="" class="me-3 text-decoration-none text-secondary" title="Edit">
                                     <i class="fas fa-edit"></i>
@@ -43,7 +51,7 @@
                                         document.getElementById('delete-user-form-{{ $student->id }}').submit();">
                                     <i class="fas fa-trash"></i>
                                 </a>
-                                <form id="delete-user-{{ $student->user->id }}" action="" method="POST" style="display:none;">
+                                <form id="delete-user-{{ $student->id }}" action="" method="POST" style="display:none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>
