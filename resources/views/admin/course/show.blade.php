@@ -3,9 +3,12 @@
 @section('content')
 
     <div class="container">
-        <a href="{{ route('course.newSession', $course->id) }}" class="btn btn-primary float-end" >
-            New Session
-        </a>
+
+        @if ($course->admissionWindows->count()==0)
+            <a href="{{ route('course.newSession', $course->id) }}" class="btn btn-primary float-end" >
+                New Session
+            </a>
+        @endif
         <h4>
             <strong>
                 {{ $course->course_name }}

@@ -82,6 +82,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 // Admission Form
 Route::get('/admission/form/{admissionWindow}',[App\Http\Controllers\Admin\AdmissionController::class, 'admissionForm'])->name('admission.form');
 Route::post('/admission/store',[App\Http\Controllers\Admin\AdmissionController::class, 'admissionData'])->name('admission.store');
+Route::get('/admission/response',[App\Http\Controllers\Admin\AdmissionController::class, 'Response'])->name('admission.response');
+Route::get('/admission/details/{admission}',[App\Http\Controllers\Admin\AdmissionController::class, 'admissionDetails'])->name('admission.details');
 
 //Co-ordinator Route
 Route::group(['prefix'=>'coordinator', 'middleware' => 'auth', 'namespace' => 'Coordinator'], function(){

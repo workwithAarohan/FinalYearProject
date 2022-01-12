@@ -1,5 +1,14 @@
 @extends('layouts.nav')
 
+@section('style')
+    <style>
+        tr[data-href]
+        {
+            cursor: pointer;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row mb-2">
@@ -7,9 +16,11 @@
                 <h1 class="float-start">
                     {{ $batch->batch_name }} Batch
                 </h1>
-                {{-- <a href="{{ route('admission.closed', $batch->id) }}" class="btn btn-warning float-end" role="button">
-                    End Session
-                </a> --}}
+                @if ($batch->admissionWindow->is_open)
+                    <a href="{{ route('admission.closed', $batch->id) }}" class="btn btn-warning float-end ms-3" role="button">
+                        End Session
+                    </a>
+                @endif
                 <a href="{{ route('classroom.index', $batch->id) }}" class="btn btn-success float-end">
                     Classroom
                 </a>
@@ -30,7 +41,7 @@
 
                 <tbody>
                     @foreach ($batch->admissionWindow->admissions as $student)
-                        <tr>
+                        <tr data-href="{{ route('admission.details', $student->id) }}">
                             <th scope="row">{{ $student->firstname }}</th>
                             <th scope="row">{{ $student->lastname }}</th>
                             <td>{{ $batch->course->courseDetails->slug }}</td>
@@ -89,4 +100,21 @@
             {{ $students->links() }}
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded',() => {
+            const rows = document.querySelectorAll("tr[data-href]");
+
+            rows.forEach(row => {
+                row.addEventListener("click", () => {
+                    window.location.href = row.dataset.href;
+                });
+            });
+        });
+        // $(document).ready(function(){
+        //     $(document.body).on("click", "tr[data-href]", function(){
+        //         window.location.href = this.dataset.href;
+        //     });
+        // });
+    </script>
 @endsection

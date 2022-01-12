@@ -199,11 +199,14 @@ class ClassroomController extends Controller
      */
     public function destroy(Classroom $classroom)
     {
-        $image_path = public_path('/images/background/'.$classroom->image);
-
-        if (file_exists($image_path))
+        if($classroom->image != 'background.jfif')
         {
-            File::delete($image_path);
+            $image_path = public_path('/images/background/'.$classroom->image);
+
+            if (file_exists($image_path))
+            {
+                File::delete($image_path);
+            }
         }
 
         $classroom->delete();

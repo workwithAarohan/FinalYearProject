@@ -88,4 +88,16 @@ class AdmissionController extends Controller
         return redirect('/');
 
     }
+
+    public function Response()
+    {
+        return view('admin.admission.response');
+    }
+
+    public function admissionDetails(Admission $admission)
+    {
+        return view('admin.admission.studentDetails', [
+            'admission' =>$admission
+        ]);
+    }
 }
