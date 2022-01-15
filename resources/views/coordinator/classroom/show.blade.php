@@ -50,9 +50,9 @@
                             <div class="mb-2 d-flex justify-content-around" style="margin-top: -15px;">
                                 <div class="card" style="width:15rem; border: none;">
                                     <div class="card-body">
-                                        <h5 class="fs-6 fw-bold text-center">Course Completed (25%)</h5>
+                                        <h5 class="fs-6 fw-bold text-center">Course Completed ({{ $courseCompleted }}%)</h5>
                                         <div class="progress" style="height: 10px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $courseCompleted }}%" aria-valuenow="{{ $courseCompleted }}" aria-valuemin="0" aria-valuemax="100"></div>
                                           </div>
                                     </div>
                                 </div>

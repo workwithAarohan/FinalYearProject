@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\NewStudentAdmissionEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\CourseCompletedTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\StudentEnrollment;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
+    use CourseCompletedTraits;
+
     public function index()
     {
 
@@ -66,11 +69,18 @@ class StudentController extends Controller
 
     public function dashboard()
     {
-        $user = User::findOrFail(auth()->user()->id);
-        $student_id = $user->student->id;
+        $student = User::findOrFail(auth()->user()->id)->student;
+
+        $classrooms = $student->classrooms;
+
+        foreach($classrooms as $classroom)
+        {
+            $classroom->courseCompleted = CourseCompletedTraits::CourseCompleted($classroom);
+        }
 
         return view('student.dashboard', [
-            'student' => Student::findOrFail($student_id)
+            'student' => $student,
+            'classrooms' => $classrooms
         ]);
     }
 }

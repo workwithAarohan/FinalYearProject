@@ -41,7 +41,7 @@
             <h5 class="background">
                 <span>Classrooms</span>
             </h5>
-            @foreach ($student->classrooms as $classroom)
+            @foreach ($classrooms as $classroom)
                 @if ($classroom->is_active)
                     <div class="col-md-8 bg-white shadow mb-3 p-2">
                         <div class="d-flex justify-content-between align-items-center">
@@ -58,9 +58,9 @@
                             </div>
                             <div class="card" style="width:10rem; border: none;">
                                 <div class="card-body">
-                                    <h5 class="fs-6 fw-bold text-center">Course Completed (25%)</h5>
+                                    <h5 class="fs-6 fw-bold text-center">Course Completed ({{ $classroom->courseCompleted }}%)</h5>
                                     <div class="progress" style="height: 10px;">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $classroom->courseCompleted }}%" aria-valuenow="{{ $classroom->courseCompleted }}" aria-valuemin="0" aria-valuemax="100"></div>
                                       </div>
                                 </div>
                             </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Coordinator;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\CourseCompletedTraits;
 use App\Models\Batch;
 use App\Models\Classroom;
 use App\Models\Course;
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\File;
 
 class ClassroomController extends Controller
 {
+    use CourseCompletedTraits;
+
+
     /**
      * Display a listing of the resource.
      *
@@ -106,6 +110,8 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom)
     {
+        $courseCompleted = CourseCompletedTraits::CourseCompleted($classroom);
+
         $eligibleStudents = Student::where('batch_id', $classroom->batch_id)
             ->orderBy('symbol_number')
             ->get();
@@ -113,7 +119,8 @@ class ClassroomController extends Controller
         return view('coordinator.classroom.show', [
             'classroom' => $classroom,
             'eligibleStudents' => $eligibleStudents,
-            'eligibleTeachers' => Teacher::all()
+            'eligibleTeachers' => Teacher::all(),
+            'courseCompleted' => $courseCompleted,
         ]);
     }
 
