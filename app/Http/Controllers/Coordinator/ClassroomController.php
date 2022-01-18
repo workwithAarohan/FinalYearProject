@@ -116,10 +116,41 @@ class ClassroomController extends Controller
             ->orderBy('symbol_number')
             ->get();
 
+        foreach($eligibleStudents as $student)
+        {
+            $student->isAdded = False;
+            foreach($classroom->students as $value)
+            {
+                if($value->id == $student->id)
+                {
+                    $student->isAdded = True;
+                    break;
+                }
+            }
+        }
+
+        $eligibleTeachers = Teacher::all();
+
+        foreach($eligibleTeachers as $teacher)
+        {
+            $teacher->isAdded = False;
+
+            foreach($classroom->teachers as $value)
+            {
+                if($value->id == $teacher->id)
+                {
+                    $teacher->isAdded = True;
+                    break;
+                }
+            }
+        }
+
+
+
         return view('coordinator.classroom.show', [
             'classroom' => $classroom,
             'eligibleStudents' => $eligibleStudents,
-            'eligibleTeachers' => Teacher::all(),
+            'eligibleTeachers' => $eligibleTeachers,
             'courseCompleted' => $courseCompleted,
         ]);
     }

@@ -56,4 +56,9 @@ class Classroom extends Model
         return $this->belongsToMany(Teacher::class);
     }
 
+    public function student_points()
+    {
+        return $this->hasMany(AssignmentPoint::class);
+    }
+
 }

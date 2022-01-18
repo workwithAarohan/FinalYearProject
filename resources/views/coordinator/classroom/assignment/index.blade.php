@@ -64,66 +64,72 @@
             </div>
 
             <div class="col-md-8">
-                <button class="btn mb-3" style="border-radius: 50px; color: white; background: #3a7fdf; padding: 10px 20px;" data-bs-toggle="modal" data-bs-target="#addTeacher">
-                    <i class="fas fa-plus" style=""></i>
-                    <span style="margin-left: 6px; font-size: 15px; font-weight: bold; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Create</span>
-                </button>
-                <!-- Modal -->
-                <div class="modal" id="addTeacher" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
-                    <div class="modal-dialog modal-fullscreen">
-                        <div class="modal-content">
-                            <form action="{{ route('assignment.store') }}" method="POST">
-                                @csrf
-                                <div class="modal-header d-flex justify-content-between">
-                                    <div class="heading d-flex align-items-baseline">
-                                        <button type="button" class="btn-close me-2" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        <h5 class="modal-title" id="selectCourse">Assignment</h5>
+                <div class="d-flex justify-content-between">
+                    <button class="btn mb-3" style="border-radius: 50px; color: white; background: #3a7fdf; padding: 10px 20px;" data-bs-toggle="modal" data-bs-target="#addTeacher">
+                        <i class="fas fa-plus" style=""></i>
+                        <span style="margin-left: 6px; font-size: 15px; font-weight: bold; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Create</span>
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal" id="addTeacher" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
+                        <div class="modal-dialog modal-fullscreen">
+                            <div class="modal-content">
+                                <form action="{{ route('assignment.store') }}" method="POST">
+                                    @csrf
+                                    <div class="modal-header d-flex justify-content-between">
+                                        <div class="heading d-flex align-items-baseline">
+                                            <button type="button" class="btn-close me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <h5 class="modal-title" id="selectCourse">Assignment</h5>
+                                        </div>
+                                        <input type="submit" class="btn btn-primary text-white fw-bold" value="Assign">
                                     </div>
-                                    <input type="submit" class="btn btn-primary text-white fw-bold" value="Assign">
-                                </div>
-                                <div class="modal-body ">
-                                    <div class="row px-3">
-                                        <div class="col-md-9 px-5 border-end" style="height: 80vh;">
-                                            <div class="mb-3 d-flex align-items-center">
-                                                <i class="fas fa-clipboard-list fs-4"></i>
-                                                <input type="text" class="form-input ms-3" id="title" name="title" placeholder="Title">
+                                    <div class="modal-body ">
+                                        <div class="row px-3">
+                                            <div class="col-md-9 px-5 border-end" style="height: 80vh;">
+                                                <div class="mb-3 d-flex align-items-center">
+                                                    <i class="fas fa-clipboard-list fs-4"></i>
+                                                    <input type="text" class="form-input ms-3" id="title" name="title" placeholder="Title">
+                                                </div>
+                                                <div class="mb-3 d-flex align-items-top">
+                                                    <i class="fas fa-align-left  fs-4 mt-3"></i>
+                                                    <textarea name="instruction" id="instruction" cols="30" rows="10" class="form-input ms-3" placeholder="Instructions"></textarea>
+                                                </div>
                                             </div>
-                                            <div class="mb-3 d-flex align-items-top">
-                                                <i class="fas fa-align-left  fs-4 mt-3"></i>
-                                                <textarea name="instruction" id="instruction" cols="30" rows="10" class="form-input ms-3" placeholder="Instructions"></textarea>
+                                            <div class="col px-4" style="height: 80vh;">
+                                                <div class="mb-3">
+                                                    <label for="batch" class="form-label">For</label>
+                                                    <input type="text" class="form-control" value="{{ $classroom->batch->batch_name }} - {{ $classroom->batch->course->courseDetails->slug }}" disabled>
+                                                </div>
+                                                <div class="mb-3 w-50">
+                                                    <label for="points" class="form-label">Points</label>
+                                                    <input type="number" id="points" class="form-control" name="points">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="due_date" class="form-label">Due Date</label>
+                                                    <input type="date" id="due_date" class="form-control" name="due_date">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="topic" class="form-label">Topic</label>
+                                                    <select name="topic_id" id="topic" class="form-select">
+                                                        @foreach ($classroom->topics as $topic)
+                                                            <option value="{{ $topic->id }}">{{ $topic->topic_title }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
+                                                <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
                                             </div>
                                         </div>
-                                        <div class="col px-4" style="height: 80vh;">
-                                            <div class="mb-3">
-                                                <label for="batch" class="form-label">For</label>
-                                                <input type="text" class="form-control" value="{{ $classroom->batch->batch_name }} - {{ $classroom->batch->course->courseDetails->slug }}" disabled>
-                                            </div>
-                                            <div class="mb-3 w-50">
-                                                <label for="points" class="form-label">Points</label>
-                                                <input type="number" id="points" class="form-control" name="points">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="due_date" class="form-label">Due Date</label>
-                                                <input type="date" id="due_date" class="form-control" name="due_date">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="topic" class="form-label">Topic</label>
-                                                <select name="topic_id" id="topic" class="form-select">
-                                                    @foreach ($classroom->topics as $topic)
-                                                        <option value="{{ $topic->id }}">{{ $topic->topic_title }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
 
-                                            <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
-                                            <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
-                                        </div>
                                     </div>
-
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
+
+                    <a href="{{ route('studentWork.show') }}" class="btn mb-3" style="border-radius: 50px; color: white; background: #3a7fdf; padding: 10px 20px;">
+                        <span style="margin-left: 6px; font-size: 15px; font-weight: bold; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Total Points</span>
+                    </a>
                 </div>
 
                 <div class="section p-4 bg-white rounded mt-2">

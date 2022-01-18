@@ -103,13 +103,14 @@
 
                 {{-- Teacher Section --}}
                 <div class="mb-3 p-1 d-flex justify-content-between align-items-baseline" style="border-bottom: 2px solid #0078D4">
-                    <h3 class="text-primary">
-                        Teachers
-                    </h3>
-
-                    <p class="fw-bold fs-6">
-                        {{ $classroom->teachers->count() }} Teachers
-                    </p>
+                    <div class="d-flex ">
+                        <h3 class="text-primary">
+                            Teachers
+                        </h3>
+                        <p class="ms-3 mt-1">
+                            <span class=" text-white my-auto" style="background: #07a83d; border-radius: 50%; padding: 4px 8px; font-size: 15px;">{{ $classroom->teachers->count() }}</span>
+                        </p>
+                    </div>
 
                     <div class="fs-4">
                         <button type="button" class="btn btn-default fs-4" data-bs-toggle="modal" data-bs-target="#addTeacher">
@@ -137,15 +138,21 @@
                                                     </div>
                                                 </div>
                                                 <div class="add">
-                                                    <form action="{{ route('classroom.addTeachers') }}" method="POST">
-                                                        @csrf
 
-                                                        <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
-                                                        <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
-                                                        <button class="btn btn-primary" type="submit">
-                                                            Add
+                                                    @if ($teacher->isAdded)
+                                                        <button class="btn btn-default border" disabled>
+                                                            <i class="fas fa-check"></i> Added
                                                         </button>
-                                                    </form>
+                                                    @else
+                                                        <form action="{{ route('classroom.addTeachers') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
+                                                            <input type="hidden" name="teacher_id" value="{{ $teacher->id }}">
+                                                            <button class="btn btn-primary" type="submit">
+                                                                Add
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach
@@ -159,8 +166,8 @@
 
                 <div class="teachers">
                     @foreach ($classroom->teachers as $teacher)
-                    <div class="d-flex w-25 justify-content-between align-items-center">
-                        <div class="image">
+                    <div class="d-flex w-50 align-items-center">
+                        <div class="image me-2">
                             <img src="{{ asset('images/profile/'.$teacher->user->avatar) }}" style="width: 45px; border-radius: 50%;">
                         </div>
                         <div class="teacherInfo">
@@ -175,15 +182,18 @@
 
                 {{-- Student Section --}}
                 <div class="mb-3 p-1 d-flex justify-content-between align-items-baseline" style="border-bottom: 2px solid #0078D4">
-                    <h3 class="text-primary">
-                        Students
-                    </h3>
+                    <div class="d-flex ">
+                        <h3 class="text-primary">
+                            Students
+                        </h3>
+                        <p class="ms-3 mt-1">
+                            <span class=" text-white my-auto" style="background: #07a83d; border-radius: 50%; padding: 4px 8px; font-size: 15px;">{{ $classroom->students->count() }}</span>
+                        </p>
+                    </div>
 
-                    <p class="fw-bold fs-6">
-                        {{ $classroom->students->count() }} Students
-                    </p>
 
-                    <div class="">
+                    <div class="d-flex align-items-baseline">
+
                         <button type="button" class="btn btn-default fs-4" data-bs-toggle="modal" data-bs-target="#addStudent">
                             <i class="fas fa-user-plus text-primary"></i>
                         </button>
@@ -200,7 +210,7 @@
                                         @foreach ($eligibleStudents as $student)
                                             <hr>
                                             <div class=" p-1 d-flex justify-content-between align-items-center">
-                                                <div class="profile d-flex">
+                                                <div class="profile d-flex align-items-center">
                                                     <div class="image me-4">
                                                         <img src="{{ asset('images/profile/'. $student->user->avatar) }}" style="width: 50px; border-radius: 50%" class="bg-dark">
                                                     </div>
@@ -210,15 +220,21 @@
                                                     </div>
                                                 </div>
                                                 <div class="add">
-                                                    <form action="{{ route('classroom.addStudents') }}" method="POST">
-                                                        @csrf
-
-                                                        <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
-                                                        <input type="hidden" name="student_id" value="{{ $student->id }}">
-                                                        <button class="btn btn-primary" type="submit">
-                                                            Add
+                                                    @if ($student->isAdded)
+                                                        <button class="btn btn-default border" disabled>
+                                                            <i class="fas fa-check"></i> Added
                                                         </button>
-                                                    </form>
+                                                    @else
+                                                        <form action="{{ route('classroom.addStudents') }}" method="POST">
+                                                            @csrf
+
+                                                            <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
+                                                            <input type="hidden" name="student_id" value="{{ $student->id }}">
+                                                            <button class="btn btn-primary" type="submit">
+                                                                Add
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach
@@ -232,8 +248,8 @@
 
                 <div class="students">
                     @foreach ($classroom->students as $student)
-                    <div class="d-flex w-25 justify-content-between align-items-center">
-                        <div class="image">
+                    <div class="d-flex w-50 align-items-center">
+                        <div class="image me-2">
                             <img src="{{ asset('images/profile/'.$student->user->avatar) }}" style="width: 45px; border-radius: 50%;">
                         </div>
                         <div class="studentInfo">

@@ -25,4 +25,9 @@ class Assignment extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function student_points()
+    {
+        return $this->hasMany(AssignmentPoint::class);
+    }
 }

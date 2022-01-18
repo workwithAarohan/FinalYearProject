@@ -101,6 +101,9 @@ Route::resource('/classroom/topic', Classroom\TopicController::class);
 Route::resource('/classroom/assignment', Classroom\AssignmentController::class)->except(['index']);
 Route::get('/classroom/{classroom}/assignment', [App\Http\Controllers\Classroom\AssignmentController::class, 'index'])->name('assignment.index');
 
+// Assignment - Student Work
+Route::resource('/classroom/assignment/studentWork', Classroom\AssignmentPointController::class);
+
 // Student New Admission
 // Route::get('student/create/{course}/{batch}', [StudentController::class, 'create'])->name('student.create');
 Route::post('/student', [StudentController::class, 'store'])->name('student.store');

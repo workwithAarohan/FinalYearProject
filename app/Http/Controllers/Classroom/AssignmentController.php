@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Classroom;
 
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
+use App\Models\AssignmentPoint;
 use App\Models\Classroom;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AssignmentController extends Controller
 {
@@ -44,9 +46,22 @@ class AssignmentController extends Controller
             'points' => 'required',
         ]);
 
-        $assignment = Assignment::create($request->all());
+        DB::transaction(function () use ($request) {
 
-        return redirect('/classroom/assignment/'. $assignment->id);
+            $assignment = Assignment::create($request->all());
+
+            foreach($assignment->classroom->students as $student)
+            {
+                AssignmentPoint::create([
+                        'assignment_id' => $assignment->id,
+                        'student_id' => $student->id,
+                        'classroom_id' => $assignment->classroom->id
+                    ]);
+            }
+            return redirect('/classroom/assignment/'. $assignment->id);
+        });
+
+
     }
 
     /**
@@ -57,6 +72,7 @@ class AssignmentController extends Controller
      */
     public function show(Assignment $assignment)
     {
+
         return view('coordinator.classroom.assignment.show', [
             'assignment' => $assignment
         ]);

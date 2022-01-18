@@ -56,6 +56,10 @@
                     </div>
                 @endif
             </div>
+
+            <div class="col">
+                <a href="{{ route('studentWork.index', $assignment->id) }}" class="btn btn-primary">Student Work</a>
+            </div>
         </div>
     </div>
 @endsection
