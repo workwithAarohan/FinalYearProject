@@ -6,19 +6,41 @@
         {
             cursor: pointer;
         }
+
+        .role-input:focus
+        {
+            outline: none;
+        }
+
+        .role-input:focus + .role-button
+        {
+            border: 2px solid #092bc5;
+        }
+
+
     </style>
 @endsection
 
 @section('content')
     <div class="container">
+        {{-- @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif --}}
         <div class="row mb-3">
             <div class="col-12">
                 <h1 class="float-start">
-                    Batch
+                    Roles
                 </h1>
-                {{-- <a href="{{ route('batch.create') }}" class="btn btn-success float-end" role="button">
-                    Create
-                </a> --}}
+
+                <form action="{{ route('role.store') }}" method="post" class="float-end d-flex">
+                    @csrf
+                    <div class="input-group mb-3" style="">
+                        <input type="text" class="role-input" placeholder="Add Role"  name="name" style="background: #fff; width: 300px; border: 1px solid #bebdbd; padding: 8px; border-radius: 5px 0 0 5px;">
+                        <button style="background: #092bc5; color: #fff; border: none; border-radius: 0 5px 5px 0; width: 80px;" type="submit" class="px-3 role-button">Add</button>
+                      </div>
+                </form>
             </div>
         </div>
         <div class="card shadow" style="padding: 10px 40px; ">
@@ -26,10 +48,9 @@
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Batch</th>
-                        <th scope="col">Course</th>
-                        <th scope="col">No.of Students</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">No.of Users</th>
+                        <th scope="col">Permissions</th>
                         @can('logged-in')
                             <th scope="col">Action</th>
                         @endcan
@@ -37,33 +58,27 @@
                 </thead>
 
                 <tbody>
-                    @foreach ($batches as $key => $value)
-                        <tr data-href="{{ route('batch.show',$value->id) }}">
-                            <th scope="row">{{ $value->id }}</th>
-
+                    @foreach ($roles as $role)
+                        <tr data-href="{{ route('role.show',$role->id) }}">
                             <th scope="row">
-                                {{ $value->batch_name }}
+                                {{ $role->id }}
+                            </th>
+                            <th scope="row">
+                                {{ $role->name }}
                             </th>
                             <td>
-                                {{ $value->course->courseDetails->slug }}
+                                {{ $role->users->count() }}
                             </td>
                             <td>
-                                {{ $value->students->count() }}
-                            </td>
-                            <td>
-                                @if ($value->is_active)
-                                    Active
-                                @else
-                                    Inactive
-                                @endif
+                                {{ $role->permissions->count() }}
                             </td>
                             @can('logged-in')
                                 <td>
                                     <div class="d-flex align-items-baseline">
-                                        <a href="{{ route('batch.edit',$value->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
+                                        <a href="{{ route('batch.edit',$role->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('batch.destroy', $value->id) }}" method="POST">
+                                        <form action="{{ route('batch.destroy', $role->id) }}" method="POST">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit" class="text-danger btn" title="Delete" style="padding: 0px;">
@@ -72,10 +87,10 @@
                                         </form>
                                     </div>
                                     {{-- <a class="text-danger pe-auto" title="Delete" onclick="event.preventDefault();
-                                            document.getElementById('delete-batch-form-{{ $value->id }}').submit();">
+                                            document.getElementById('delete-batch-form-{{ $role->id }}').submit();">
                                         <i class="fas fa-trash"></i>
                                     </a>
-                                    <form id="delete-batch-form-{{ $value->id }}" action="{{ route('batch.destroy',$value->id) }}" method="POST" style="display:none;">
+                                    <form id="delete-batch-form-{{ $role->id }}" action="{{ route('batch.destroy',$role->id) }}" method="POST" style="display:none;">
                                         @method('DELETE')
                                         @csrf
 
@@ -87,7 +102,7 @@
                 </tbody>
             </table>
 
-            {{ $batches->links() }}
+            {{ $roles->links() }}
         </div>
     </div>
 

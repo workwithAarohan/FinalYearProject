@@ -44,14 +44,14 @@
                                 {{ $batch->batch_name }}
                             </th>
                             <td>
-                                {{ $batch->users()->count() }}
+                                {{ $batch->students->count() }}
                             </td>
                             <td>
                                 {{ $batch->createdBy->firstname }}
                             </td>
                             @can('logged-in')
                                 <td>
-                                    
+
                                     <div class="d-flex align-items-baseline">
                                         <a href="{{ route('batch.edit',$batch->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
                                             <i class="fas fa-edit"></i>

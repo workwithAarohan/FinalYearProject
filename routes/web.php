@@ -53,6 +53,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
     });
 
     Route::group(['namespace' => 'Admin'], function(){
+        Route::resource('/role', RoleController::class);
+        
         Route::get('/batch/{course}/create', [App\Http\Controllers\Admin\BatchController::class, 'create'])->name('course.batch.create');
         Route::resource('/batch', BatchController::class);
 
@@ -91,6 +93,9 @@ Route::group(['prefix'=>'coordinator', 'middleware' => 'auth', 'namespace' => 'C
     Route::get('/rooms/{batch}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'index'])->name('classroom.index');
     Route::post('/classroom/addStudents', [App\Http\Controllers\Coordinator\ClassroomController::class, 'addStudents'])->name('classroom.addStudents');
     Route::post('/classroom/addTeachers', [App\Http\Controllers\Coordinator\ClassroomController::class, 'addTeachers'])->name('classroom.addTeachers');
+    Route::delete('/classroom/removeTeacher/{teacher}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'removeTeacher'])->name('classroom.removeTeacher');
+    Route::delete('/classroom/removeStudent/{student}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'removeStudent'])->name('classroom.removeStudent');
+
 });
 Route::get('/classroom/{classroom}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'classroom'])->name('classroom.dashboard');
 
@@ -100,9 +105,14 @@ Route::resource('/classroom/topic', Classroom\TopicController::class);
 // Classroom Assignment
 Route::resource('/classroom/assignment', Classroom\AssignmentController::class)->except(['index']);
 Route::get('/classroom/{classroom}/assignment', [App\Http\Controllers\Classroom\AssignmentController::class, 'index'])->name('assignment.index');
+Route::get('/classroom/{classroom}/assignmentEvaluation', [App\Http\Controllers\Classroom\AssignmentController::class, 'studentAssignmentEvaluation'])->name('assignment.evaluation');
 
 // Assignment - Student Work
-Route::resource('/classroom/assignment/studentWork', Classroom\AssignmentPointController::class);
+Route::resource('/classroom/assignment/studentWork', Classroom\AssignmentPointController::class)->except(['index']);
+Route::get('/classroom/assignment/{assignment}/studentWork',[ App\Http\Controllers\Classroom\AssignmentPointController::class, 'index'])->name('studentWork.index');
+
+// Comment
+Route::post('/addComment', [App\Http\Controllers\Classroom\CommentController::class, 'addComment'])->name('comment.store');
 
 // Student New Admission
 // Route::get('student/create/{course}/{batch}', [StudentController::class, 'create'])->name('student.create');

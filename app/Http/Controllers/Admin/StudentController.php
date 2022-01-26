@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\NewStudentAdmissionEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Traits\CourseCompletedTraits;
+use App\Http\Traits\EvaluationTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\StudentEnrollment;
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
-    use CourseCompletedTraits;
+    use EvaluationTraits;
 
     public function index()
     {
@@ -75,7 +75,7 @@ class StudentController extends Controller
 
         foreach($classrooms as $classroom)
         {
-            $classroom->courseCompleted = CourseCompletedTraits::CourseCompleted($classroom);
+            $classroom->courseCompleted = EvaluationTraits::CourseCompleted($classroom);
         }
 
         return view('student.dashboard', [

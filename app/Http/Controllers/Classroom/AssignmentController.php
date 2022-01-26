@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Classroom;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\EvaluationTraits;
 use App\Models\Assignment;
 use App\Models\AssignmentPoint;
 use App\Models\Classroom;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class AssignmentController extends Controller
 {
+    use EvaluationTraits;
+
     /**
      * Display a listing of the resource.
      *
@@ -20,6 +23,20 @@ class AssignmentController extends Controller
     {
         return view('coordinator.classroom.assignment.index', [
             'classroom' => $classroom
+        ]);
+    }
+
+    /**
+     * Student Assignment Evaluation
+     *
+     */
+    public function studentAssignmentEvaluation(Classroom $classroom)
+    {
+        $classroom->percent = EvaluationTraits::studentAssignmentEvaluation($classroom);
+
+
+        return view('coordinator.classroom.assignment.studentWork.show',[
+            'classroom' => $classroom,
         ]);
     }
 
@@ -46,21 +63,23 @@ class AssignmentController extends Controller
             'points' => 'required',
         ]);
 
-        DB::transaction(function () use ($request) {
+        $assignment = DB::transaction(function () use ($request) {
 
             $assignment = Assignment::create($request->all());
 
             foreach($assignment->classroom->students as $student)
             {
                 AssignmentPoint::create([
-                        'assignment_id' => $assignment->id,
-                        'student_id' => $student->id,
-                        'classroom_id' => $assignment->classroom->id
-                    ]);
+                    'assignment_id' => $assignment->id,
+                    'student_id' => $student->id,
+                    'classroom_id' => $assignment->classroom->id
+                ]);
             }
-            return redirect('/classroom/assignment/'. $assignment->id);
+
+            return $assignment;
         });
 
+        return redirect('/classroom/assignment/'. $assignment->id);
 
     }
 

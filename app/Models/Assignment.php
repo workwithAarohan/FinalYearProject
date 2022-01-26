@@ -30,4 +30,9 @@ class Assignment extends Model
     {
         return $this->hasMany(AssignmentPoint::class);
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

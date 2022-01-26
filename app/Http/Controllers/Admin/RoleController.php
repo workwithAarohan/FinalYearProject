@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -15,13 +15,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-
-        $courses = Course::all();
-
-        return view("course.index",[
-            'courses' => $courses
+        return view('admin.role.index', [
+            'roles' => Role::paginate(10)
         ]);
-
     }
 
     /**
@@ -31,10 +27,6 @@ class RoleController extends Controller
      */
     public function create()
     {
-
-        return view('course.create');
-
-        //
 
     }
 
@@ -46,10 +38,15 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+        ]);
 
-        
-        
+        Role::create(['name' => $request->input('name')]);
 
+        $request->session()->flash('success','You have create new role');
+
+        return redirect()->back();
     }
 
     /**
@@ -60,7 +57,9 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
+        return view('admin.role.show', [
+            'role' => $role
+        ]);
     }
 
     /**
@@ -71,7 +70,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        return view('admin.role.edit', [
+            'role' => $role
+        ]);
     }
 
     /**
@@ -83,7 +84,15 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+        ]);
+
+        $role->update(['name' => $request->input('name')]);
+
+        $request->session()->flash('success','You have create new role');
+
+        return redirect()->back();
     }
 
     /**
@@ -94,6 +103,6 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        $role->delete();
     }
 }

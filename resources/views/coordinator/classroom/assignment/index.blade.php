@@ -127,7 +127,7 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('studentWork.show') }}" class="btn mb-3" style="border-radius: 50px; color: white; background: #3a7fdf; padding: 10px 20px;">
+                    <a href="{{ route('assignment.evaluation', [$classroom->id]) }}" class="btn mb-3" style="border-radius: 50px; color: white; background: #3a7fdf; padding: 10px 20px;">
                         <span style="margin-left: 6px; font-size: 15px; font-weight: bold; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">Total Points</span>
                     </a>
                 </div>

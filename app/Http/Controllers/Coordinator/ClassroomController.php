@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Coordinator;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\CourseCompletedTraits;
+use App\Http\Traits\EvaluationTraits;
 use App\Models\Batch;
 use App\Models\Classroom;
 use App\Models\Course;
@@ -11,13 +11,14 @@ use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class ClassroomController extends Controller
 {
-    use CourseCompletedTraits;
+    use EvaluationTraits;
 
 
     /**
@@ -43,8 +44,21 @@ class ClassroomController extends Controller
      */
     public function classroom(Classroom $classroom)
     {
+        $classroom->percent = EvaluationTraits::StudentAssignmentEvaluation($classroom);
+        $classroom->courseCompleted = EvaluationTraits::CourseCompleted($classroom);
+
+        $assignments = $classroom->assignments->where('due_date', '>', Carbon::now());
+        foreach($assignments as $assignment)
+        {
+            $assignment->daysLeft = Carbon::now()->diffInDays($assignment->due_date);
+        }
+
+        $announcements = $classroom->announcements->sortByDesc('created_at');
+
         return view('coordinator.classroom.room',[
-            'classroom' => $classroom
+            'classroom' => $classroom,
+            'assignments' => $assignments,
+            'announcements' => $announcements
         ]);
     }
 
@@ -58,6 +72,9 @@ class ClassroomController extends Controller
         $batch_id = $request->input('batch_id');
         $course_id = $request->input('course_id');
         $semester_id = $request->input('semester_id');
+        $eligibleStudents = Student::where('batch_id', $batch_id)
+            ->orderBy('symbol_number')
+            ->get();
 
         $subjects = Subject::where([
             'course_id'=> $course_id,
@@ -68,7 +85,8 @@ class ClassroomController extends Controller
             'course' => Course::find($course_id),
             'batch' => Batch::find($batch_id),
             'semester' => Semester::find($semester_id),
-            'subjects' => $subjects
+            'subjects' => $subjects,
+            'eligibleStudents' => $eligibleStudents
         ]);
     }
 
@@ -82,22 +100,28 @@ class ClassroomController extends Controller
     {
         $classroom = new Classroom();
 
-        if($request->hasFile('image'))
-        {
-            $image=$request->file('image');
-            $filename = 'background-' . time() . '.' . $image->getClientOriginalExtension();
-            $Path = public_path('/images/background');
-            $image->move($Path, $filename);
-            $classroom->image = $filename;
-        }
+        DB::transaction(function () use ($request, &$classroom) {
 
-        $classroom->room_name = $request->input('room_name');
-        $classroom->description = $request->input('description');
-        $classroom->batch_id = $request->input('batch_id');
-        $classroom->subject_id = $request->input('subject_id');
-        $classroom->created_by = $request->input('created_by');
 
-        $classroom->save();
+            if($request->hasFile('image'))
+            {
+                $image=$request->file('image');
+                $filename = 'background-' . time() . '.' . $image->getClientOriginalExtension();
+                $Path = public_path('/images/background');
+                $image->move($Path, $filename);
+                $classroom->image = $filename;
+            }
+
+            $classroom->room_name = $request->input('room_name');
+            $classroom->description = $request->input('description');
+            $classroom->batch_id = $request->input('batch_id');
+            $classroom->subject_id = $request->input('subject_id');
+            $classroom->created_by = $request->input('created_by');
+
+            $classroom->save();
+
+            $classroom->students()->sync($request->students);
+        });
 
         return redirect('/coordinator/classroom/'. $classroom->id);
     }
@@ -110,7 +134,7 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom)
     {
-        $courseCompleted = CourseCompletedTraits::CourseCompleted($classroom);
+        $courseCompleted = EvaluationTraits::CourseCompleted($classroom);
 
         $eligibleStudents = Student::where('batch_id', $classroom->batch_id)
             ->orderBy('symbol_number')
@@ -168,6 +192,20 @@ class ClassroomController extends Controller
             'student_id' => $request->input('student_id')
         ]);
 
+        $student = Student::find($request->input('student_id'))->user;
+
+        return response()->json($student);
+    }
+
+    /**
+     *
+     * Remove Teacher from classroom
+     *
+     */
+    public function removeStudent($id)
+    {
+        DB::table('classroom_student')->where('student_id', $id)->delete();
+
         return redirect()->back();
     }
 
@@ -178,11 +216,24 @@ class ClassroomController extends Controller
      */
     public function addTeachers(Request $request)
     {
-
         DB::table('classroom_teacher')->insert([
             'classroom_id'=> $request->input('classroom_id'),
             'teacher_id' => $request->input('teacher_id')
         ]);
+
+        $teacher = Teacher::find($request->input('teacher_id'))->user;
+
+        return response()->json($teacher);
+    }
+
+    /**
+     *
+     * Remove Teacher from classroom
+     *
+     */
+    public function removeTeacher($id)
+    {
+        DB::table('classroom_teacher')->where('teacher_id', $id)->delete();
 
         return redirect()->back();
     }

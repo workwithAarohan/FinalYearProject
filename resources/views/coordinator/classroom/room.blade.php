@@ -1,7 +1,11 @@
 @extends('layouts.nav')
 
+@section('style')
+    <style></style>
+@endsection
+
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row mb-4 justify-content-around">
             <div class="col-md-7">
                 <div class="mb-3">
@@ -9,11 +13,16 @@
                     <p>{{ $classroom->batch->batch_name }}</p>
                 </div>
                 <div class="mb-3 d-flex justify-content-around">
-                    <div class="card" style="width:12rem;">
-                      <div class="card-body">
-                        <h5 class="card-title">Course Completed</h5>
-                        <h6 class="card-subtitle mb-2 text-muted ">80%</h6>
-                      </div>
+                    <div class="card" style="width:12rem; border: none;">
+                        <div class="card-body">
+                            <h5 class="fs-6 fw-bold text-center">Course Completed</h5>
+                            <div class="progress mt-4" style="height: 15px; position: relative;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $classroom->courseCompleted }}%" aria-valuenow="{{ $classroom->courseCompleted }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <h6 class="fw-bold my-auto" style="position: absolute; left: 40%; top: 1px; font-size: 13px; ">
+                                    {{ $classroom->courseCompleted }}%
+                                </h6>
+                              </div>
+                        </div>
                     </div>
                     <div class="card" style="width:12rem;">
                         <div class="card-body">
@@ -21,28 +30,30 @@
                           <h6 class="card-subtitle mb-2 text-muted ">80%</h6>
                         </div>
                     </div>
-                    <div class="card" style="width:12rem;">
+                    <div class="card" style="width:12rem; border: none;">
                         <div class="card-body">
-                          <h5 class="card-title">Assignment</h5>
-                          <h6 class="card-subtitle mb-2 text-muted ">80%</h6>
+                            <h5 class="fs-6 fw-bold text-center">Assignment</h5>
+                            <div class="progress mt-4" style="height: 15px; position: relative;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $classroom->percent }}%" aria-valuenow="{{ $classroom->percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <h6 class="fw-bold my-auto" style="position: absolute; left: 40%; top: 1px; font-size: 13px; ">
+                                    {{ $classroom->percent }}%
+                                </h6>
+                              </div>
                         </div>
                     </div>
                 </div>
-                <div class="mb-3 mt-2 p-4 bg-white w-50 rounded shadow ">
-                    <h5 class="fw-bold mb-3">Assignments</h5>
-                    <a href="{{ route('assignment.index', $classroom->id) }}" class="btn btn-primary text-white">Assignment</a>
-                    @foreach ($classroom->assignments as $assignment)
-                        <div class="card" style="border:none;">
-                            <div class="card-body d-flex justify-content-between align-items-baseline">
-                                <a href="{{ route('assignment.show', $assignment->id) }}" class="card-title text-dark">{{ $assignment->title }}</a>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ $assignment->due_date }}</h6>
-                            </div>
+                <div class="mb-3 mt-2 p-4 bg-white rounded shadow" style="width: 250px;">
+                    <a href="{{ route('assignment.index', $classroom->id) }}" class="mb-3 text-primary text-decoration-none fs-4 fw-bold ">Assignment</a>
+                    @foreach ($assignments as $assignment)
+                        <div class=" d-flex justify-content-between align-items-baseline p-2">
+                            <a href="{{ route('assignment.show', $assignment->id) }}" class=" text-dark">{{ $assignment->title }}</a>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ $assignment->daysLeft }} days left</h6>
                         </div>
                     @endforeach
                 </div>
             </div>
 
-            <div class="col-md-4 ">
+            <div class="col-md-4">
                 <div class="row p-4">
                     <form action="{{ route('announcement.store') }}" method="POST">
                         @csrf
@@ -57,32 +68,50 @@
                     </form>
                 </div>
 
-                <div class="row bg-white p-4 rounded shadow">
-                    <h5 class="fw-bold mb-3">Announcements</h5>
-                    <table class="table table-hover">
-                        @foreach ($classroom->announcements as $announcement)
-                            <tbody>
-                                <tr>
-                                    <td>{{ $announcement->createdBy->firstname }}</td>
-                                    <td>{{ $announcement->notice }}</td>
-                                    <td>{{ $announcement->created_at }}</td>
-                                </tr>
-                            </tbody>
+                <div class="p-0 border" style="width: 400px;">
+                    <div class="d-flex bg-white align-items-baseline" style="height: 50px; padding-left: 20px;">
+                        <h5 class="me-2 mt-3" style="font-size: 18px;">Announcements</h5>
+                        <p class="" style="font-size: 15px; background: #0029e2; border-radius: 50%; padding: 3px 10px; color: #fff;">{{ $announcements->count() }}</p>
+                    </div>
+
+                    <div class="announcement-body p-4" style=" height: 340px; overflow-y:auto;">
+                        @foreach ($announcements as $announcement)
+                            <div class="d-flex align-items-top">
+                                <div class="me-2">
+                                    <img src="{{ asset('images/profile/'.$announcement->createdBy->avatar) }}" alt="createdBy" style="width: 40px; border-radius: 50%;">
+                                </div>
+                                <div class="">
+                                    <div class=" d-flex">
+                                        <p style="font-size: 11px; background: #777777; border-radius: 12px; padding: 1px 10px; color: #fff; margin-right: 10px;">
+                                            <strong>{{ $announcement->createdBy->firstname }} {{ $announcement->createdBy->lastname }}</strong>
+                                        </p>
+                                        <p style="font-size: 12px;">
+                                            {{ $announcement->updated_at->toFormattedDateString() }} {{ date('h:i A', strtotime($announcement->updated_at)) }}
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <p style="font-size: 15px; margin-top: -10px; margin-left: 2px;">
+                                            {{ $announcement->notice }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
-                    </table>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="card shadow" style="padding: 10px 40px; ">
+        <div class="mt-5 shadow" style="padding: 10px 40px; margin: 10px 100px; border: none;">
             <div class="d-flex justify-content-between">
-                <h5 class="fw-bold mt-2 mb-3">Course Structure</h5>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <h4 class="fw-bold mt-2 mb-3">Course Structure</h4>
+                <button type="button" class="px-2" data-bs-toggle="modal" data-bs-target="#addTopic" style="background: #2664d8; border: none; color: #fff;">
                     Add Topic
                 </button>
 
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
+                <div class="modal fade" id="addTopic" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -134,8 +163,8 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Topic</th>
-                            <th scope="col">Credit Hrs</th>
-                            <th scope="col">Remarks</th>
+                            <th scope="col" class="text-center">Credit Hrs</th>
+                            <th scope="col" class="text-center">Remarks</th>
                             @can('logged-in')
                                 <th scope="col">Action</th>
                             @endcan
@@ -149,25 +178,45 @@
                                 <th scope="row">{{ $i }}</th>
 
                                 <td>
-                                    {{ $topic->topic_title }}
+                                    <h6 style="font-size: 16px;">
+                                        {{ $topic->topic_title }}
+                                    </h6>
                                     <ul>
                                         @foreach ($topic->subTopics as $subTopic)
-                                            <li>{{ $subTopic->title }}</li>
+                                            @if ($subTopic->is_completed)
+                                                <li style="font-size: 14px; font-weight: bold; color: #03b62a">{{ $subTopic->title }} <i class="fas fa-check-circle"></i></li>
+                                            @else
+                                                <li>{{ $subTopic->title }}</li>
+                                            @endif
                                         @endforeach
                                     </ul>
                                 </td>
-                                <td class="align-middle">
-                                    {{ $topic->credit_hrs }}
+                                <td class="align-middle text-center" style="font-size: 15px;">
+                                    {{ $topic->credit_hrs }} Hrs.
                                 </td>
                                 <td class="align-middle">
-                                    Assignments: {{ $topic->assignments->count() }}
-                                    <br> Notes: 0
+                                    <div class="d-flex justify-content-center">
+                                        <div class="checked me-3 text-center">
+                                            <h5 style="font-size: 25px;">
+                                                {{ $topic->assignments->count() }}
+                                            </h5>
+                                            <p class="muted" style="font-size: 13px; margin-top: -10px;">Assignments</p>
+                                        </div>
+                                        <div class="vr me-3" style="height: 48px; width: 2px;"></div>
+                                        <div class="checked me-3 text-center">
+                                            <h5 style="font-size: 25px;">
+                                                0
+                                            </h5>
+                                            <p class="muted" style="font-size: 13px; margin-top: -10px;">Notes</p>
+                                        </div>
+                                    </div>
+
                                 </td>
                                 @can('logged-in')
                                     <td class="align-middle">
                                         <div class="d-flex align-items-baseline">
                                             <div class="dropdown">
-                                                <button class="btn btn-default" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <button class="" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false" style="background: transparent; border: none;">
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">

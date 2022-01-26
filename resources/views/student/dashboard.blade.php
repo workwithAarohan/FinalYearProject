@@ -45,23 +45,27 @@
                 @if ($classroom->is_active)
                     <div class="col-md-8 bg-white shadow mb-3 p-2">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="image me-3">
-                                <img src="{{ asset('images/background/'. $classroom->image) }}" style="width: 200px;">
+                            <div class="d-flex">
+                                <div class="image me-4">
+                                    <img src="{{ asset('images/background/'. $classroom->image) }}" style="width: 200px;">
+                                </div>
+                                <div class="body">
+                                    <h6 class="text-muted" style="font-size: 12px;">{{ $classroom->batch->course->courseDetails->slug }}</h6>
+                                    <a href="{{ route('classroom.dashboard', $classroom->id) }}" style="text-decoration: none; color: #0056D2; font-weight: bold; font-size: 20px;"> {{ $classroom->room_name }}</a>
+                                    <p>{{ $classroom->subject->subject_name }}</p>
+                                </div>
+
                             </div>
-                            <div class="body">
-                                <h6 class="text-muted" style="font-size: 12px;">{{ $classroom->batch->course->courseDetails->slug }}</h6>
-                                <a href="{{ route('classroom.dashboard', $classroom->id) }}" style="text-decoration: none; color: #0056D2; font-weight: bold; font-size: 20px;"> {{ $classroom->room_name }}</a>
-                                <p>{{ $classroom->subject->subject_name }}</p>
-                            </div>
-                            <div class="d-flex" style="height: 100px;">
+                            <div class="d-flex align-items-center" style="height: 100px;">
                                 <div class="vr"></div>
-                            </div>
-                            <div class="card" style="width:10rem; border: none;">
-                                <div class="card-body">
-                                    <h5 class="fs-6 fw-bold text-center">Course Completed ({{ $classroom->courseCompleted }}%)</h5>
-                                    <div class="progress" style="height: 10px;">
+                                <div class="ms-3 p-2 me-3">
+                                    <h5 class="fs-6 fw-bold text-center">Course Completed</h5>
+                                    <div class="progress" style="height: 15px; position: relative;">
                                         <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $classroom->courseCompleted }}%" aria-valuenow="{{ $classroom->courseCompleted }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                      </div>
+                                        <h6 class="fw-bold my-auto" style="position: absolute; left: 50%; top: 1px; font-size: 13px; ">
+                                            {{ $classroom->courseCompleted }}%
+                                        </h6>
+                                    </div>
                                 </div>
                             </div>
                         </div>
