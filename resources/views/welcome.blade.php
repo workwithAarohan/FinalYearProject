@@ -62,7 +62,7 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                                         @foreach ($admissionWindows as $admissionWindow)
-                                            <li><a class="dropdown-item text-dark" href="{{ route('student.create', [$admissionWindow->course_id, $admissionWindow->batch_id]) }}">{{ $admissionWindow->course->courseDetails->slug }}</a></li>
+                                            <li><a class="dropdown-item text-dark" href="{{ route('admission.form', $admissionWindow->id) }}">{{ $admissionWindow->course->courseDetails->slug }}</a></li>
                                         @endforeach
                                     </ul>
                                 </div>

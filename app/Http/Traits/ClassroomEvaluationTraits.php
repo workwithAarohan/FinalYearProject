@@ -3,9 +3,10 @@
 namespace App\Http\Traits;
 
 use App\Models\Classroom;
+use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 
-trait EvaluationTraits
+trait ClassroomEvaluationTraits
 {
     public static function CourseCompleted(Classroom $classroom)
     {
@@ -35,7 +36,7 @@ trait EvaluationTraits
         return $courseCompleted;
     }
 
-    public static function StudentAssignmentEvaluation(Classroom $classroom)
+    public static function StudentAssignmentEvaluation(Classroom $classroom, Student $student)
     {
         if($classroom->assignments->count()!=0)
         {
@@ -44,10 +45,10 @@ trait EvaluationTraits
 
             foreach($classroom->assignments as $assignment)
             {
+                $count = 0;
                 foreach ($assignment->student_points as $student_point)
                 {
-                    $count = 0;
-                    if ($student_point->student->id == auth()->user()->student->id && $student_point->pointsObtained != null)
+                    if ($student_point->student->id == $student->id && $student_point->pointsObtained != null)
                     {
                         $totalPointsObtained= $totalPointsObtained + $student_point->pointsObtained;
                         $count++;
@@ -59,15 +60,54 @@ trait EvaluationTraits
                 }
             }
 
-            $percent = round(($totalPointsObtained/$totalAssignmentPoints)*100,2);
+            if($totalAssignmentPoints!=0)
+            {
+                $assignmentPercent = round(($totalPointsObtained/$totalAssignmentPoints)*100,2);
+            }
+            else
+            {
+                $assignmentPercent = 0;
+            }
+
         }
 
         else
         {
-            $percent = 0;
+            $assignmentPercent = 0;
         }
 
-        return $percent;
+        return $assignmentPercent;
 
     }
+
+    public static function StudentAttendanceEvaluation(Classroom $classroom, Student $student)
+    {
+        if($classroom->attendances->count() != 0)
+        {
+            $totalAttendance = $classroom->attendances->count();
+
+            $totalPresentCount = 0;
+
+            foreach($classroom->attendances as $attendance)
+            {
+                $totalPresent = DB::table('attendance_student')
+                    ->where('attendance_id', $attendance->id)
+                    ->where('student_id', $student->id)
+                    ->where('status', 'Present')
+                    ->count();
+
+                $totalPresentCount += $totalPresent;
+            }
+
+            $attendancePercent = round(($totalPresentCount/$totalAttendance) * 100);
+
+        }
+        else
+        {
+            $attendancePercent = 0;
+        }
+
+        return $attendancePercent;
+    }
+
 }

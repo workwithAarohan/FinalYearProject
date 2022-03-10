@@ -12,7 +12,9 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -98,7 +100,9 @@
                         </a>
                         <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ route('student.dashboard') }}">Dashboard</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            {{-- @if (Auth::user()->roles->name == 'Student')
+                                <li><a class="dropdown-item" href="{{ route('student.performance', auth()->user()->student->id) }}">My Performance</a></li>
+                            @endif --}}
                             <li><hr class="dropdown-divider"></li>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();

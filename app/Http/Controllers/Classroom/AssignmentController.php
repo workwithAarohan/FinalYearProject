@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Classroom;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\EvaluationTraits;
+use App\Http\Traits\ClassroomEvaluationTraits;
 use App\Models\Assignment;
 use App\Models\AssignmentPoint;
 use App\Models\Classroom;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class AssignmentController extends Controller
 {
-    use EvaluationTraits;
+    use ClassroomEvaluationTraits;
 
     /**
      * Display a listing of the resource.
@@ -32,7 +32,7 @@ class AssignmentController extends Controller
      */
     public function studentAssignmentEvaluation(Classroom $classroom)
     {
-        $classroom->percent = EvaluationTraits::studentAssignmentEvaluation($classroom);
+        $classroom->percent = ClassroomEvaluationTraits::studentAssignmentEvaluation($classroom, auth()->user()->student);
 
 
         return view('coordinator.classroom.assignment.studentWork.show',[

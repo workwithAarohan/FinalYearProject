@@ -4,20 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\NewStudentAdmissionEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Traits\EvaluationTraits;
+use App\Http\Traits\ClassroomEvaluationTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\StudentEnrollment;
 
 use App\Models\User;
 use App\Models\Batch;
-use App\Models\Role;
+use App\Models\Classroom;
+use App\Models\Semester;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class StudentController extends Controller
 {
-    use EvaluationTraits;
+    use ClassroomEvaluationTraits;
 
     public function index()
     {
@@ -75,12 +77,24 @@ class StudentController extends Controller
 
         foreach($classrooms as $classroom)
         {
-            $classroom->courseCompleted = EvaluationTraits::CourseCompleted($classroom);
+            $classroom->courseCompleted = ClassroomEvaluationTraits::CourseCompleted($classroom);
         }
 
         return view('student.dashboard', [
             'student' => $student,
             'classrooms' => $classrooms
+        ]);
+    }
+
+    public function studentPerformance(Classroom $classroom, Student $student)
+    {
+        $student->attendancePercent = ClassroomEvaluationTraits::StudentAttendanceEvaluation($classroom, $student);
+        $student->assignmentPercent = ClassroomEvaluationTraits::StudentAssignmentEvaluation($classroom, $student);
+
+        return view('coordinator.classroom.student.performance', [
+            'student' => $student,
+            'classroom' => $classroom,
+            'semesters' => Semester::all()
         ]);
     }
 }

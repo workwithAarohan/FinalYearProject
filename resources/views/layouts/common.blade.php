@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <script src="{{ asset('js/app.js') }}"></script>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
+
         <style>
             .sidebar
             {
@@ -193,7 +195,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#about">
+                    <a href="{{ route('students.list') }}">
                         <i class="far fa-calendar me-2"></i> Student
                     </a>
                 </li>
@@ -216,6 +218,10 @@
                 @yield('content')
             </div>
         </main>
+
+        <script>
+            @yield('script'); 
+        </script>
     </body>
 </html>
 

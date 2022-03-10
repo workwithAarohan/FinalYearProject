@@ -16,24 +16,20 @@ class CreateAttendancesTable extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('course_id')
+            $table->foreignId('classroom_id')
                 ->constrained()
                 ->onDelete('cascade');
-            $table->foreignId('batch_id')
-                ->constrained()
-                ->onDelete('cascade');
-            $table->foreignId('semester_id')
-                ->constrained()
-                ->onDelete('cascade');
-            $table->foreignId('subject_id')
-                ->constrained()
-                ->onDelete('cascade');
-            $table->foreignId('student_id')
-                ->constrained()
-                ->onDelete('cascade');
+
             $table->foreignId('teacher_id')
                 ->constrained('users')
                 ->onDelete('cascade');
+
+            $table->foreignId('created_by')
+                ->constrained('users')
+                ->onDelete('cascade');
+
+            $table->string('topic_covered');
+
             $table->date('attendance_date');
 
             $table->timestamps();

@@ -119,6 +119,11 @@ class User extends Authenticatable
         return $this->hasMany(Assignment::class, 'created_by');
     }
 
+    public function attendances()
+    {
+        return $this->hasMany(Assignment::class, 'created_by');
+    }
+
     public function studentinfo()
     {
         return $this->hasOne(StudentInformation::class);
@@ -129,10 +134,10 @@ class User extends Authenticatable
     //     return $this->belongsToMany(Role::class,'user_role');
     // }
 
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class, 'teacher_id');
-    }
+    // public function attendances()
+    // {
+    //     return $this->hasMany(Attendance::class, 'teacher_id');
+    // }
 
     public function announcements()
     {

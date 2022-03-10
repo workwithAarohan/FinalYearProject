@@ -1,4 +1,8 @@
-@extends('admin.dashboard')
+@extends('layouts.common')
+
+@section('title')
+    Course - Index
+@endsection
 
 @section('style')
     tr[data-href]

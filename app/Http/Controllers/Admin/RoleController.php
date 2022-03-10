@@ -9,6 +9,24 @@ use Spatie\Permission\Models\Role;
 class RoleController extends Controller
 {
     /**
+     * Search Roles using Ajax
+     */
+    public function searchRoles(Request $request)
+    {
+        $request->get('search');
+
+        $roles = Role::where('name', 'like', $request->get('search') . '%')->get();
+
+        foreach($roles as $role)
+        {
+            $role->students = $role->users->count();
+            $role->permissions = $role->permissions->count();;
+        }
+
+        return json_encode($roles);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -88,11 +106,11 @@ class RoleController extends Controller
             'name' => 'required',
         ]);
 
-        $role->update(['name' => $request->input('name')]);
+        $role->update($request->all());
 
-        $request->session()->flash('success','You have create new role');
+        $request->session()->flash('success','You have updated role');
 
-        return redirect()->back();
+        return redirect('/admin/role');
     }
 
     /**
@@ -104,5 +122,7 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         $role->delete();
+
+        return redirect('/admin/role');
     }
 }

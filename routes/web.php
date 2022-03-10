@@ -54,7 +54,10 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
     Route::group(['namespace' => 'Admin'], function(){
         Route::resource('/role', RoleController::class);
-        
+        Route::post('/role/search', [App\Http\Controllers\Admin\RoleController::class,'searchRoles'])->name('role.search');
+
+        Route::resource('/permission', PermissionController::class);
+
         Route::get('/batch/{course}/create', [App\Http\Controllers\Admin\BatchController::class, 'create'])->name('course.batch.create');
         Route::resource('/batch', BatchController::class);
 
@@ -69,6 +72,11 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
         Route::get('/course/newSession/{course}', [App\Http\Controllers\Admin\AdmissionController::class, 'createNewSession'])->name('course.newSession');
         Route::post('/course/newSession/store', [App\Http\Controllers\Admin\AdmissionController::class, 'storeNewSession'])->name('course.newSession.store');
         Route::get('/admission/closed/{batch}',[App\Http\Controllers\Admin\AdmissionController::class, 'endSession'])->name('admission.closed');
+
+        // Admin
+        Route::get('/students-list', [App\Http\Controllers\Admin\AdminController::class, 'listOfStudents'])->name('students.list');
+        Route::get('/select-batch/{course}', [App\Http\Controllers\Admin\AdminController::class, 'selectBatch'])->name('select.batch');
+        Route::get('/student/performance/{student}', [App\Http\Controllers\Admin\AdminController::class, 'studentPerformance'])->name('student.performance');
     });
 
     Route::group(['prefix' =>'student', 'as' => 'student.'], function(){
@@ -102,6 +110,11 @@ Route::get('/classroom/{classroom}', [App\Http\Controllers\Coordinator\Classroom
 // Classroom Topic
 Route::resource('/classroom/topic', Classroom\TopicController::class);
 
+// Classroom Attendance
+Route::resource('/classroom/attendance', Classroom\AttendanceController::class)->except(['index']);
+Route::get('/classroom/{classroom}/attendance', [App\Http\Controllers\Classroom\AttendanceController::class, 'index'])->name('attendance.index');
+Route::post('/classroom/{classroom}/attendance/retrieveData', [App\Http\Controllers\Classroom\AttendanceController::class, 'reterieveData'])->name('attendance.retrieveData');
+
 // Classroom Assignment
 Route::resource('/classroom/assignment', Classroom\AssignmentController::class)->except(['index']);
 Route::get('/classroom/{classroom}/assignment', [App\Http\Controllers\Classroom\AssignmentController::class, 'index'])->name('assignment.index');
@@ -118,7 +131,7 @@ Route::post('/addComment', [App\Http\Controllers\Classroom\CommentController::cl
 // Route::get('student/create/{course}/{batch}', [StudentController::class, 'create'])->name('student.create');
 Route::post('/student', [StudentController::class, 'store'])->name('student.store');
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard')->middleware('auth');
-
+Route::get('classroom/{classroom}/student/performance/{student}', [StudentController::class, 'studentPerformance'])->name('classroom.student.performance');
 
 Route::get('/send-enrollment', [App\Http\Controllers\StudentEnrollmentController::class, 'sendEnrollmentNotification']);
 

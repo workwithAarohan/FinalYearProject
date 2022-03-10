@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Coordinator;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\EvaluationTraits;
+use App\Http\Traits\ClassroomEvaluationTraits;
 use App\Models\Batch;
 use App\Models\Classroom;
 use App\Models\Course;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\File;
 
 class ClassroomController extends Controller
 {
-    use EvaluationTraits;
+    use ClassroomEvaluationTraits;
 
 
     /**
@@ -44,8 +44,9 @@ class ClassroomController extends Controller
      */
     public function classroom(Classroom $classroom)
     {
-        $classroom->percent = EvaluationTraits::StudentAssignmentEvaluation($classroom);
-        $classroom->courseCompleted = EvaluationTraits::CourseCompleted($classroom);
+        $classroom->assignmentPercent = ClassroomEvaluationTraits::StudentAssignmentEvaluation($classroom, auth()->user()->student);
+        $classroom->courseCompleted = ClassroomEvaluationTraits::CourseCompleted($classroom);
+        $classroom->attendancePercent = ClassroomEvaluationTraits::StudentAttendanceEvaluation($classroom, auth()->user()->student);
 
         $assignments = $classroom->assignments->where('due_date', '>', Carbon::now());
         foreach($assignments as $assignment)
@@ -134,7 +135,7 @@ class ClassroomController extends Controller
      */
     public function show(Classroom $classroom)
     {
-        $courseCompleted = EvaluationTraits::CourseCompleted($classroom);
+        $courseCompleted = ClassroomEvaluationTraits::CourseCompleted($classroom);
 
         $eligibleStudents = Student::where('batch_id', $classroom->batch_id)
             ->orderBy('symbol_number')
@@ -168,8 +169,6 @@ class ClassroomController extends Controller
                 }
             }
         }
-
-
 
         return view('coordinator.classroom.show', [
             'classroom' => $classroom,

@@ -9,30 +9,20 @@ class Attendance extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['course_id', 'batch_id', 'semester_id', 'subject_id', 'student_id', 'attendance_date', 'teacher_id'];
+    protected $fillable = ['classroom_id', 'attendance_date', 'created_by', 'topic_covered', 'teacher_id'];
 
-    public function course()
+    public function classroom()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Classroom::class);
     }
 
-    public function batch()
+    public function createdBy()
     {
-        return $this->belongsTo(Batch::class);
+        return $this->belongsTo(User::class,'created_by');
     }
 
-    public function semester()
+    public function students()
     {
-        return $this->belongsTo(Semester::class);
-    }
-
-    public function student()
-    {
-        return $this->belongsTo(Student::class);
-    }
-
-    public function teacher()
-    {
-        return $this->belongsTo(User::class, 'teacher_id');
+        return $this->belongsToMany(Student::class);
     }
 }

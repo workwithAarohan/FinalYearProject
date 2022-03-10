@@ -24,19 +24,24 @@
                               </div>
                         </div>
                     </div>
-                    <div class="card" style="width:12rem;">
+                    <div class="card" style="width:12rem; border: none;">
                         <div class="card-body">
-                          <h5 class="card-title">Attendance</h5>
-                          <h6 class="card-subtitle mb-2 text-muted ">80%</h6>
+                            <a href="{{ route('attendance.index', $classroom->id) }}" class="fs-6 fw-bold text-center">Attendance</a>
+                            <div class="progress mt-4" style="height: 15px; position: relative;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $classroom->attendancePercent }}%" aria-valuenow="{{ $classroom->attendancePercent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <h6 class="fw-bold my-auto" style="position: absolute; left: 40%; top: 1px; font-size: 13px; ">
+                                    {{ $classroom->attendancePercent }}%
+                                </h6>
+                              </div>
                         </div>
                     </div>
                     <div class="card" style="width:12rem; border: none;">
                         <div class="card-body">
                             <h5 class="fs-6 fw-bold text-center">Assignment</h5>
                             <div class="progress mt-4" style="height: 15px; position: relative;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $classroom->percent }}%" aria-valuenow="{{ $classroom->percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $classroom->assignmentPercent }}%" aria-valuenow="{{ $classroom->assignmentPercent }}" aria-valuemin="0" aria-valuemax="100"></div>
                                 <h6 class="fw-bold my-auto" style="position: absolute; left: 40%; top: 1px; font-size: 13px; ">
-                                    {{ $classroom->percent }}%
+                                    {{ $classroom->assignmentPercent }}%
                                 </h6>
                               </div>
                         </div>

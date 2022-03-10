@@ -61,4 +61,9 @@ class Classroom extends Model
         return $this->hasMany(AssignmentPoint::class);
     }
 
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
 }
