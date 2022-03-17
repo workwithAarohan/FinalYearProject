@@ -30,9 +30,9 @@
                         <th scope="col">Course</th>
                         <th scope="col">No.of Students</th>
                         <th scope="col">Status</th>
-                        @can('logged-in')
+                        @role('Admin')
                             <th scope="col">Action</th>
-                        @endcan
+                        @endrole
                     </tr>
                 </thead>
 
@@ -57,7 +57,7 @@
                                     Inactive
                                 @endif
                             </td>
-                            @can('logged-in')
+                            @role('Admin')
                                 <td>
                                     <div class="d-flex align-items-baseline">
                                         <a href="{{ route('batch.edit',$value->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
@@ -81,7 +81,7 @@
 
                                     </form> --}}
                                 </td>
-                            @endcan
+                            @endrole
                         </tr>
                     @endforeach
                 </tbody>

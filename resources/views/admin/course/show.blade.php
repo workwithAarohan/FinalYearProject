@@ -72,9 +72,6 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body ">
-                        <a href="{{ route('course.batch.create', $course->id) }}" class="btn btn-success float-end">
-                            Add Batch
-                        </a>
                         <a href="{{ route('course.batches', $course->id) }}" class="text-decoration-none">
                             <h5 class="card-title fw-bold ">Batch</h5>
                         </a>
@@ -82,65 +79,67 @@
 
                     </div>
                 </div>
-                <div class="card mt-3">
-                    <div class="card-body ">
-                        <a href="{{ route('course.subject.create', $course->id) }}" class="btn btn-success float-end">
-                            Add Subject
-                        </a>
-                        <a href="{{ route('course.subject.create', $course->id) }}" class="text-decoration-none">
-                            <h5 class="card-title fw-bold ">Subject</h5>
-                        </a>
-                        <h6 class="card-subtitle mb-2 text-muted ">{{ $course->subjects()->count() }}</h6>
+                @role('Admin')
+                    <div class="card mt-3">
+                        <div class="card-body ">
+                            <a href="{{ route('course.subject.create', $course->id) }}" class="btn btn-success float-end">
+                                Add Subject
+                            </a>
+                            <a href="{{ route('course.subject.create', $course->id) }}" class="text-decoration-none">
+                                <h5 class="card-title fw-bold ">Subject</h5>
+                            </a>
+                            <h6 class="card-subtitle mb-2 text-muted ">{{ $course->subjects()->count() }}</h6>
 
+                        </div>
                     </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-body ">
-                        {{-- <a href="{{ route('course.subject.create', $course->id) }}" class="btn btn-success float-end">
-                            Add Classroom
-                        </a> --}}
+                    <div class="card mt-3">
+                        <div class="card-body ">
+                            {{-- <a href="{{ route('course.subject.create', $course->id) }}" class="btn btn-success float-end">
+                                Add Classroom
+                            </a> --}}
 
-                        <button type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Add Classroom
-                        </button>
+                            <button type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Add Classroom
+                            </button>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="selectCourse">Select Course and Semester</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <form action="{{ route('classroom.create') }}" method="GET">
-                                        @csrf
-                                        <div class="modal-body">
-                                            <input type="hidden"  id="course" name="course_id" value="{{ $course->id }}">
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="selectCourse">Select Course and Semester</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('classroom.create') }}" method="GET">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <input type="hidden"  id="course" name="course_id" value="{{ $course->id }}">
 
-                                            <div class="mb-3">
-                                                <label for="semester" class="form-label">Semester</label>
-                                                <select name="semester_id" id="semester" class="form-control">
-                                                    @foreach ($semesters as $semester)
-                                                        <option value="{{ $semester->id }}">{{ $semester->semester_name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <div class="mb-3">
+                                                    <label for="semester" class="form-label">Semester</label>
+                                                    <select name="semester_id" id="semester" class="form-control">
+                                                        @foreach ($semesters as $semester)
+                                                            <option value="{{ $semester->id }}">{{ $semester->semester_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
                                             </div>
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Save changes</button>
-                                        </div>
-                                    </form>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <a href="{{ route('course.subject.create', $course->id) }}" class="text-decoration-none">
-                            <h5 class="card-title fw-bold ">Classroom</h5>
-                        </a>
+                            <a href="{{ route('course.subject.create', $course->id) }}" class="text-decoration-none">
+                                <h5 class="card-title fw-bold ">Classroom</h5>
+                            </a>
+                        </div>
                     </div>
-                </div>
+                @endrole
             </div>
         </div>
     </div>

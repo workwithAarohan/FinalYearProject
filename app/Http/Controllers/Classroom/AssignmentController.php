@@ -67,14 +67,11 @@ class AssignmentController extends Controller
 
             $assignment = Assignment::create($request->all());
 
-            foreach($assignment->classroom->students as $student)
-            {
-                AssignmentPoint::create([
-                    'assignment_id' => $assignment->id,
-                    'student_id' => $student->id,
-                    'classroom_id' => $assignment->classroom->id
-                ]);
-            }
+            $students = $assignment->classroom->students;
+
+            $assignment->students()->sync($students);
+
+            
 
             return $assignment;
         });
@@ -140,5 +137,26 @@ class AssignmentController extends Controller
         $assignment->delete();
 
         return redirect('/classroom/'. $assignment->classroom_id .'/assignment');
+    }
+
+    public function marksEvaluation(Request $request)
+    {
+        foreach($request->students as $student)
+        {
+            if($request->points_obtained[$student] != null)
+            {
+                DB::table('assignment_student')
+                    ->where('assignment_id', $request->assignment_id)
+                    ->where('student_id', $student)
+                    ->update([
+                            'points_obtained' => $request->points_obtained[$student],
+                            'is_checked' => 1,
+                        ]);
+            }
+        }
+
+        $request->session()->flash('success','Marks Updated');
+
+        return redirect()->back();
     }
 }

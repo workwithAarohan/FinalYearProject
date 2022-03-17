@@ -1,12 +1,10 @@
-@extends('layouts.nav')
+@extends('layouts.common')
 
 @section('style')
-    <style>
         tr[data-href]
         {
             cursor: pointer;
         }
-    </style>
 @endsection
 
 @section('content')
@@ -16,9 +14,11 @@
                 <h1 class="float-start">
                     Semester
                 </h1>
-                <a href="{{ route('semester.create') }}" class="btn btn-success float-end" role="button">
-                    Create
-                </a>
+                @role('Admin')
+                    <a href="{{ route('semester.create') }}" class="btn btn-success float-end" role="button">
+                        Create
+                    </a>
+                @endrole
             </div>
         </div>
         <div class="card shadow" style="padding: 10px 40px; ">
@@ -29,9 +29,9 @@
                         <th scope="col">Semester</th>
                         <th scope="col">Created By</th>
                         <th scope="col">Status</th>
-                        @can('logged-in')
+                        @role('Admin')
                             <th scope="col">Action</th>
-                        @endcan
+                        @endrole
                     </tr>
                 </thead>
 
@@ -53,7 +53,7 @@
                                     Inactive
                                 @endif
                             </td>
-                            @can('logged-in')
+                            @role('Admin')
                                 <td>
                                     <div class="d-flex align-items-baseline">
                                         <a href="{{ route('semester.edit',$semester->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
@@ -79,7 +79,7 @@
                                         @method('DELETE')
                                     </form> --}}
                                 </td>
-                            @endcan
+                            @endrole
                         </tr>
                     @endforeach
                 </tbody>

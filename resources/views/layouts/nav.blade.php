@@ -12,9 +12,13 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
 
     <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
+
+    <script src="{{ asset('js/circle-progress.min.js') }}"></script>
+
+    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -43,9 +47,7 @@
             @can('logged-in')
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active text-white" aria-current="page" href="{{ route('role.index') }}">Role</a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link active text-white" aria-current="page" href="{{ route('course.index') }}">Course</a>
                         </li>
@@ -83,12 +85,6 @@
                     @if (Route::has('login'))
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                    @endif
-
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
                     @endif
 

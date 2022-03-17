@@ -23,6 +23,28 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    public function authenticated()
+    {
+        if(auth()->user()->hasRole('Admin'))
+        {
+            return redirect('/admin/dashboard');
+        }
+        elseif(auth()->user()->hasRole('Student'))
+        {
+            return redirect('/student/dashboard');
+        }
+        elseif(auth()->user()->hasRole('Teacher'))
+        {
+            return redirect('/teacher/dashboard');
+        }
+        elseif(auth()->user()->hasRole('Coordinator'))
+        {
+            return redirect('/coordinator/dashboard');
+        }
+
+        return redirect('home');
+    }
+
     /**
      * Where to redirect users after login.
      *
@@ -45,5 +67,5 @@ class LoginController extends Controller
         return 'username';
     }
 
-    
+
 }

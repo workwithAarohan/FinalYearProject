@@ -1,4 +1,4 @@
-@extends('admin.dashboard')
+@extends('layouts.common')
 
 @section('title')
     Role - Index
@@ -78,7 +78,7 @@
                             <td>
                                 {{ $role->permissions->count() }}
                             </td>
-                            @can('logged-in')
+                            @role('Admin')
                                 <td>
                                     <div class="d-flex align-items-baseline">
                                         <a href="{{ route('role.edit',$role->id) }}" class="me-3 text-decoration-none text-dark" title="Edit">
@@ -93,7 +93,7 @@
                                         </form>
                                     </div>
                                 </td>
-                            @endcan
+                            @endrole
                         </tr>
 
                         <?php $i++; ?>

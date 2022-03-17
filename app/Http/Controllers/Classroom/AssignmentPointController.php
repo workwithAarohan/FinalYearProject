@@ -7,6 +7,7 @@ use App\Models\Assignment;
 use App\Models\AssignmentPoint;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AssignmentPointController extends Controller
 {
@@ -17,8 +18,13 @@ class AssignmentPointController extends Controller
      */
     public function index(Assignment $assignment)
     {
+        $checkedCount = DB::table('assignment_student')
+            ->where('assignment_id' ,$assignment->id)
+            ->where('is_checked', 1)
+            ->count();
         return view('coordinator.classroom.assignment.studentWork.index', [
-            'assignment' => $assignment
+            'assignment' => $assignment,
+            'checkedCount' => $checkedCount,
         ]);
     }
 

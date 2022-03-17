@@ -45,4 +45,16 @@ class Student extends Model
     {
         return $this->hasMany(AssignmentPoint::class);
     }
+
+    public function assignments()
+    {
+        return $this->belongsToMany(Assignment::class)
+                ->withPivot(['points_obtained','is_checked', 'file']);
+    }
+
+    public function results()
+    {
+        return $this->hasMany(Result::class);
+    }
+
 }

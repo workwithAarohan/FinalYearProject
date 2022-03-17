@@ -1,12 +1,10 @@
-@extends('layouts.nav')
+@extends('layouts.common')
 
 @section('style')
-    <style>
         tr[data-href]
         {
             cursor: pointer;
         }
-    </style>
 @endsection
 
 
@@ -32,9 +30,9 @@
                         <th scope="col">Course</th>
                         <th scope="col">Semester</th>
                         <th scope="col">Subject Type</th>
-                        @can('logged-in')
+                        @role('Admin')
                             <th scope="col">Action</th>
-                        @endcan
+                        @endrole
                     </tr>
                 </thead>
 
@@ -62,7 +60,7 @@
                                     Non-Elective
                                 @endif
                             </td>
-                            @can('logged-in')
+                            @role('Admin')
                                 <td>
                                     <div class="d-flex align-items-baseline">
                                         <a href="{{ route('subject.edit',$subject->id) }}" class="me-3 text-decoration-none text-secondary" title="Edit">
@@ -88,7 +86,7 @@
                                         @method('DELETE')
                                     </form> --}}
                                 </td>
-                            @endcan
+                            @endrole
                         </tr>
                     @endforeach
                 </tbody>

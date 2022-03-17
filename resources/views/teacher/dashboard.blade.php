@@ -1,7 +1,6 @@
-@extends('layouts.nav')
+@extends('layouts.common')
 
 @section('style')
-    <style>
         h5.background
         {
             font-size: 13px;
@@ -71,40 +70,12 @@
             font-size: 15px;
             font-weight: 500;
         }
-    </style>
 @endsection
 
 @section('content')
     <div class="container mt-3">
-        <div class="row bg-white p-4">
-            <div class="d-flex justify-content-around">
-                <div>
-                    <div class="back">
-                        <div class="circle">
-                            <?php $attendance_value= $semester->attendance/100 ?>
-                            <div class="bar" data-value="{{ $attendance_value }}">
-                                <div class="box">
-                                    <span>{{ $semester->attendance }}%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text">Attendance</div>
-                </div>
-                <div>
-                    <div class="back">
-                        <div class="circle">
-                            <?php $assignment_value= $semester->assignment/100 ?>
-                            <div class="bar" data-value="{{ $assignment_value }}">
-                                <div class="box">
-                                    <span>{{ $semester->assignment }}%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text">Assignment</div>
-                </div>
-            </div>
+        <div class="row">
+            <h5>{{ auth()->user()->firstname }} {{ auth()->user()->lasttname }}</h5>
         </div>
 
         <div class="row justify-content-center">
@@ -147,13 +118,3 @@
     </div>
 @endsection
 
-@section('script')
-    <script>
-        let options = {
-            startAngle: -1.55,
-            size: 80,
-            fill: {color: "green"}
-        }
-        $('.circle .bar').circleProgress(options).on('cicle-animation-progress', function(event, progress, stepValue){});
-    </script>
-@endsection

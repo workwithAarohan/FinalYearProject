@@ -31,5 +31,16 @@ class Subject extends Model
         return $this->hasMany(Classroom::class)->where('batch_id', $batch_id);
     }
 
+    public function results()
+    {
+        return $this->hasMany(Result::class);
+    }
+
+    public function examination()
+    {
+        return $this->belongsToMany(Examination::class)
+                ->withPivot(['full_mark', 'pass_mark', 'is_checked', 'teacher_id']);;
+    }
+
 
 }

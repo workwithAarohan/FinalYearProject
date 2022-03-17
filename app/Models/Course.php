@@ -40,4 +40,11 @@ class Course extends Model
     {
         return $this->hasMany(AdmissionWindow::class);
     }
+
+    public function examination()
+    {
+        return $this->hasMany(Examination::class);
+    }
+
+    
 }

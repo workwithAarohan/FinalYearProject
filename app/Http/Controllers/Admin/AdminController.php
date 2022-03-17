@@ -55,14 +55,30 @@ class AdminController extends Controller
     public function studentPerformance(Student $student)
     {
         $semesters = Semester::all();
+        $data = "";
+        $overall = 0;
+        
         foreach($semesters as $semester)
         {
             $semester->attendance = StudentPerformanceTraits::OverallAttendance($semester, $student);
             $semester->assignment = StudentPerformanceTraits::OverallAssignment($semester, $student);
+            $semester->exam = StudentPerformanceTraits::OverallExamination($semester, $student);
+
+            $semester->overall = ($semester->attendance + $semester->assignment)/2;
+
+            $overall += $semester->overall;
+            $data .= "['". $semester->semester_name . "',  " .$semester->attendance. ",  " .$semester->assignment. ",  " .$semester->exam.  "],";
         }
+
+        $overall /= 8;
+
+        $data = rtrim($data, ',');
+
         return view('admin.students.performance', [
             'semesters' => $semesters,
-            'student' => $student
+            'student' => $student,
+            'data' => $data,
+            'overall' => $overall,
         ]);
     }
 }

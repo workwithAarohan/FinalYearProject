@@ -7,13 +7,147 @@
             border: 5px solid red;
             outline: none;
         }
+
+        .wrapper
+        {
+            width: 430px;
+            padding: 30px;
+            background: #fff;
+            border-radius: 5px;
+        }
+
+        .wrapper header 
+        {
+            color: #6990f2;
+            font-size: 27px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .wrapper form 
+        {
+            height: 167px;
+            display: flex;
+            margin: 30px 0;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: 5px;
+            border: 2px dashed #6990f2;
+
+        }
+
+        form :where(i,p)
+        {
+            color: #6990f2;
+        }
+
+        form i 
+        {
+            font-size: 50px;
+        }
+
+        form p
+        {
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        section .row
+        {
+            background: #e9f0ff;
+            margin-bottom: 10px;
+            list-style: none;
+            padding: 15px 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        section .row i 
+        {
+            font-size: 30px;
+            color: #6990f2;
+        }
+
+        section .details span 
+        {
+            font-size: 14px;
+        }
+
+        .progress-area .row .content 
+        {
+            width: 100%;
+            margin-left: 15px;
+        }
+
+        .progress-area .details
+        {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .progress-area .progress-bar
+        {
+            height: 6px;
+            width: 100%;
+            background: #fff;
+            margin-bottom: 4px;
+            border-radius: 30px;
+        }
+
+        .progress-bar .progress 
+        {
+            height: 100%;
+            width: 50%;
+            background: #6990f2;
+            border-radius: inherit;
+
+        }
+
+        .uploaded-area
+        {
+            max-height: 100px;
+            overflow-y: scroll;
+        }
+
+        .uploaded-area::-webkit-scrollbar
+        {
+            width: 0px;
+        }
+
+        .uploaded-area .row .content 
+        {
+            display: flex;
+            align-items: center;
+        }
+
+        .uploaded-area .row .details
+        {
+            display: flex;
+            margin-left: 15px;
+            flex-direction: column;
+        }
+
+        .uploaded-area .details .size
+        {
+            font-size: 11px;
+            color: #404040;
+        }
+        .uploaded-area .fa-check
+        {
+            color: #6990f2;
+            font-size: 16px;
+        }
     </style>
 @endsection
 
 @section('content')
     <div class="container-fluid mt-3">
         <div class="row justify-content-center" style="column-gap: 20px;">
-            <div class="col-md-8 p-4 bg-white">
+            <div class="col-md-6 p-4 bg-white">
                 <div class="d-flex">
                     <div class="icon" style="width: 60px;">
                         <i class="fas fa-clipboard-list fs-4" style="background: #3a7fdf; color: #fff; border-radius: 50%; padding: 10px;"></i>
@@ -128,37 +262,81 @@
                 </div>
             </div>
 
-            <div class="col-md-3 bg-white p-2 text-center" style="height: 200px; position: relative;">
-                <h4 class=" fs-2" style="color: #0d3cac; ">
-                    Students Work
-                </h4>
+            <div class="col-md-4 bg-white p-2 text-center" style="height: 200px; position: relative;">
+                @role('Teacher')
+                    <h4 class=" fs-2" style="color: #0d3cac; ">
+                        Students Work
+                    </h4>
 
-                <div class="d-flex justify-content-center mt-3">
-                    <div class="checked me-3 text-center">
-                        <h5 style="font-size: 40px;">
-                            {{ $assignment->classroom->students->count() }}
-                        </h5>
-                        <p class="muted" style="font-size: 13px; margin-top: -10px;">Students</p>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="checked me-3 text-center">
+                            <h5 style="font-size: 40px;">
+                                {{ $assignment->classroom->students->count() }}
+                            </h5>
+                            <p class="muted" style="font-size: 13px; margin-top: -10px;">Students</p>
+                        </div>
+                        <div class="vr me-3" style="height: 65px; width: 2px;"></div>
+                        <div class="checked me-3 text-center">
+                            <h5 style="font-size: 40px;">
+                                {{ $assignment->student_points->where('pointsObtained','!=',null)->count() }}
+                            </h5>
+                            <p class="muted" style="font-size: 13px; margin-top: -10px;">Checked</p>
+                        </div>
+                        <div class="vr me-3" style="height: 65px; width: 2px;"></div>
+                        <div class="returned text-center">
+                            <h5 style="font-size: 40px;">
+                                {{ $assignment->student_points->where('is_returned',1)->count() }}
+                            </h5>
+                            <p class="muted" style="font-size: 13px; margin-top: -10px;">Returned</p>
+                        </div>
                     </div>
-                    <div class="vr me-3" style="height: 65px; width: 2px;"></div>
-                    <div class="checked me-3 text-center">
-                        <h5 style="font-size: 40px;">
-                            {{ $assignment->student_points->where('pointsObtained','!=',null)->count() }}
-                        </h5>
-                        <p class="muted" style="font-size: 13px; margin-top: -10px;">Checked</p>
-                    </div>
-                    <div class="vr me-3" style="height: 65px; width: 2px;"></div>
-                    <div class="returned text-center">
-                        <h5 style="font-size: 40px;">
-                            {{ $assignment->student_points->where('is_returned',1)->count() }}
-                        </h5>
-                        <p class="muted" style="font-size: 13px; margin-top: -10px;">Returned</p>
-                    </div>
-                </div>
+                    <a href="{{ route('studentWork.index', $assignment->id) }}" class="text-decoration-none fw-bold px-2 py-1" style="position: absolute; bottom: 15px; right: 10px; color: #0d3cac; border: 2px solid #0d3cac;">
+                        View Work
+                    </a>
+                @elseif ('Student')
+                    <h4 class=" fs-2" style="color: #0d3cac; ">
+                        Students Work
+                    </h4>
 
-                <a href="{{ route('studentWork.index', $assignment->id) }}" class="text-decoration-none fw-bold px-2 py-1" style="position: absolute; bottom: 15px; right: 10px; color: #0d3cac; border: 2px solid #0d3cac;">
-                    View Work
-                </a>
+                    <div class="wrapper">
+                        <header>File Uploader JavaScript</header>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" class="file-input" hidden>
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Browse File to Upload</p>
+                        </form>
+                        <section class="progress-area">
+                            <li class="row">
+                                <i class="fas fa-file-alt"></i>
+                                <div class="content">
+                                    <div class="details">
+                                        <span class="name">image_01.png . Uploading </span>
+                                        <span class="percent">50%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </section>
+                        <section class="uploaded-area">
+                            <li class="row">
+                                <div class="content">
+                                    <i class="fas fa-file-alt"></i>
+                                    <div class="details">
+                                        <span class="name">image_01.png . Uploaded</span>
+                                        <span class="size">70 KB</span>
+                                    </div>
+                                </div>
+                                <i class="fas fa-check"></i>
+                            </li>
+                        </section>
+                    </div>
+                @endrole
+
             </div>
         </div>
     </div>
@@ -171,5 +349,14 @@
                 };
             });
         });
+
+        const form = document.querySelector("form"); 
+        fileInput = form.querySelector(".file-input");
+        progressArea = document.querySelector(".progress.area");
+        uploadedArea = document.querySelector(".uploaded.area");
+
+        form.addEventListener("click", ()=>{
+            fileInput.click();
+        })
     </script>
 @endsection

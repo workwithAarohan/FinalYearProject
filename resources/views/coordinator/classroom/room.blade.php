@@ -1,13 +1,100 @@
 @extends('layouts.nav')
 
 @section('style')
-    <style></style>
+    <style>
+        .type-list
+        {
+            margin-top: 80px;
+        }
+
+        .type-list > .list
+        {
+            margin-top: 15px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .type-list > .list:hover
+        {
+            background: #a9c7f1d5;
+            border-radius: 8px;
+        }
+
+        .list > .list-link
+        {
+            text-decoration: none;
+            color: #a19f9f;
+        }
+
+        .list > .list-link.active
+        {
+            color: #2d5da1;
+            font-weight: bold;
+        }
+        .circle
+        {
+            position: relative;
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+
+        }
+
+        .circle .box,
+        .circle .box span
+        {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+
+        }
+
+        .circle .box
+        {
+            height: 100%;
+            width: 100%;
+            background: #fff;
+            transform: translate(-50%, -50%) scale(0.8);
+            border-radius: 50%;
+        }
+
+        .circle .box span
+        {
+            font-size: 20px;
+            font-weight: 600;
+            font-family: sans-serif;
+            transform: translate(-50%, -50%);
+        }
+
+        .text
+        {
+            font-size: 15px;
+            font-weight: 500;
+        }
+    </style>
 @endsection
 
 @section('content')
     <div class="container-fluid">
         <div class="row mb-4 justify-content-around">
-            <div class="col-md-7">
+            <div class="col-md-2">
+                <ul class="type-list" style="list-style: none;">
+                    <li class="list" style="color: #ffffff; background: #116deed5; border-radius: 8px;">
+                        <a class="list-link" href="{{ route('classroom.dashboard', $classroom->id) }}" style="color: #ffffff;">Classroom</a>
+                    </li>
+                    <li class="list" style="color: #3a7fdf;">
+                        <a class="list-link " href="{{ route('assignment.index', $classroom->id) }}">Assignment</a>
+                    </li>
+                    <li class="list">
+                        <a class="list-link" href="{{ route('examination.index') }}">Examination</a>
+                    </li>
+                    <li class="list">
+                        <a class="list-link" href="{{ route('attendance.index', $classroom->id) }}">Attendance</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
                 <div class="mb-3">
                     <h4>{{ $classroom->room_name }}</h4>
                     <p>{{ $classroom->batch->batch_name }}</p>
@@ -24,28 +111,34 @@
                               </div>
                         </div>
                     </div>
-                    <div class="card" style="width:12rem; border: none;">
-                        <div class="card-body">
-                            <a href="{{ route('attendance.index', $classroom->id) }}" class="fs-6 fw-bold text-center">Attendance</a>
-                            <div class="progress mt-4" style="height: 15px; position: relative;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $classroom->attendancePercent }}%" aria-valuenow="{{ $classroom->attendancePercent }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                <h6 class="fw-bold my-auto" style="position: absolute; left: 40%; top: 1px; font-size: 13px; ">
-                                    {{ $classroom->attendancePercent }}%
-                                </h6>
-                              </div>
+                    @role('Student')
+                        <div>
+                            <div class="back">
+                                <div class="circle">
+                                    <?php $assignment_value= $classroom->assignmentPercent/100 ?>
+                                    <div class="bar" data-value="{{ $assignment_value }}">
+                                        <div class="box">
+                                            <span>{{ $classroom->assignmentPercent }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text">Assignment</div>
                         </div>
-                    </div>
-                    <div class="card" style="width:12rem; border: none;">
-                        <div class="card-body">
-                            <h5 class="fs-6 fw-bold text-center">Assignment</h5>
-                            <div class="progress mt-4" style="height: 15px; position: relative;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $classroom->assignmentPercent }}%" aria-valuenow="{{ $classroom->assignmentPercent }}" aria-valuemin="0" aria-valuemax="100"></div>
-                                <h6 class="fw-bold my-auto" style="position: absolute; left: 40%; top: 1px; font-size: 13px; ">
-                                    {{ $classroom->assignmentPercent }}%
-                                </h6>
-                              </div>
+                        <div>
+                            <div class="back">
+                                <div class="circle">
+                                    <?php $attendance_value= $classroom->attendancePercent/100 ?>
+                                    <div class="bar" data-value="{{ $attendance_value }}">
+                                        <div class="box">
+                                            <span>{{ $classroom->attendancePercent }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text">Attendance</div>
                         </div>
-                    </div>
+                    @endrole
                 </div>
                 <div class="mb-3 mt-2 p-4 bg-white rounded shadow" style="width: 250px;">
                     <a href="{{ route('assignment.index', $classroom->id) }}" class="mb-3 text-primary text-decoration-none fs-4 fw-bold ">Assignment</a>
@@ -59,19 +152,21 @@
             </div>
 
             <div class="col-md-4">
-                <div class="row p-4">
-                    <form action="{{ route('announcement.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
-                        <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
-                        <div class=" d-flex">
-                            <input type="text" placeholder="Add Announcement" name="notice" class="form-control me-3">
-                            <button class="btn btn-primary form-control" type="submit">
-                                Add
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                @role('Teacher')
+                    <div class="row p-4">
+                        <form action="{{ route('announcement.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
+                            <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
+                            <div class=" d-flex">
+                                <input type="text" placeholder="Add Announcement" name="notice" class="form-control me-3">
+                                <button class="btn btn-primary form-control" type="submit">
+                                    Add
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                @endrole
 
                 <div class="p-0 border" style="width: 400px;">
                     <div class="d-flex bg-white align-items-baseline" style="height: 50px; padding-left: 20px;">
@@ -111,56 +206,59 @@
         <div class="mt-5 shadow" style="padding: 10px 40px; margin: 10px 100px; border: none;">
             <div class="d-flex justify-content-between">
                 <h4 class="fw-bold mt-2 mb-3">Course Structure</h4>
-                <button type="button" class="px-2" data-bs-toggle="modal" data-bs-target="#addTopic" style="background: #2664d8; border: none; color: #fff;">
-                    Add Topic
-                </button>
 
-                <!-- Modal -->
-                <div class="modal fade" id="addTopic" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="selectCourse">Add Topic</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <form action="{{ route('topic.store') }}" method="POST">
-                                @csrf
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Topic Title</label>
-                                        <input type="text" name="topic_title" class="form-control">
-                                    </div>
+                @role("Teacher")
+                    <button type="button" class="px-2" data-bs-toggle="modal" data-bs-target="#addTopic" style="background: #2664d8; border: none; color: #fff;">
+                        Add Topic
+                    </button>
 
-                                    <div class="mb-3">
-                                        <label for="" class="form-label">Classroom</label>
-                                        <input type="text" value="{{ $classroom->room_name }}" class="form-control" disabled>
-                                        <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="credit_hr" class="form-label">Credit Hours</label>
-                                        <input type="text" name="credit_hrs" class="form-control">
-                                    </div>
-
-                                    <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
-
-                                    <div class="mb-3">
-                                        <label for="sub_topic" class="form-label">Sub Topics</label>
-                                        <div class="d-flex">
-                                            <input type="text" class="form-control me-2" name="title[]">
-                                            <input type="text" class="form-control me-2" name="title[]">
+                    <!-- Modal -->
+                    <div class="modal fade" id="addTopic" tabindex="-1" aria-labelledby="selectCourse" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="selectCourse">Add Topic</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('topic.store') }}" method="POST">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="" class="form-label">Topic Title</label>
+                                            <input type="text" name="topic_title" class="form-control">
                                         </div>
-                                    </div>
 
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Select</button>
-                                </div>
-                            </form>
+                                        <div class="mb-3">
+                                            <label for="" class="form-label">Classroom</label>
+                                            <input type="text" value="{{ $classroom->room_name }}" class="form-control" disabled>
+                                            <input type="hidden" name="classroom_id" value="{{ $classroom->id }}">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="credit_hr" class="form-label">Credit Hours</label>
+                                            <input type="text" name="credit_hrs" class="form-control">
+                                        </div>
+
+                                        <input type="hidden" name="created_by" value="{{ auth()->user()->id }}">
+
+                                        <div class="mb-3">
+                                            <label for="sub_topic" class="form-label">Sub Topics</label>
+                                            <div class="d-flex">
+                                                <input type="text" class="form-control me-2" name="title[]">
+                                                <input type="text" class="form-control me-2" name="title[]">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Select</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endrole
             </div>
             <table class="table table-hover" style="font-size:small;">
                 @if ($classroom->topics->count()!=0)
@@ -311,16 +409,19 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+@endsection
 
+@section('script')
     <script>
         $(document).ready(function(){
-            $('#add_btn').on('click', function(){
-                var html = "";
-                html += '<input type="text" class="form-control" name="title[]">';
-            });
-
-            $('.modal-body').append(html);
+            
         });
+
+        let options = {
+            startAngle: -1.55,
+            size: 80,
+            fill: {color: "green"}
+        }
+        $('.circle .bar').circleProgress(options).on('cicle-animation-progress', function(event, progress, stepValue){});
     </script>
 @endsection

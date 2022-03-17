@@ -44,10 +44,12 @@ class ClassroomController extends Controller
      */
     public function classroom(Classroom $classroom)
     {
-        $classroom->assignmentPercent = ClassroomEvaluationTraits::StudentAssignmentEvaluation($classroom, auth()->user()->student);
         $classroom->courseCompleted = ClassroomEvaluationTraits::CourseCompleted($classroom);
-        $classroom->attendancePercent = ClassroomEvaluationTraits::StudentAttendanceEvaluation($classroom, auth()->user()->student);
-
+        if(auth()->user()->hasRole('Student'))
+        {
+            $classroom->assignmentPercent = ClassroomEvaluationTraits::StudentAssignmentEvaluation($classroom, auth()->user()->student);
+            $classroom->attendancePercent = ClassroomEvaluationTraits::StudentAttendanceEvaluation($classroom, auth()->user()->student);
+        }
         $assignments = $classroom->assignments->where('due_date', '>', Carbon::now());
         foreach($assignments as $assignment)
         {

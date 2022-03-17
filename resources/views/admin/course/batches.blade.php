@@ -29,9 +29,9 @@
                         <th scope="col">Batch</th>
                         <th scope="col">No.of Students</th>
                         <th scope="col">Created By</th>
-                        @can('logged-in')
+                        @role('Admin')
                             <th scope="col">Action</th>
-                        @endcan
+                        @endrole
                     </tr>
                 </thead>
 
@@ -49,7 +49,7 @@
                             <td>
                                 {{ $batch->createdBy->firstname }}
                             </td>
-                            @can('logged-in')
+                            @role('Admin')
                                 <td>
 
                                     <div class="d-flex align-items-baseline">
@@ -65,7 +65,7 @@
                                         </form>
                                     </div>
                                 </td>
-                            @endcan
+                            @endrole
                         </tr>
                     @endforeach
                 </tbody>

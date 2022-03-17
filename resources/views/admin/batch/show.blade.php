@@ -1,12 +1,14 @@
-@extends('layouts.nav')
+@extends('layouts.common')
+
+@section('title')
+    {{ $batch->batch_name }} - Batch
+@endsection
 
 @section('style')
-    <style>
         tr[data-href]
         {
             cursor: pointer;
         }
-    </style>
 @endsection
 
 @section('content')
@@ -21,9 +23,11 @@
                         End Session
                     </a>
                 @endif
-                <a href="{{ route('classroom.index', $batch->id) }}" class="btn btn-success float-end">
-                    Classroom
-                </a>
+                @role('Coordinator')
+                    <a href="{{ route('classroom.index', $batch->id) }}" class="btn btn-success float-end">
+                        Classroom
+                    </a>
+                @endrole
 
             </div>
         </div>
@@ -35,26 +39,26 @@
                         <th scope="col">Last Name</th>
                         <th scope="col">Course</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Actions</th>
+                        {{-- <th scope="col">Actions</th> --}}
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($batch->admissionWindow->admissions as $student)
-                        <tr data-href="{{ route('admission.details', $student->id) }}">
-                            <th scope="row">{{ $student->firstname }}</th>
-                            <th scope="row">{{ $student->lastname }}</th>
+                    @foreach ($batch->students as $student)
+                        <tr data-href="{{ route('student.performance', $student->id) }}">
+                            <th scope="row">{{ $student->user->firstname }}</th>
+                            <th scope="row">{{ $student->user->lastname }}</th>
                             <td>{{ $batch->course->courseDetails->slug }}</td>
-                            @if ($student->is_admitted)
+                            @if ($student->is_active)
                                 <td>
-                                    <a href="" class="badge bg-success text-decoration-none">Admitted</a>
+                                    <a href="" class="badge bg-success text-decoration-none">Active</a>
                                 </td>
                             @else
                                 <td>
-                                    <span class="badge bg-warning text-dark">Not Admitted</span>
+                                    <span class="badge bg-warning text-dark">Inactive</span>
                                 </td>
                             @endif
-                            <td>
+                            {{-- <td>
                                 <a href="" class="me-3 text-decoration-none text-secondary" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -66,7 +70,7 @@
                                     @csrf
                                     @method('DELETE')
                                 </form>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>

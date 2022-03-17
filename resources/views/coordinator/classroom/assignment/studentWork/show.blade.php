@@ -1,11 +1,63 @@
 @extends('layouts.nav')
 
+@section('style')
+    <style>
+
+        .type-list
+        {
+            margin-top: 80px;
+        }
+
+        .type-list > .list
+        {
+            margin-top: 15px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .type-list > .list:hover
+        {
+            background: #a9c7f1d5;
+            border-radius: 8px;
+        }
+
+        .list > .list-link
+        {
+            text-decoration: none;
+            color: #a19f9f;
+        }
+
+        .list > .list-link.active
+        {
+            color: #2d5da1;
+            font-weight: bold;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row">
+            <div class="col-md-2">
+                <ul class="type-list" style="list-style: none;">
+                    <li class="list" style="color: #ffffff; background: #116deed5; border-radius: 8px;">
+                        <a class="list-link" href="{{ route('classroom.dashboard', $classroom->id) }}" style="color: #ffffff;">Classroom</a>
+                    </li>
+                    <li class="list" style="color: #3a7fdf;">
+                        <a class="list-link" href="{{ route('assignment.index', $classroom->id) }}">Assignment</a>
+                    </li>
+                    <li class="list">
+                        <a class="list-link" href="{{ route('examination.index') }}">Examination</a>
+                    </li>
+                    <li class="list">
+                        <a class="list-link" href="{{ route('attendance.index', $classroom->id) }}">Attendance</a>
+                    </li>
+                </ul>
+            </div>
             <div class="col-md-8">
                 @if ($classroom->assignments->count()!=0)
-                    {{ $classroom->percent }}
+                    <h5 style="font-size: 25px;">{{ $classroom->percent }}%</h5>
                     <div class="card shadow" style="padding: 10px 40px; ">
                         <table class="table table-hover" style="font-size:small;">
                             <thead>

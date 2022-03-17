@@ -153,4 +153,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class, 'created_by');
     }
+
+    public function examination()
+    {
+        return $this->hasMany(Examination::class, 'created_by');
+    }
 }

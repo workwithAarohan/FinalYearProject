@@ -9,7 +9,11 @@
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <script src="{{ asset('js/app.js') }}"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
+        <script src="{{ asset('js/circle-progress.min.js') }}"></script>
+
+    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+
+        <script type="text/javascript" src="{{ asset('js/loader.js') }}"></script>
 
         <style>
             .sidebar
@@ -98,9 +102,7 @@
                 @can('logged-in')
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link active text-dark" aria-current="page" href="{{ route('role.index') }}">Role</a>
-                            </li>
+                            
                             <li class="nav-item">
                                 <a class="nav-link active text-dark" aria-current="page" href="{{ route('course.index') }}">Course</a>
                             </li>
@@ -141,12 +143,6 @@
                             </li>
                         @endif
 
-                        @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                        @endif
-
                     @else
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item dropdown">
@@ -154,9 +150,9 @@
                                 {{ Auth::user()->username }}
                             </a>
                             <ul class="dropdown-menu " aria-labelledby="navbarDropdown" >
-                                <li><a class="dropdown-item" href="{{ route('student.dashboard') }}">Dashboard</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><hr class="dropdown-divider"></li>
+
+                                {{-- <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><hr class="dropdown-divider"></li> --}}
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">
@@ -184,29 +180,31 @@
                 Pages
             </h5>
             <ul class="list">
-                <li>
-                    <a href="{{ route('role.index') }}">
-                        <i class="far fa-calendar me-2"></i> Role
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('course.index') }}">
-                        <i class="far fa-calendar me-2"></i> Course
-                    </a>
-                </li>
+                @role('Admin')
+                    <li>
+                        <a href="{{ route('role.index') }}">
+                            <i class="far fa-calendar me-2"></i> Role
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('course.index') }}">
+                            <i class="far fa-calendar me-2"></i> Course
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('semester.index') }}">
+                            <i class="far fa-calendar me-2"></i> Semester
+                        </a>
+                    </li>
+                @endrole
                 <li>
                     <a href="{{ route('students.list') }}">
                         <i class="far fa-calendar me-2"></i> Student
                     </a>
                 </li>
                 <li>
-                    <a href="#about">
-                        <i class="far fa-calendar me-2"></i> Semester
-                    </a>
-                </li>
-                <li>
-                    <a href="#about">
-                        <i class="far fa-calendar me-2"></i> Event
+                    <a href="{{ route('examination.index') }}">
+                        <i class="far fa-calendar me-2"></i> Examination
                     </a>
                 </li>
             </ul>
@@ -220,7 +218,7 @@
         </main>
 
         <script>
-            @yield('script'); 
+            @yield('script');
         </script>
     </body>
 </html>

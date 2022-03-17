@@ -45,6 +45,12 @@ Route::get('/header', function () {
 // Route::resource('/admin/batch', BatchController::class);
 // Route::resource('/admin/course', CourseController::class);
 
+Route::get('/teacher/dashboard', [App\Http\Controllers\TeacherController::class, 'dashboard'])->name('teacher.dashboard');
+
+Route::get('/coordinator/dashboard', function(){
+    return view('coordinator.dashboard');
+});
+
 
 // Admin Route
 Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
@@ -104,6 +110,12 @@ Route::group(['prefix'=>'coordinator', 'middleware' => 'auth', 'namespace' => 'C
     Route::delete('/classroom/removeTeacher/{teacher}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'removeTeacher'])->name('classroom.removeTeacher');
     Route::delete('/classroom/removeStudent/{student}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'removeStudent'])->name('classroom.removeStudent');
 
+    Route::resource('/examination', ExaminationController::class);
+    Route::get('/select-batch/{course}', [App\Http\Controllers\Coordinator\ExaminationController::class, 'selectBatch']);
+
+    //Result
+    Route::resource('/result', ResultController::class)->except(['index']);
+
 });
 Route::get('/classroom/{classroom}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'classroom'])->name('classroom.dashboard');
 
@@ -119,6 +131,7 @@ Route::post('/classroom/{classroom}/attendance/retrieveData', [App\Http\Controll
 Route::resource('/classroom/assignment', Classroom\AssignmentController::class)->except(['index']);
 Route::get('/classroom/{classroom}/assignment', [App\Http\Controllers\Classroom\AssignmentController::class, 'index'])->name('assignment.index');
 Route::get('/classroom/{classroom}/assignmentEvaluation', [App\Http\Controllers\Classroom\AssignmentController::class, 'studentAssignmentEvaluation'])->name('assignment.evaluation');
+Route::post('/assignment/marksEvaluation', [App\Http\Controllers\Classroom\AssignmentController::class, 'marksEvaluation'])->name('assignment.marksEvaluation');
 
 // Assignment - Student Work
 Route::resource('/classroom/assignment/studentWork', Classroom\AssignmentPointController::class)->except(['index']);
@@ -170,3 +183,9 @@ Route::post('/search/users', [SearchController::class, 'searchUsers'])->name('se
 
 Route::get('/welcome', [WelcomeController::class, 'admissionOpen'])->name('welcome');
 
+
+Route::get('/result/{examination}/subject/{subject}', [App\Http\Controllers\Coordinator\ResultController::class, 'index'])->name('result.index');
+
+Route::post('/update/table', [App\Http\Controllers\Coordinator\ExaminationController::class, 'updateTable'])->name('update.table');
+
+Route::post('/examination/publish', [App\Http\Controllers\Coordinator\ExaminationController::class, 'examinationPublish'])->name('examination.publish');

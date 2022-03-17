@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Events\NewStudentAdmissionEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ClassroomEvaluationTraits;
+use App\Http\Traits\StudentPerformanceTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\StudentEnrollment;
@@ -19,7 +20,7 @@ use Spatie\Permission\Models\Role;
 
 class StudentController extends Controller
 {
-    use ClassroomEvaluationTraits;
+    use ClassroomEvaluationTraits, StudentPerformanceTraits;
 
     public function index()
     {
@@ -80,9 +81,15 @@ class StudentController extends Controller
             $classroom->courseCompleted = ClassroomEvaluationTraits::CourseCompleted($classroom);
         }
 
+        $semester = $student->semester;
+
+        $semester->attendance = StudentPerformanceTraits::OverallAttendance($semester, $student);
+        $semester->assignment = StudentPerformanceTraits::OverallAssignment($semester, $student);
+
         return view('student.dashboard', [
             'student' => $student,
-            'classrooms' => $classrooms
+            'classrooms' => $classrooms,
+            'semester' => $semester,
         ]);
     }
 
