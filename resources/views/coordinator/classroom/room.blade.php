@@ -111,6 +111,19 @@
                               </div>
                         </div>
                     </div>
+                    @role('Teacher')
+                        <div class="card" style="padding: 10px 12px; width: 12rem; border: none;">
+                            <div class="d-flex align-items-baseline">
+                                <div style="margin: auto 5px;">
+                                    <i class="fas fa-user-graduate me-1" style="font-size: 32px;"></i>
+                                </div>
+                                <div style="margin: 0px auto; text-align:center">
+                                    <p style=" color: #002a79; font-size:16px;" >Student</p>
+                                    <h5 style=" font-size:26px; margin-top: -14px;">{{ $classroom->students->count() }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    @endrole
                     @role('Student')
                         <div>
                             <div class="back">
@@ -140,7 +153,11 @@
                         </div>
                     @endrole
                 </div>
-                <div class="mb-3 mt-2 p-4 bg-white rounded shadow" style="width: 250px;">
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="mb-3 mt-2 p-4 bg-white rounded shadow" style="width: 400px;">
                     <a href="{{ route('assignment.index', $classroom->id) }}" class="mb-3 text-primary text-decoration-none fs-4 fw-bold ">Assignment</a>
                     @foreach ($assignments as $assignment)
                         <div class=" d-flex justify-content-between align-items-baseline p-2">
@@ -149,10 +166,7 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
-
-            <div class="col-md-4">
-                @role('Teacher')
+                {{-- @role('Teacher')
                     <div class="row p-4">
                         <form action="{{ route('announcement.store') }}" method="POST">
                             @csrf
@@ -199,7 +213,7 @@
                             </div>
                         @endforeach
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 
@@ -414,7 +428,7 @@
 @section('script')
     <script>
         $(document).ready(function(){
-            
+
         });
 
         let options = {

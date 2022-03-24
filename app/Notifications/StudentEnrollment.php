@@ -61,7 +61,7 @@ class StudentEnrollment extends Notification
             'title' => 'New Admission Request',
             'message' => 'New Student has requested for admission',
             'logo' => '/images/logo/student.png',
-            'route' => 'enrolledStudent.info',
+            'route' => 'admission.details',
             'id' => $this->student['id']
         ];
     }

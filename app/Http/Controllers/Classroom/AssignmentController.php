@@ -71,7 +71,7 @@ class AssignmentController extends Controller
 
             $assignment->students()->sync($students);
 
-            
+
 
             return $assignment;
         });
@@ -88,9 +88,24 @@ class AssignmentController extends Controller
      */
     public function show(Assignment $assignment)
     {
+        if(auth()->user()->hasRole('Student'))
+        {
+            $studentWork = DB::table('assignment_student')->where('student_id' ,auth()->user()->student->id)->where('assignment_id', $assignment->id)->first();
+        }
+        else
+        {
+            $studentWork = [];
+        }
+
+        $checkedCount = DB::table('assignment_student')
+            ->where('assignment_id' ,$assignment->id)
+            ->where('is_checked', 1)
+            ->count();
 
         return view('coordinator.classroom.assignment.show', [
-            'assignment' => $assignment
+            'assignment' => $assignment,
+            'student_work' => $studentWork,
+            'checkedCount' => $checkedCount,
         ]);
     }
 
@@ -156,6 +171,33 @@ class AssignmentController extends Controller
         }
 
         $request->session()->flash('success','Marks Updated');
+
+        return redirect()->back();
+    }
+
+    public function submit(Request $request)
+    {
+        $request->validate([
+            'file' => 'required',
+        ]);
+
+        $assignment = Assignment::find($request->assignment_id);
+
+
+
+        if($request->hasFile('file'))
+        {
+            $image=$request->file('file');
+            $filename = 'document-' . time() . '.' . $image->getClientOriginalExtension();
+            $Path = public_path('/images/assignment/document');
+            $image->move($Path, $filename);
+            $assignment->file = $filename;
+        }
+
+
+        DB::table('assignment_student')->where('student_id' ,auth()->user()->student->id)->where('assignment_id', $assignment->id)->update([
+            'file' => $assignment->file,
+        ]);
 
         return redirect()->back();
     }

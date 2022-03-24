@@ -102,7 +102,7 @@
                 @can('logged-in')
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            
+
                             <li class="nav-item">
                                 <a class="nav-link active text-dark" aria-current="page" href="{{ route('course.index') }}">Course</a>
                             </li>
@@ -202,11 +202,13 @@
                         <i class="far fa-calendar me-2"></i> Student
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('examination.index') }}">
-                        <i class="far fa-calendar me-2"></i> Examination
-                    </a>
-                </li>
+                @role('Coordinator')
+                    <li>
+                        <a href="{{ route('examination.index') }}">
+                            <i class="far fa-calendar me-2"></i> Examination
+                        </a>
+                    </li>
+                @endrole
             </ul>
         </div>
 

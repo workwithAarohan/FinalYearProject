@@ -14,6 +14,15 @@ class AdminController extends Controller
 {
     use StudentPerformanceTraits;
 
+    public function dashboard()
+    {
+        return view('admin.dashboard', [
+            'course' => Course::all()->count(),
+            'batch' => Batch::all()->count(),
+            'semester' => Semester::all()->count()
+        ]);
+    }
+
     public function listOfStudents(Request $request)
     {
 
@@ -57,7 +66,7 @@ class AdminController extends Controller
         $semesters = Semester::all();
         $data = "";
         $overall = 0;
-        
+
         foreach($semesters as $semester)
         {
             $semester->attendance = StudentPerformanceTraits::OverallAttendance($semester, $student);

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\NewStudentAdmissionEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Admission;
 use App\Models\AdmissionWindow;
 use App\Models\Batch;
 use App\Models\Course;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdmissionController extends Controller
 {
@@ -82,10 +85,18 @@ class AdmissionController extends Controller
 
             $request->request->add(['pp_photo' => $filename]);
         }
+        DB::transaction(function () use ($request) {
+            // Create new Admission
+            $student = Admission::create($request->all());;
 
-        Admission::create($request->all());
+            // Select admin to notify
+            $user = User::find(1);
 
-        return redirect('/');
+            // Call New Student Admission Event
+            event(new NewStudentAdmissionEvent($student,$user));
+        });
+        
+        return redirect('/admission/response');
 
     }
 

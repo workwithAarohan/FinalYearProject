@@ -6,6 +6,7 @@ use App\Events\NewStudentAdmissionEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ClassroomEvaluationTraits;
 use App\Http\Traits\StudentPerformanceTraits;
+use App\Models\Admission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\StudentEnrollment;
@@ -41,26 +42,56 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
+        $admission = Admission::find($request->admission_id);
+
+        $admission->is_admitted = 1;
+        $admission->save();
+
+        // $admission->update([
+        //     'is_admitted' => 0,
+        // ]);
+
         $request->merge([
-            'username' => strtolower($request->firstname) . "@academia",
+            'username' => strtolower($admission->firstname) . "@academia",
         ]);
 
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request, $admission) {
             // Create new Student
-            $student = User::create($request->all());
+            $student = User::create([
+                'firstname' => $admission->firstname,
+                'lastname' => $admission->lastname,
+                'username' => $request->username,
+                'email' => $admission->email,
+                'password' => 'password',
+                'avatar' => $admission->pp_photo,
+                'temporaryAddress' => $admission->temporaryAddress,
+                'permanentAddress' => $admission->permanentAddress,
+                'phone' => $admission->phone,
+                'dob' => $admission->dob,
+                'gender' => $admission->gender,
+                'nationality' => $admission->nationality,
+            ]);
 
             // Insert into user_role table
             $student->roles()->sync($request->roles);
 
+            Student::create([
+                'user_id' => $student->id,
+                'course_id' => $admission->admission_window->course_id,
+                'batch_id' => $admission->admission_window->batch_id,
+                'semester_id' => 1,
+                'admission_date' => date('Y-m-d'),
+            ]);
+
             // Select admin to notify
-            $user = User::find(1);
+            // $user = User::find(1);
 
             // Call New Student Admission Event
-            event(new NewStudentAdmissionEvent($student,$user));
+            // event(new NewStudentAdmissionEvent($student,$user));
         });
 
 
-        return redirect('/');
+        return redirect()->back();
     }
 
     public function show($id)

@@ -1,7 +1,10 @@
-@extends('layouts.nav')
+@extends('layouts.common')
+
+@section('title')
+    Student Details
+@endsection
 
 @section('style')
-    <style>
         h5.background
         {
             font: 14px sans-serif;
@@ -36,7 +39,7 @@
             bottom: 1px;
             border-top: 2px solid #382d2d;
         }
-    </style>
+@endsection
 
 @section('content')
     <div class="container">
@@ -162,6 +165,19 @@
                     <span>Certificates</span>
                 </h5>
             </div>
+        </div>
+        <div class="row mt-3">
+            <form action="{{ route('student.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="admission_id" value="{{ $admission->id }}">
+                <input type="hidden" name="roles[]" value="1">
+                @if ($admission->is_admitted)
+                    <input type="submit" value="Approve" class="btn btn-primary w-100" disabled>
+                @else
+                    <input type="submit" value="Approve" class="btn btn-primary w-100" >
+                @endif
+
+            </form>
         </div>
     </div>
 @endsection

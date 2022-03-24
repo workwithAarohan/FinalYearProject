@@ -70,38 +70,39 @@ class ExaminationController extends Controller
             'start_time' => 'required',
             'end_time' => 'required',
         ]);
+        DB::transaction(function () use ($request) {
 
-        $examination = Examination::create($request->all());
+            $examination = Examination::create($request->all());
 
+            $subjects = Subject::where('course_id', $examination->course_id)->where('semester_id', $examination->semester_id)->get();
 
-        $subjects = Subject::where('course_id', $examination->course_id)->where('semester_id', $examination->semester_id)->get();
-
-        foreach($subjects as $subject)
-        {
-            if($subject->batch_classrooms($examination->batch_id)->where('is_active',1)->exists())
+            foreach($subjects as $subject)
             {
-                DB::table('examination_subject')->insert([
-                    'examination_id' => $examination->id,
-                    'subject_id' => $subject->id,
-                    'teacher_id' => 1,
-                ]);
+                if($subject->batch_classrooms($examination->batch_id)->where('is_active',1)->exists())
+                {
+                    DB::table('examination_subject')->insert([
+                        'examination_id' => $examination->id,
+                        'subject_id' => $subject->id,
+                        'teacher_id' => 1,
+                    ]);
+                }
             }
-        }
 
-        $exams = DB::table('examination_subject')->where('examination_id', $examination->id)->get();
+            $exams = DB::table('examination_subject')->where('examination_id', $examination->id)->get();
 
-        foreach($examination->batch->students as $student)
-        {
-            foreach($exams as $exam)
+            foreach($examination->batch->students as $student)
             {
-                Result::create([
-                    'examination_id' => $exam->examination_id,
-                    'subject_id' => $exam->subject_id,
-                    'student_id' => $student->id,
-                    'teacher_id' => $exam->teacher_id,
-                ]);
+                foreach($exams as $exam)
+                {
+                    Result::create([
+                        'examination_id' => $exam->examination_id,
+                        'subject_id' => $exam->subject_id,
+                        'student_id' => $student->id,
+                        'teacher_id' => $exam->teacher_id,
+                    ]);
+                }
             }
-        }
+        });
 
         return redirect('/coordinator/examination');
     }
@@ -125,29 +126,47 @@ class ExaminationController extends Controller
 
         // if($examination->is_published)
         // {
-            $pass = 0;
-            $fail = 0;
+            $pass = null;
+            $fail = null;
             foreach($examination->batch->students as $student)
             {
-                $total = 0;
-                $full_marks = 0;
-                $status =true;
+                $total = null;
+                $full_marks = null;
+                $status = null;
                 foreach($examination->subjects as $subject)
                 {
-                    $result[$student->id][$subject->id] = Result::where('student_id', $student->id)->where('subject_id', $subject->id)->where('examination_id', $examination->id)->first();
-
-                    $total += $result[$student->id][$subject->id]->marks_obtained;
-                    $full_marks += $subject->pivot->full_mark;
-
-                    if(($result[$student->id][$subject->id]->marks_obtained < $subject->pivot->pass_mark))
+                    if($subject->pivot->is_checked)
                     {
-                        $status = false;
+                        $result[$student->id][$subject->id] = Result::where('student_id', $student->id)->where('subject_id', $subject->id)->where('examination_id', $examination->id)->first();
+
+                        if($result[$student->id][$subject->id]->marks_obtained != null)
+                            $total += $result[$student->id][$subject->id]->marks_obtained;
+
+                        $full_marks += $subject->pivot->full_mark;
+
+                        if(($result[$student->id][$subject->id]->marks_obtained < $subject->pivot->pass_mark))
+                        {
+                            $status = 0;
+                        }
+                        else
+                        {
+                            $status = true;
+                        }
                     }
+
                 }
 
                 $result[$student->id]['total'] = $total;
-                $result[$student->id]['percentage'] = round(($total / $full_marks) * 100, 2);
+                if($full_marks != null)
+                {
+                    $result[$student->id]['percentage'] = round(($total / $full_marks) * 100, 2);
+                }
+                else
+                {
+                    $result[$student->id]['percentage'] = null;
+                }
                 $result[$student->id]['status'] = $status;
+                
                 if($status)
                 {
                     $pass++;
@@ -166,7 +185,6 @@ class ExaminationController extends Controller
         //     $result = [];
         //     $resultReport = "";
         // }
-
 
 
         return view('coordinator.examination.show', [

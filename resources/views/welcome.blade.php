@@ -96,9 +96,7 @@
             <div class="caption">
                 <h6>Evolve with tech</h6>
                 <h2>Ease <em> access</em> to<em> system</em></h2>
-                <div class="main-button scroll-to-section">
-                    <a href="#features">Already a member?</a>
-                </div>
+                
             </div>
         </div>
     </div>

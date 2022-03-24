@@ -94,12 +94,19 @@
                         </div>
 
                         <div>
+                            <form action="{{ route('classroom.status') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="classroom_id" value="{{ $classroom->id}}">
 
-                            @if ($classroom->is_active)
-                                <span class="badge bg-primary">Active</span>
-                            @else
-                                <span class="badge bg-danger">Inactive</span>
-                            @endif
+                                <button type="submit" class="show_confirm" data-toggle="tooltip" style="background: transparent; border: none;" >
+                                    @if ($classroom->is_active)
+                                        <span class="badge bg-primary">Active</span>
+                                    @else
+                                        <span class="badge bg-danger">Inactive</span>
+                                    @endif
+                                </button>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -284,12 +291,13 @@
                         <div class="member-list p-3 d-flex justify-content-between align-items-center">
                             <div class="d-flex w-50 align-items-center">
                                 <div class="image me-2">
-                                    <img src="{{ asset('images/profile/'.$student->user->avatar) }}" style="width: 45px; border-radius: 50%;">
+                                    <img src="{{ asset('images/profile/'.$student->user->avatar) }}" style="width: 60px; height: 60px; border-radius: 50%;">
                                 </div>
                                 <div class="studentInfo">
                                     <a href="" class="text-decoration-none text-black fw-bold member-link" style="font-size: 13px;">
                                         {{ $student->user->firstname }} {{ $student->user->lastname }}
                                     </a>
+                                    <p>{{ $student->symbol_number }}</p>
                                 </div>
                             </div>
                             <div class="delete-button" style="display: none;">

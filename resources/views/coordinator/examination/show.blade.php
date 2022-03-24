@@ -121,31 +121,60 @@
 
                         <tbody>
                             @foreach ($examination->batch->students as $student)
+                                
                                 <tr>
                                     <th scope="row">{{ $student->user->firstname }}</th>
                                     @foreach ($examination->subjects as $subject)
-                                    @if ($result[$student->id][$subject->id]->marks_obtained < $subject->pivot->pass_mark)
-                                        <td style="color: red; font-weight: bold;">
-                                    @else
-                                        <td>
-                                    @endif
-                                    {{ $result[$student->id][$subject->id]->marks_obtained }}</td>
+                                        @if ($subject->pivot->is_checked)
+                                            @if ($result[$student->id][$subject->id]->marks_obtained < $subject->pivot->pass_mark)
+                                            <td style="color: red; font-weight: bold;">
+                                            @else
+                                                <td>
+                                            @endif
+                                            {{ $result[$student->id][$subject->id]->marks_obtained }}</td>
+                                            
+                                        @else
+                                            <td>-</td>
+                                        @endif
 
                                     @endforeach
-                                    <td>
-                                        {{ $result[$student->id]['total'] }}
-                                    </td>
-                                    <td>
-                                        {{ $result[$student->id]['percentage'] }}
-                                    </td>
 
-                                    <td>
-                                        @if ($result[$student->id]['status'])
-                                            Pass
-                                        @else
-                                            Fail
-                                        @endif
-                                    </td>
+                                    @if ($result[$student->id]['total'])
+                                        <td>
+                                            {{ $result[$student->id]['total'] }}
+                                        </td>
+                                    @else
+                                        <td>
+                                            -
+                                        </td>
+                                    @endif
+
+                                    @if ($result[$student->id]['percentage'] != null)
+                                        <td>
+                                            {{ $result[$student->id]['percentage'] }}
+                                        </td>
+                                    @else
+                                        <td>
+                                            -
+                                        </td>
+                                    @endif
+
+                                    
+                                   @if ($result[$student->id]['status'] !=null)
+                                        <td>
+                                            @if ($result[$student->id]['status'])
+                                                Pass
+                                            @else
+                                                Fail
+                                            @endif
+                                        </td>
+                                   @else
+                                        <td>
+                                            -
+                                        </td>
+                                   @endif
+
+                                    
                                 </tr>
 
                             @endforeach

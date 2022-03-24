@@ -146,12 +146,22 @@ trait StudentPerformanceTraits
                 $full_marks = 0;
                 foreach($exam->subjects as $subject)
                 {
-                    $result = Result::where('student_id', $student->id)->where('subject_id', $subject->id)->where('examination_id', $exam->id)->first();
-
-                    $total += $result->marks_obtained;
-                    $full_marks += $subject->pivot->full_mark;
+                    if($subject->pivot->is_checked)
+                    {
+                        $result = Result::where('student_id', $student->id)->where('subject_id', $subject->id)->where('examination_id', $exam->id)->first();
+    
+                        $total += $result->marks_obtained;
+                        $full_marks += $subject->pivot->full_mark;
+                    }
                 }
-                $percentage = round(($total/$full_marks) * 100,2);
+                if($full_marks!=0)
+                {
+                    $percentage = round(($total/$full_marks) * 100,2);
+                }
+                else
+                {
+                    $percentage = 0;
+                }
                 $overall_percentage += $percentage;
             }
             $overall_percentage /= $count;

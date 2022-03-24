@@ -4,7 +4,7 @@
     <style>
         h5.background
         {
-            font: 14px sans-serif;
+            font: 14px;
             margin-top: 30px;
             position: relative;
             text-align: center;
@@ -40,7 +40,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-12">
                 <h1 class="float-start">
@@ -101,7 +101,7 @@
                 <h5 class="background">
                     <span>{{ $semester->semester_name }} Semester</span>
                 </h5>
-                <div class="d-flex justify-content-between">
+                {{-- <div class="d-flex justify-content-between">
                     &nbsp;
                     <form action="{{ route('classroom.create') }}" class="" method="GET">
                         @csrf
@@ -112,13 +112,13 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </form>
-                </div>
+                </div> --}}
                 <?php $i=0; ?>
                 @foreach ($semester->subjects as $subject)
                     @foreach ($subject->batch_classrooms($batch->id)->get() as $classroom)
                         <div class="col-md-3 mb-3 mt-3" style="width: 20rem;">
                             <div class="card shadow p-0" style="height: 350px; position: relative;">
-                                <img src="{{ asset('images/background/'.$classroom->image) }}" class="card-img-top" style="object-fit:contain;">
+                                <img src="{{ asset('images/background/'.$classroom->image) }}" class="card-img-top" style=" width: 100%; height: 170px;">
                                 <div class="profile" style="position: absolute; top: 132px; right: 10px;">
                                     @foreach ($classroom->teachers as $teacher)
                                         <img src="{{ asset('images/profile/'. $teacher->user->avatar) }}" style="width: 60px; border-radius: 50%; ">

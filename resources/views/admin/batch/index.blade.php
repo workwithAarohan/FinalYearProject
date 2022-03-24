@@ -1,12 +1,10 @@
-@extends('layouts.nav')
+@extends('layouts.common')
 
 @section('style')
-    <style>
         tr[data-href]
         {
             cursor: pointer;
         }
-    </style>
 @endsection
 
 @section('content')

@@ -54,9 +54,8 @@ Route::get('/coordinator/dashboard', function(){
 
 // Admin Route
 Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
-    Route::get('/dashboard', function(){
-        return view('admin.dashboard');
-    });
+
+    Route::get('/dashboard', [App\Http\Controllers\Admin\AdminController::class,'dashboard'])->name('admin.dashboard');
 
     Route::group(['namespace' => 'Admin'], function(){
         Route::resource('/role', RoleController::class);
@@ -77,6 +76,9 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function(){
 
         Route::get('/course/newSession/{course}', [App\Http\Controllers\Admin\AdmissionController::class, 'createNewSession'])->name('course.newSession');
         Route::post('/course/newSession/store', [App\Http\Controllers\Admin\AdmissionController::class, 'storeNewSession'])->name('course.newSession.store');
+        Route::get('/admission/response', function(){
+            return view('admin.admission.response');
+        });
         Route::get('/admission/closed/{batch}',[App\Http\Controllers\Admin\AdmissionController::class, 'endSession'])->name('admission.closed');
 
         // Admin
@@ -109,6 +111,7 @@ Route::group(['prefix'=>'coordinator', 'middleware' => 'auth', 'namespace' => 'C
     Route::post('/classroom/addTeachers', [App\Http\Controllers\Coordinator\ClassroomController::class, 'addTeachers'])->name('classroom.addTeachers');
     Route::delete('/classroom/removeTeacher/{teacher}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'removeTeacher'])->name('classroom.removeTeacher');
     Route::delete('/classroom/removeStudent/{student}', [App\Http\Controllers\Coordinator\ClassroomController::class, 'removeStudent'])->name('classroom.removeStudent');
+    Route::post('/classroom/status', [App\Http\Controllers\Coordinator\ClassroomController::class, 'status'])->name('classroom.status');
 
     Route::resource('/examination', ExaminationController::class);
     Route::get('/select-batch/{course}', [App\Http\Controllers\Coordinator\ExaminationController::class, 'selectBatch']);
@@ -132,6 +135,7 @@ Route::resource('/classroom/assignment', Classroom\AssignmentController::class)-
 Route::get('/classroom/{classroom}/assignment', [App\Http\Controllers\Classroom\AssignmentController::class, 'index'])->name('assignment.index');
 Route::get('/classroom/{classroom}/assignmentEvaluation', [App\Http\Controllers\Classroom\AssignmentController::class, 'studentAssignmentEvaluation'])->name('assignment.evaluation');
 Route::post('/assignment/marksEvaluation', [App\Http\Controllers\Classroom\AssignmentController::class, 'marksEvaluation'])->name('assignment.marksEvaluation');
+Route::post('/assignment/submit', [App\Http\Controllers\Classroom\AssignmentController::class, 'submit'])->name('assignment.submit');
 
 // Assignment - Student Work
 Route::resource('/classroom/assignment/studentWork', Classroom\AssignmentPointController::class)->except(['index']);

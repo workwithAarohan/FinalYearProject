@@ -46,11 +46,11 @@ trait ClassroomEvaluationTraits
             foreach($classroom->assignments as $assignment)
             {
                 $count = 0;
-                foreach ($assignment->student_points as $student_point)
+                foreach ($assignment->students as $studentPoints)
                 {
-                    if ($student_point->student->id == $student->id && $student_point->pointsObtained != null)
+                    if ($studentPoints->id == $student->id && $studentPoints->pivot->is_checked)
                     {
-                        $totalPointsObtained= $totalPointsObtained + $student_point->pointsObtained;
+                        $totalPointsObtained= $totalPointsObtained + $studentPoints->pivot->points_obtained;
                         $count++;
                     }
                 }

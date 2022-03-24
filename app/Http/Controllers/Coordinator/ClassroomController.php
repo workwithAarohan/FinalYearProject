@@ -302,4 +302,24 @@ class ClassroomController extends Controller
         $classroom->delete();
         return redirect('/coordinator/rooms/'. $classroom->batch_id);
     }
+
+    public function status(Request $request)
+    {
+        $classroom = Classroom::find($request->classroom_id);
+
+        if($classroom->is_active)
+        {
+            $active = 0;
+        }
+
+        else
+        {
+            $active = 1;
+        }
+        $classroom->update([
+            'is_active' => $active
+        ]);
+
+        return redirect()->back();
+    }
 }

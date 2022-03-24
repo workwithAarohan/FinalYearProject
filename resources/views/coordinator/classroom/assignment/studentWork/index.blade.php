@@ -101,8 +101,18 @@
             </div>
 
             <div class="row justify-content-between mt-3">
-                <div class="col-md-6">
-    
+                <div class="col-md-7 px-5">
+                    <div class="row justify-content-center" style="column-gap: 20px;">
+                        @foreach ($assignment->students as $student)
+                            <div class="col-md-1 border text-center p-0 py-3" style="width: 140px;">
+                                <p style="border-bottom: 1px solid #ddd; margin-top: -10px;">{{ $student->user->firstname }} {{ $student->user->lastname }}</p>
+                                <div style="">
+                                    <i class="fas fa-file-pdf" style="font-size: 60px;"></i>
+                                </div>
+                            </div>
+
+                        @endforeach
+                    </div>
                 </div>
                 <div class="col-md-4 shadow p-3 align-center">
                     <h4 class=" fs-4" style="color: #0d3cac;">
@@ -131,7 +141,7 @@
                                     </td>
                                 </tr>
                             @endforeach
-    
+
                             <tr>
                                 <td>
                                     <div class="mb-3 px-4">

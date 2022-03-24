@@ -1,12 +1,10 @@
-@extends('layouts.nav')
+@extends('layouts.common')
 
 @section('style')
-    <style>
         tr[data-href]
         {
             cursor: pointer;
         }
-    </style>
 @endsection
 
 @section('content')
@@ -16,9 +14,6 @@
                 <h1 class="float-start">
                    {{ $course->courseDetails->slug }} - Batch
                 </h1>
-                <a href="{{ route('course.batch.create', $course->id) }}" class="btn btn-success float-end" role="button">
-                    Create
-                </a>
             </div>
         </div>
         <div class="card shadow" style="padding: 10px 40px; ">

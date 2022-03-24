@@ -8,139 +8,7 @@
             outline: none;
         }
 
-        .wrapper
-        {
-            width: 430px;
-            padding: 30px;
-            background: #fff;
-            border-radius: 5px;
-        }
 
-        .wrapper header 
-        {
-            color: #6990f2;
-            font-size: 27px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .wrapper form 
-        {
-            height: 167px;
-            display: flex;
-            margin: 30px 0;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            border-radius: 5px;
-            border: 2px dashed #6990f2;
-
-        }
-
-        form :where(i,p)
-        {
-            color: #6990f2;
-        }
-
-        form i 
-        {
-            font-size: 50px;
-        }
-
-        form p
-        {
-            font-size: 16px;
-            margin-top: 15px;
-        }
-
-        section .row
-        {
-            background: #e9f0ff;
-            margin-bottom: 10px;
-            list-style: none;
-            padding: 15px 20px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        section .row i 
-        {
-            font-size: 30px;
-            color: #6990f2;
-        }
-
-        section .details span 
-        {
-            font-size: 14px;
-        }
-
-        .progress-area .row .content 
-        {
-            width: 100%;
-            margin-left: 15px;
-        }
-
-        .progress-area .details
-        {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .progress-area .progress-bar
-        {
-            height: 6px;
-            width: 100%;
-            background: #fff;
-            margin-bottom: 4px;
-            border-radius: 30px;
-        }
-
-        .progress-bar .progress 
-        {
-            height: 100%;
-            width: 50%;
-            background: #6990f2;
-            border-radius: inherit;
-
-        }
-
-        .uploaded-area
-        {
-            max-height: 100px;
-            overflow-y: scroll;
-        }
-
-        .uploaded-area::-webkit-scrollbar
-        {
-            width: 0px;
-        }
-
-        .uploaded-area .row .content 
-        {
-            display: flex;
-            align-items: center;
-        }
-
-        .uploaded-area .row .details
-        {
-            display: flex;
-            margin-left: 15px;
-            flex-direction: column;
-        }
-
-        .uploaded-area .details .size
-        {
-            font-size: 11px;
-            color: #404040;
-        }
-        .uploaded-area .fa-check
-        {
-            color: #6990f2;
-            font-size: 16px;
-        }
     </style>
 @endsection
 
@@ -278,7 +146,7 @@
                         <div class="vr me-3" style="height: 65px; width: 2px;"></div>
                         <div class="checked me-3 text-center">
                             <h5 style="font-size: 40px;">
-                                {{ $assignment->student_points->where('pointsObtained','!=',null)->count() }}
+                                {{ $checkedCount }}
                             </h5>
                             <p class="muted" style="font-size: 13px; margin-top: -10px;">Checked</p>
                         </div>
@@ -298,43 +166,30 @@
                         Students Work
                     </h4>
 
-                    <div class="wrapper">
-                        <header>File Uploader JavaScript</header>
-                        <form action="" method="POST" enctype="multipart/form-data">
+                    @if ($student_work->file == null)
+                        <form action="{{ route('assignment.submit') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <input type="file" class="file-input" hidden>
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Browse File to Upload</p>
-                        </form>
-                        <section class="progress-area">
-                            <li class="row">
-                                <i class="fas fa-file-alt"></i>
-                                <div class="content">
-                                    <div class="details">
-                                        <span class="name">image_01.png . Uploading </span>
-                                        <span class="percent">50%</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress">
+                            {{-- <label for="file" class="form-label shadow mt-2" style="border: 1px solid #202020; width: 300px; padding: 10px 1px; border-radius: 5px; font-weight: bold; cursor: pointer;"><i class="fas fa-plus"></i> Add file</label> <br> --}}
+                            <label for="file" class="form-label mt-3">Upload file</label> <br>
+                            <input type="file" name="file" id="file" style="" accept="application/pdf">
 
-                                        </div>
-                                    </div>
+                            <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+
+                            <input type="submit" value="Submit" style="width: 300px; background: #022ea5;border: none; padding: 10px 1px; border-radius: 5px; color: #fff;" class="mt-3">
+                        </form>
+                    @else
+                        <div style="width: 350px;  border: 1px solid #dadada; border-radius: 5px; margin: auto">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div style="border-right: 1px solid #dadada; padding: 10px;">
+                                    <i class="fas fa-file-pdf fs-1 me-2 ms-2 my-auto" ></i>
                                 </div>
-                            </li>
-                        </section>
-                        <section class="uploaded-area">
-                            <li class="row">
-                                <div class="content">
-                                    <i class="fas fa-file-alt"></i>
-                                    <div class="details">
-                                        <span class="name">image_01.png . Uploaded</span>
-                                        <span class="size">70 KB</span>
-                                    </div>
-                                </div>
-                                <i class="fas fa-check"></i>
-                            </li>
-                        </section>
-                    </div>
+                                <p style="margin: auto">{{ $student_work->file }}</p>
+                            </div>
+                        </div>
+                        <button style="width: 300px; background: #022ea5;border: none; padding: 10px 1px; border-radius: 5px; color: #fff; margin-top: 10px;">Submitted</button>
+                    @endif
+
+
                 @endrole
 
             </div>
@@ -350,7 +205,7 @@
             });
         });
 
-        const form = document.querySelector("form"); 
+        const form = document.querySelector("form");
         fileInput = form.querySelector(".file-input");
         progressArea = document.querySelector(".progress.area");
         uploadedArea = document.querySelector(".uploaded.area");
