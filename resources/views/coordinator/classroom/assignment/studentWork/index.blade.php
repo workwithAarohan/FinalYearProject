@@ -92,7 +92,7 @@
                         <div class="vr me-3" style="height: 50px; width: 3px;"></div>
                         <div class="returned text-center">
                             <h5 style="font-size: 24px;">
-                                {{ $assignment->student_points->where('is_returned',1)->count() }}
+                                5
                             </h5>
                             <p class="muted" style="font-size: 13px; margin-top: -10px;">Turned In</p>
                         </div>
@@ -104,7 +104,7 @@
                 <div class="col-md-7 px-5">
                     <div class="row justify-content-center" style="column-gap: 20px;">
                         @foreach ($assignment->students as $student)
-                            <div class="col-md-1 border text-center p-0 py-3" style="width: 140px;">
+                            <div class="col-md-1 border text-center p-0 py-3 mb-3" style="width: 140px;">
                                 <p style="border-bottom: 1px solid #ddd; margin-top: -10px;">{{ $student->user->firstname }} {{ $student->user->lastname }}</p>
                                 <div style="">
                                     <i class="fas fa-file-pdf" style="font-size: 60px;"></i>

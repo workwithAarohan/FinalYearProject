@@ -126,8 +126,8 @@ class ExaminationController extends Controller
 
         // if($examination->is_published)
         // {
-            $pass = null;
-            $fail = null;
+            $pass = 0;
+            $fail = 0;
             foreach($examination->batch->students as $student)
             {
                 $total = null;
@@ -166,7 +166,7 @@ class ExaminationController extends Controller
                     $result[$student->id]['percentage'] = null;
                 }
                 $result[$student->id]['status'] = $status;
-                
+
                 if($status)
                 {
                     $pass++;
@@ -235,9 +235,12 @@ class ExaminationController extends Controller
             'pass_mark' => 'required',
         ]);
 
-        DB::table('examination_subject')->where('subject_id', $request->subject)->update([
-            'full_mark' =>$request->full_mark,
-            'pass_mark' => $request->pass_mark,
+        DB::table('examination_subject')
+            ->where('subject_id', $request->subject)
+            ->where('examination_id', $request->exam)
+            ->update([
+                'full_mark' =>$request->full_mark,
+                'pass_mark' => $request->pass_mark,
         ]);
 
         Examination::find($request->exam)->update([

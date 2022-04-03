@@ -2,7 +2,6 @@
 
 namespace App\Http\Traits;
 
-use App\Models\Classroom;
 use App\Models\Examination;
 use App\Models\Result;
 use App\Models\Semester;
@@ -17,8 +16,6 @@ trait StudentPerformanceTraits
 
         $attendance = 0;
 
-        // echo($semester->semester_name . "<br>");
-
         $count = 0;
 
         if(count($semester->subjects))
@@ -31,13 +28,9 @@ trait StudentPerformanceTraits
                 {
                     foreach($subject->batch_classrooms($batch_id)->get() as $classroom)
                     {
-
-                        // echo($classroom->room_name . "<br>");
                         $classroom_attendance = ClassroomEvaluationTraits::StudentAttendanceEvaluation($classroom, $student);
 
                         $attendance = $attendance + $classroom_attendance;
-
-                        // echo($classroom_attendance. "--- " . $classroom->room_name . "<br>");
                     }
 
                     $count++;
@@ -54,16 +47,12 @@ trait StudentPerformanceTraits
             {
                 $overall = 0;
             }
-
         }
 
         else
         {
             $overall = 0;
         }
-
-
-        // echo($overall . "<br>");
 
         return $overall;
     }
@@ -73,8 +62,6 @@ trait StudentPerformanceTraits
         $batch_id = $student->batch->id;
 
         $assignment = 0;
-
-        // echo($semester->semester_name . "<br>");
 
         $count = 0;
 
@@ -88,13 +75,9 @@ trait StudentPerformanceTraits
                 {
                     foreach($subject->batch_classrooms($batch_id)->get() as $classroom)
                     {
-
-                        // echo($classroom->room_name . "<br>");
                         $classroom_assignment = ClassroomEvaluationTraits::StudentAssignmentEvaluation($classroom, $student);
 
                         $assignment = $assignment + $classroom_assignment;
-
-                        // echo($classroom_assignment. "--- " . $classroom->room_name . "<br>");
                     }
 
                     $count++;
@@ -118,9 +101,6 @@ trait StudentPerformanceTraits
         {
             $overall = 0;
         }
-
-
-        // echo($overall . "<br>");
 
         return $overall;
     }
@@ -149,14 +129,14 @@ trait StudentPerformanceTraits
                     if($subject->pivot->is_checked)
                     {
                         $result = Result::where('student_id', $student->id)->where('subject_id', $subject->id)->where('examination_id', $exam->id)->first();
-    
+
                         $total += $result->marks_obtained;
                         $full_marks += $subject->pivot->full_mark;
                     }
                 }
                 if($full_marks!=0)
                 {
-                    $percentage = round(($total/$full_marks) * 100,2);
+                    $percentage = round((($total/$full_marks) * 100),1);
                 }
                 else
                 {
@@ -171,8 +151,33 @@ trait StudentPerformanceTraits
         {
             $overall_percentage = 0;
         }
-        
+
         return $overall_percentage;
+    }
+
+    public static function OverallPerformance(Semester $semester, Student $student)
+    {
+        $attendancePercentage = StudentPerformanceTraits::OverallAttendance($semester, $student);
+        $assignmentPercentage = StudentPerformanceTraits::OverallAssignment($semester, $student);
+        $internalExamPercentage = StudentPerformanceTraits::OverallExamination($semester, $student);
+
+        // echo($attendancePercentage ."<br>" . $assignmentPercentage ."<br>" . $internalExamPercentage ."<br>");
+
+
+        $boards = DB::table('education_student')
+            ->where('course_id', $student->course_id)
+            ->where('batch_id', $student->batch_id)
+            ->where('semester_id', $semester->id)
+            ->select('percentage')
+            ->first();
+
+        $overall = (40 * $internalExamPercentage + 40 * $boards->percentage + 10 * $attendancePercentage + 10 * $assignmentPercentage)/ 100 ;
+
+
+        // echo($overall ."<br>");
+        // echo("--------------------- <br>");
+
+        return $overall;
     }
 
 

@@ -193,3 +193,6 @@ Route::get('/result/{examination}/subject/{subject}', [App\Http\Controllers\Coor
 Route::post('/update/table', [App\Http\Controllers\Coordinator\ExaminationController::class, 'updateTable'])->name('update.table');
 
 Route::post('/examination/publish', [App\Http\Controllers\Coordinator\ExaminationController::class, 'examinationPublish'])->name('examination.publish');
+
+
+Route::get('/student/performance/{semester}/{batch}', [App\Http\Controllers\StudentPerformanceController::class, 'ScholarshipEvaluation'])->name('student.scholarship');

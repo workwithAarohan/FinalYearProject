@@ -150,13 +150,6 @@
                             </h5>
                             <p class="muted" style="font-size: 13px; margin-top: -10px;">Checked</p>
                         </div>
-                        <div class="vr me-3" style="height: 65px; width: 2px;"></div>
-                        <div class="returned text-center">
-                            <h5 style="font-size: 40px;">
-                                {{ $assignment->student_points->where('is_returned',1)->count() }}
-                            </h5>
-                            <p class="muted" style="font-size: 13px; margin-top: -10px;">Returned</p>
-                        </div>
                     </div>
                     <a href="{{ route('studentWork.index', $assignment->id) }}" class="text-decoration-none fw-bold px-2 py-1" style="position: absolute; bottom: 15px; right: 10px; color: #0d3cac; border: 2px solid #0d3cac;">
                         View Work

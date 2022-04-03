@@ -7,7 +7,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col">
+            <div class="col-md-7">
                 <div class="d-flex align-items-top">
                     <h4 class="me-2" style="font-size: 24px; font-weight: bold;">{{ $examination->exam_title }}</h4>
                     <div>
@@ -73,7 +73,7 @@
                                                 <tbody>
                                                     @foreach ($examination->batch->students as $student)
                                                         <tr>
-                                                            <th scope="row">{{ $student->user->firstname }}</th>
+                                                            <th scope="row">{{ $student->user->firstname }} {{ $student->user->lastname }}</th>
                                                             <td>{{ $result[$student->id][$subject->id]->marks_obtained }}</td>
                                                             <td>{{ $subject->pivot->full_mark }}</td>
                                                             <td>{{ $subject->pivot->pass_mark }}</td>
@@ -111,7 +111,7 @@
                             <tr>
                                 <th>Student Name</th>
                                 @foreach ($examination->subjects as $subject)
-                                    <th scope="col">{{ $subject->subject_code }}</th>
+                                    <th scope="col">{{ $subject->subject_slug }}</th>
                                 @endforeach
                                 <th>Total</th>
                                 <th>Percentage</th>
@@ -121,9 +121,9 @@
 
                         <tbody>
                             @foreach ($examination->batch->students as $student)
-                                
+
                                 <tr>
-                                    <th scope="row">{{ $student->user->firstname }}</th>
+                                    <th scope="row">{{ $student->user->firstname }} {{ $student->user->lastname }}</th>
                                     @foreach ($examination->subjects as $subject)
                                         @if ($subject->pivot->is_checked)
                                             @if ($result[$student->id][$subject->id]->marks_obtained < $subject->pivot->pass_mark)
@@ -132,7 +132,7 @@
                                                 <td>
                                             @endif
                                             {{ $result[$student->id][$subject->id]->marks_obtained }}</td>
-                                            
+
                                         @else
                                             <td>-</td>
                                         @endif
@@ -159,7 +159,7 @@
                                         </td>
                                     @endif
 
-                                    
+
                                    @if ($result[$student->id]['status'] !=null)
                                         <td>
                                             @if ($result[$student->id]['status'])
@@ -174,7 +174,7 @@
                                         </td>
                                    @endif
 
-                                    
+
                                 </tr>
 
                             @endforeach

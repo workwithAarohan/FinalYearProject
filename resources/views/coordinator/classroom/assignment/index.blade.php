@@ -191,7 +191,7 @@
                                         @endforeach
                                     @else
                                         <div class="d-flex justify-content-around">
-                                            <h4 class="fs-6 mb-3">Students will see this topic once work is added to it</h4>
+                                            <h4 class="fs-6 mb-3">No Assignment Added</h4>
                                         </div>
                                     @endif
                                 </div>
